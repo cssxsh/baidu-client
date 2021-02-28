@@ -1,6 +1,66 @@
+import java.util.Date
+
 plugins {
     kotlin("jvm") version Versions.kotlin
     kotlin("plugin.serialization") version Versions.kotlin
+    `maven-publish`
+    id("com.jfrog.bintray") version Versions.bintray
+}
+
+bintray {
+    user = BintraySetting.user
+    key = BintraySetting.key
+    publish = true
+    setPublications(BintraySetting.task)
+
+    pkg.apply {
+        userOrg = BintraySetting.org
+        repo = BintraySetting.repo
+        name = project.name
+        vcsUrl = BintraySetting.githubUrl
+        githubRepo = BintraySetting.githubRepo
+        setLicenses(BintraySetting.license)
+        version.apply {
+            name = project.version.toString()
+            released = Date().toString()
+        }
+    }
+}
+
+publishing {
+    publications {
+        create<MavenPublication>(BintraySetting.task) {
+            groupId = project.group.toString()
+            artifactId = project.name
+            version = project.version.toString()
+            artifact(tasks.kotlinSourcesJar)
+            artifact(tasks.jar)
+
+            pom {
+                packaging = "jar"
+                name.set(BintraySetting.repo)
+                url.set(BintraySetting.githubUrl)
+                licenses {
+                    license {
+                        name.set(BintraySetting.licenseName)
+                        url.set(BintraySetting.licenseUrl)
+                    }
+                }
+                developers {
+                    developer {
+                        id.set(BintraySetting.githubId)
+                        email.set(BintraySetting.githubEmail)
+                        url.set(BintraySetting.githubPage)
+                    }
+                }
+                scm {
+                    connection.set(BintraySetting.githubUrl)
+                    developerConnection.set(BintraySetting.githubUrl)
+                    url.set(BintraySetting.githubUrl)
+                }
+            }
+        }
+    }
 }
 
 dependencies {
@@ -37,5 +97,4 @@ tasks {
         kotlinOptions.freeCompilerArgs += "-Xjvm-default=all"
         kotlinOptions.jvmTarget = "11"
     }
-
 }
