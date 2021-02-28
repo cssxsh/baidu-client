@@ -1,0 +1,24 @@
+package xyz.cssxsh.baidu.disk
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class NetDiskUserInfo(
+    @SerialName("avatar_url")
+    val avatar: String,
+    @SerialName("baidu_name")
+    val baiduName: String,
+    @SerialName("errmsg")
+    val message: String,
+    @SerialName("errno")
+    val errno: Int,
+    @SerialName("netdisk_name")
+    val netdiskName: String,
+    @SerialName("request_id")
+    val requestId: String,
+    @SerialName("uk")
+    val uk: Long,
+    @SerialName("vip_type")
+    val vipType: VipType
+)
