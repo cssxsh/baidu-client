@@ -4,12 +4,15 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.utils.io.core.*
+import kotlinx.serialization.builtins.ListSerializer
+import kotlinx.serialization.builtins.serializer
+import kotlinx.serialization.json.Json
 import xyz.cssxsh.baidu.*
 
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF)
  */
-suspend fun AbstractNetDiskClient.getUserInfo(): NetDiskUserInfo = useHttpClient { client ->
+suspend fun BaiduAuthClient.getUserInfo(): NetDiskUserInfo = useHttpClient { client ->
     client.get(NetDiskApi.PAN_NAS) {
         parameter("access_token", accessToken)
         parameter("method", "uinfo")
@@ -19,7 +22,7 @@ suspend fun AbstractNetDiskClient.getUserInfo(): NetDiskUserInfo = useHttpClient
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E7%BD%91%E7%9B%98%E5%AE%B9%E9%87%8F%E4%BF%A1%E6%81%AF)
  */
-suspend fun AbstractNetDiskClient.getQuotaInfo(
+suspend fun BaiduAuthClient.getQuotaInfo(
     checkFree: Boolean? = null,
     checkExpire: Boolean? = null,
 ): NetDiskQuotaInfo = useHttpClient { client ->
@@ -33,7 +36,7 @@ suspend fun AbstractNetDiskClient.getQuotaInfo(
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8)
  */
-suspend fun AbstractNetDiskClient.listFile(
+suspend fun BaiduAuthClient.listFile(
     dir: String? = null,
     order: OrderType? = null,
     desc: Boolean? = null,
@@ -57,7 +60,7 @@ suspend fun AbstractNetDiskClient.listFile(
     }
 }
 
-suspend fun AbstractNetDiskClient.listAllFile(
+suspend fun BaiduAuthClient.listAllFile(
     path: String? = null,
     order: OrderType? = null,
     desc: Boolean? = null,
@@ -86,7 +89,7 @@ suspend fun AbstractNetDiskClient.listAllFile(
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E6%96%87%E6%A1%A3%E5%88%97%E8%A1%A8)
  */
-suspend fun AbstractNetDiskClient.listDoc(
+suspend fun BaiduAuthClient.listDoc(
     page: Int? = null,
     num: Int? = null,
     order: OrderType? = null,
@@ -111,7 +114,7 @@ suspend fun AbstractNetDiskClient.listDoc(
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E8%A7%86%E9%A2%91%E5%88%97%E8%A1%A8)
  */
-suspend fun AbstractNetDiskClient.listVideo(
+suspend fun BaiduAuthClient.listVideo(
     page: Int? = null,
     num: Int? = null,
     order: OrderType? = null,
@@ -134,7 +137,7 @@ suspend fun AbstractNetDiskClient.listVideo(
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E8%A7%86%E9%A2%91%E5%88%97%E8%A1%A8)
  */
-suspend fun AbstractNetDiskClient.listBt(
+suspend fun BaiduAuthClient.listBt(
     page: Int? = null,
     num: Int? = null,
     order: OrderType? = null,
@@ -157,14 +160,14 @@ suspend fun AbstractNetDiskClient.listBt(
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E5%88%86%E7%B1%BB%E6%96%87%E4%BB%B6%E6%80%BB%E4%B8%AA%E6%95%B0)
  */
-suspend fun AbstractNetDiskClient.getCategoryInfo(
-    category: CategoryType? = null,
+suspend fun BaiduAuthClient.getCategoryInfo(
+    categories: List<CategoryType>? = null,
     path: String? = null,
     recursion: Boolean? = null,
 ): NetDiskCategoryList = useHttpClient { client ->
-    client.get(NetDiskApi.PAN_FILE) {
+    client.get(NetDiskApi.API_CATEGORY_INFO) {
         parameter("access_token", accessToken)
-        parameter("category", category?.ordinal)
+        parameter("category", categories?.joinToString(",") { it.ordinal.toString() })
         parameter("parent_path", path)
         parameter("recursion", recursion?.toInt())
     }
@@ -173,8 +176,8 @@ suspend fun AbstractNetDiskClient.getCategoryInfo(
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E5%88%86%E7%B1%BB%E5%88%97%E8%A1%A8%E6%96%87%E4%BB%B6)
  */
-suspend fun AbstractNetDiskClient.listCategoryFile(
-    categories: List<CategoryType> = emptyList(),
+suspend fun BaiduAuthClient.listCategoryFile(
+    categories: List<CategoryType>,
     path: String? = null,
     recursion: Boolean? = null,
     ext: List<String> = emptyList(),
@@ -190,7 +193,7 @@ suspend fun AbstractNetDiskClient.listCategoryFile(
         parameter("parent_path", path)
         parameter("recursion", recursion?.toInt())
         parameter("ext", ext.joinToString(","))
-        parameter("order", order?.value)
+        parameter("order", order)
         parameter("desc", desc?.toInt())
         parameter("start", start)
         parameter("limit", limit)
@@ -200,7 +203,7 @@ suspend fun AbstractNetDiskClient.listCategoryFile(
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E6%90%9C%E7%B4%A2%E6%96%87%E4%BB%B6)
  */
-suspend fun AbstractNetDiskClient.searchFile(
+suspend fun BaiduAuthClient.searchFile(
     key: String,
     dir: String? = null,
     recursion: Boolean? = null,
@@ -223,7 +226,7 @@ suspend fun AbstractNetDiskClient.searchFile(
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E6%9F%A5%E8%AF%A2%E6%96%87%E4%BB%B6%E4%BF%A1%E6%81%AF)
  */
-suspend fun AbstractNetDiskClient.listFileById(
+suspend fun BaiduAuthClient.listFileById(
     ids: List<Long>,
     path: String? = null,
     thumb: Boolean? = null,
@@ -242,9 +245,29 @@ suspend fun AbstractNetDiskClient.listFileById(
 }
 
 /**
+ * [document]([document](https://pan.baidu.com/union/document/basic#%E6%9F%A5%E8%AF%A2%E6%96%87%E4%BB%B6%E4%BF%A1%E6%81%AF))
+ */
+suspend fun BaiduAuthClient.operaFile(
+    async: AsyncType = AsyncType.AUTO,
+    opera: FileOpera,
+    type: FileOnDupType? = null,
+): NetDiskOpera = useHttpClient { client ->
+    client.get(NetDiskApi.PAN_FILE) {
+        parameter("access_token", accessToken)
+        parameter("method", "filemanager")
+        parameter("opera", opera.name)
+        body = FormDataContent(Parameters.build {
+            appendParameter("async", async.ordinal)
+            appendParameter("filelist", Json.encodeToString(FileOpera.serializer(), opera))
+            appendParameter("ondup", type)
+        })
+    }
+}
+
+/**
  * [document](https://pan.baidu.com/union/document/basic#%E9%A2%84%E4%B8%8A%E4%BC%A0)
  */
-suspend fun AbstractNetDiskClient.preCreate(
+suspend fun BaiduAuthClient.preCreate(
     path: String,
     size: Long,
     isDir: Boolean,
@@ -264,12 +287,12 @@ suspend fun AbstractNetDiskClient.preCreate(
             appendParameter("size", size)
             appendParameter("isdir", isDir.toInt())
             appendParameter("autoinit", "1")
-            appendParameter("block_list", blocks.joinToString(separator = "\",\"", prefix = "[\"", postfix = "\"]"))
+            appendParameter("block_list", Json.encodeToString(ListSerializer(String.serializer()), blocks))
             appendParameter("content-md5", content)
             appendParameter("slice-md5", slice)
             appendParameter("local_ctime", createdTime)
             appendParameter("local_mtime", modifiedTime)
-            appendParameter("rtype", rename?.value)
+            appendParameter("rtype", rename?.ordinal)
             appendParameter("uploadid", uploadId)
         })
     }
@@ -278,7 +301,7 @@ suspend fun AbstractNetDiskClient.preCreate(
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E5%88%86%E7%89%87%E4%B8%8A%E4%BC%A0)
  */
-suspend fun AbstractNetDiskClient.superFile(
+suspend fun BaiduAuthClient.superFile(
     path: String,
     uploadId: String,
     index: Int,
@@ -301,14 +324,13 @@ suspend fun AbstractNetDiskClient.superFile(
     }
 }
 
-suspend fun AbstractNetDiskClient.uploadSingleFile(
+suspend fun BaiduAuthClient.uploadSingleFile(
     path: String,
     data: ByteArray,
     size: Int = data.size,
 ): NetDiskSuperFile = useHttpClient { client ->
     client.post(NetDiskApi.PCS_FILE) {
         parameter("access_token", accessToken)
-        parameter("app_id", appId)
         parameter("method", "upload")
         parameter("path", path)
 
@@ -323,7 +345,7 @@ suspend fun AbstractNetDiskClient.uploadSingleFile(
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E5%88%9B%E5%BB%BA%E6%96%87%E4%BB%B6)
  */
-suspend fun AbstractNetDiskClient.createFile(
+suspend fun BaiduAuthClient.createFile(
     path: String,
     size: Long,
     isDir: Boolean,
@@ -344,10 +366,12 @@ suspend fun AbstractNetDiskClient.createFile(
             appendParameter("path", path)
             appendParameter("size", size)
             appendParameter("isdir", isDir.toInt())
-            appendParameter("rtype", rename?.value)
+            appendParameter("rtype", rename?.ordinal)
             appendParameter("uploadid", uploadId)
             appendParameter("autoinit", "1")
-            appendParameter("block_list", blocks?.joinToString(separator = "\",\"", prefix = "[\"", postfix = "\"]"))
+            appendParameter("block_list", blocks?.let {
+                Json.encodeToString(ListSerializer(String.serializer()), it)
+            })
             appendParameter("is_revision", isRevision?.toInt())
             appendParameter("exif_info", exifInfo)
             appendParameter("local_ctime", createdTime)

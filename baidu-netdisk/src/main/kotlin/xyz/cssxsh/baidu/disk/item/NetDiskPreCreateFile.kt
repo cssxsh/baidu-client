@@ -10,16 +10,16 @@ data class NetDiskPreCreateFile(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("ctime")
-    override val createdTime: Long,
+    override val created: Long,
     @SerialName("fs_id")
-    override val fsId: Long,
+    override val id: Long,
     @SerialName("isdir")
     @Serializable(with = NumberToBooleanSerializer::class)
     override val isDir: Boolean,
     @SerialName("md5")
     override val md5: String,
     @SerialName("mtime")
-    override val modifiedTime: Long,
+    override val modified: Long,
     @SerialName("path")
     override val path: String,
     @SerialName("request_id")

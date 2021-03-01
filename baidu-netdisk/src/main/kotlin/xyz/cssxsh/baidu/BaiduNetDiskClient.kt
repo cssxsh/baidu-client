@@ -3,10 +3,15 @@ package xyz.cssxsh.baidu
 import xyz.cssxsh.baidu.disk.*
 import java.io.File
 
-open class BaiduNetDiskClient(override val appKey: String, override val appName: String, override val appId: Int) :
-    AbstractNetDiskClient(emptyList()) {
+open class BaiduNetDiskClient(
+    override val appId: Long,
+    override val appName: String,
+    override val appKey: String,
+    override val secretKey: String
+) : AbstractNetDiskClient(emptyList()) {
 
-    suspend fun createDir(path: String): NetDiskFileInfo = createFile(path = path, size = 0, isDir = true, uploadId = null)
+    suspend fun createDir(path: String): NetDiskFileInfo =
+        createFile(path = path, size = 0, isDir = true, uploadId = null)
 
     suspend fun uploadFile(file: File, path: String = "${appDataFolder}/${file.name}"): NetDiskFileInfo {
         val user = getUserInfo()
@@ -64,6 +69,6 @@ open class BaiduNetDiskClient(override val appKey: String, override val appName:
             rename = RenameType.BLOCK
         )
         check(pre.type == CreateReturnType.EXIST) { pre.toString() }
-        return listFileById(listOf(pre.info!!.fsId)).list.single()
+        return listFileById(listOf(pre.info!!.id)).list.single()
     }
 }

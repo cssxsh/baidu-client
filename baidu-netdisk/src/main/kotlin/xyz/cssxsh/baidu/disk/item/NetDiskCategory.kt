@@ -6,11 +6,11 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NetDiskCategory(
     @SerialName("count")
-    val count: Int,
+    val count: Long,
     @SerialName("real_server_mtime_2")
-    private val realServerMtime2: String,
+    private val realServerMtime2: Long,
     @SerialName("size")
-    val size: Int,
+    val size: Long,
     @SerialName("total")
-    val total: Int
+    val total: Long
 )

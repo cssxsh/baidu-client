@@ -10,13 +10,13 @@ data class NetDiskDetail(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("date_taken")
-    val dateTaken: Long? = null,
+    val date: Long? = null,
     @SerialName("dlink")
     val link: String? = null,
     @SerialName("filename")
     override val filename: String,
     @SerialName("fs_id")
-    override val fsId: Long,
+    override val id: Long,
     @SerialName("height")
     val height: Int? = null,
     @SerialName("isdir")
@@ -25,13 +25,13 @@ data class NetDiskDetail(
     @SerialName("md5")
     override val md5: String,
     @SerialName("oper_id")
-    val operatorId: Int,
+    val operatorId: Long,
     @SerialName("path")
     override val path: String,
     @SerialName("server_ctime")
-    override val createdTime: Long,
+    override val created: Long,
     @SerialName("server_mtime")
-    override val modifiedTime: Long,
+    override val modified: Long,
     @SerialName("size")
     override val size: Int,
     @SerialName("thumbs")

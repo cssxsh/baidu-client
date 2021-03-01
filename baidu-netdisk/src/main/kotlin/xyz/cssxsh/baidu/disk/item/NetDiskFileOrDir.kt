@@ -15,7 +15,7 @@ data class NetDiskFileOrDir(
     @SerialName("empty")
     val empty: Int? = null,
     @SerialName("fs_id")
-    override val fsId: Long,
+    override val id: Long,
     @SerialName("isdir")
     @Serializable(with = NumberToBooleanSerializer::class)
     override val isDir: Boolean,
@@ -30,23 +30,25 @@ data class NetDiskFileOrDir(
     @SerialName("path")
     override val path: String,
     @SerialName("pl")
-    val pl: Int,
+    private val pl: Int? = null,
     @SerialName("server_atime")
-    val accessTime: Int,
+    val accessed: Long? = null,
     @SerialName("server_ctime")
-    override val createdTime: Long,
+    override val created: Long,
     @SerialName("server_filename")
     override val filename: String,
     @SerialName("server_mtime")
-    override val modifiedTime: Long,
+    override val modified: Long,
     @SerialName("share")
-    val share: Int,
+    private val share: Int? = null,
     @SerialName("size")
     override val size: Int,
     @SerialName("thumbs")
     val thumbs: Map<String, String>? = null,
     @SerialName("unlist")
-    val unlist: Int,
+    private val unlist: Int? = null,
     @SerialName("wpfile")
-    val wpfile: Int,
+    private val wpfile: Int? = null,
+    @SerialName("extent_tinyint1")
+    private val extentTinyint1: Int? = null
 ) : NetDiskFileInfo

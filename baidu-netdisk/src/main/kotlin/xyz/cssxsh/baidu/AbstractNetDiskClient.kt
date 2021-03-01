@@ -7,6 +7,7 @@ import io.ktor.client.features.compression.*
 import io.ktor.client.features.cookies.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.util.date.*
 import kotlinx.coroutines.*
@@ -48,7 +49,7 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : BaiduAuthClien
         }
         BrowserUserAgent()
         install(UserAgent) {
-            agent = "pan.baidu.com"
+            agent = NetDiskApi.USER_AGENT
         }
         ContentEncoding {
             gzip()
@@ -62,6 +63,15 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : BaiduAuthClien
             socketTimeoutMillis = (5).minutes.toLongMilliseconds()
             connectTimeoutMillis = (5).minutes.toLongMilliseconds()
             requestTimeoutMillis = (5).minutes.toLongMilliseconds()
+        }
+        HttpResponseValidator {
+            handleResponseException { cause ->
+                if (cause is ClientRequestException) {
+                    cause.toAuthorizeExceptionOrNull()?.let {
+                        throw it
+                    }
+                }
+            }
         }
     }
 
@@ -91,67 +101,78 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : BaiduAuthClien
     override val redirect: String = AuthorizeApi.DEFAULT_REDIRECT
 
     @Suppress("unused")
-    protected var accessTokenValue: String? = null
+    protected open var accessTokenValue: String? = null
 
     @Suppress("unused")
-    protected var expires: OffsetDateTime = OffsetDateTime.now()
+    protected open var expires: OffsetDateTime = OffsetDateTime.now()
 
     @Suppress("unused")
-    protected var refreshTokenValue: String? = null
+    protected open var refreshTokenValue: String? = null
 
     override val accessToken: String
-        get() = requireNotNull(accessTokenValue?.takeIf { expires >= OffsetDateTime.now() })
+        get() = requireNotNull(accessTokenValue?.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() })
 
     override val refreshToken: String
-        get() = requireNotNull(refreshTokenValue)
+        get() = requireNotNull(refreshTokenValue?.takeIf { it.isNotBlank() })
 
-    internal abstract val appKey: String
-
-    internal abstract val appName: String
-
-    internal abstract val appId: Int
-
-    internal open val appDataFolder: String
+    open val appDataFolder: String
         get() = "/apps/$appName"
 
-    override val clientId: String
-        get() = appKey
-
-    override val clientSecret: String
-        get() = throw IllegalAccessError()
-
-    @Suppress("unused")
-    protected fun AuthorizeAccessToken.save(): Unit = synchronized(expires) {
-        accessTokenValue = accessToken
-        refreshTokenValue = refreshToken
-        expires = OffsetDateTime.now().plusMinutes(expiresIn)
+    open fun saveToken(token: AuthorizeAccessToken): Unit = synchronized(expires) {
+        accessTokenValue = token.accessToken
+        refreshTokenValue = token.refreshToken
+        expires = OffsetDateTime.now().plusSeconds(token.expiresIn)
     }
 
-    fun setToken(token: String) = synchronized(expires) {
+    fun setToken(token: String, expiresIn: SecondUnit = AuthorizeApi.ACCESS_EXPIRES): Unit = synchronized(expires) {
         accessTokenValue = token
-        expires = OffsetDateTime.now().plusMinutes(AuthorizeApi.ACCESS_EXPIRES)
+        expires = OffsetDateTime.now().plusSeconds(expiresIn)
     }
 
-    suspend fun authorize(block: suspend (Url) -> String) {
-        getAuthorizeToken(code = block(getWebAuthorizeUrl(type = AuthorizeType.AUTHORIZATION))).save()
-    }
+    suspend fun authorize(block: suspend (Url) -> String) =
+        saveToken(token = getAuthorizeToken(code = block(getWebAuthorizeUrl(type = AuthorizeType.AUTHORIZATION))))
 
-    suspend fun implicit(block: suspend (Url) -> String) {
-        setToken(token = block(getWebAuthorizeUrl(type = AuthorizeType.AUTHORIZATION)))
-    }
+    suspend fun implicit(block: suspend (Url) -> Url) =
+        saveToken(token = block(getWebAuthorizeUrl(type = AuthorizeType.IMPLICIT)).getAuthorizeToken())
 
-    suspend fun credentials() {
-        getCredentialsToken().save()
-    }
+    suspend fun credentials() =
+        saveToken(token = getCredentialsToken())
 
-    suspend fun device(block: suspend (Url, String) -> Unit) {
-        getDeviceCode().run {
-            block(getDeviceAuthorizeUrl(code = deviceCode), userCode)
-            getDeviceToken(code = deviceCode).save()
+    private suspend fun AuthorizeDeviceCode.wait(): AuthorizeAccessToken = withTimeout(expiresIn.seconds) {
+        var tokens: AuthorizeAccessToken? = null
+        while (isActive && tokens == null) {
+            tokens = runCatching {
+                getDeviceToken(code = deviceCode)
+            }.onFailure {
+                if (it is AuthorizeException) {
+                    when(it.type) {
+                        AuthorizeErrorType.AUTHORIZATION_PENDING -> {
+                            delay(interval.seconds)
+                        }
+                        AuthorizeErrorType.SLOW_DOWN -> {
+                            delay(interval.seconds)
+                        }
+                        else -> throw it
+                    }
+                } else {
+                    throw it
+                }
+            }.getOrNull()
         }
+        tokens!!
     }
 
-    suspend fun refresh() {
-        getRefreshToken().save()
-    }
+    suspend fun device(block: suspend (Url, Url) -> Unit) = saveToken(token = getDeviceCode().let { code ->
+        block(getDeviceAuthorizeUrl(code = code.userCode), Url(code.qrcodeUrl))
+        code.wait()
+    })
+
+    @JvmName("device_")
+    suspend fun device(block: suspend (ByteArray) -> Unit) = saveToken(token = getDeviceCode().let { code ->
+        block(useHttpClient { it.get(code.qrcodeUrl) })
+        code.wait()
+    })
+
+    suspend fun refresh() =
+        saveToken(token = getRefreshToken())
 }

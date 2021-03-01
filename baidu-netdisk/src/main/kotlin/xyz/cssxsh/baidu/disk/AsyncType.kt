@@ -8,19 +8,19 @@ import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
-@Serializable(with = CreateReturnType.Serializer::class)
-enum class CreateReturnType {
-    TEMP_,
-    NOT_EXIST,
-    EXIST;
+@Serializable(with = AsyncType.Serializer::class)
+enum class AsyncType {
+    SYNC,
+    AUTO,
+    ASYNC;
 
-    companion object Serializer : KSerializer<CreateReturnType> {
+    companion object Serializer : KSerializer<AsyncType> {
         override val descriptor: SerialDescriptor
-            get() = buildSerialDescriptor("CategoryTypeSerializer", SerialKind.ENUM)
+            get() = buildSerialDescriptor("AsyncTypeSerializer", SerialKind.ENUM)
 
-        override fun serialize(encoder: Encoder, value: CreateReturnType) = encoder.encodeInt(value.ordinal)
+        override fun serialize(encoder: Encoder, value: AsyncType) = encoder.encodeInt(value.ordinal)
 
-        override fun deserialize(decoder: Decoder): CreateReturnType =
+        override fun deserialize(decoder: Decoder): AsyncType =
             requireNotNull(values().getOrNull(decoder.decodeInt())) { "${decoder.decodeInt()} not in ${values().toList()}" }
     }
 }

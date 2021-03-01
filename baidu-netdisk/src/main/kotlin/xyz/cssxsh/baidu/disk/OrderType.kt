@@ -5,4 +5,6 @@ enum class OrderType(val value: String) {
     NAME(value = "name"),
     SIZE(value = "size"),
     TIME(value = "time");
+
+    override fun toString(): String = value
 }

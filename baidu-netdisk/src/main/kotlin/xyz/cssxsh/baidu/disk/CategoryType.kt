@@ -29,6 +29,6 @@ enum class CategoryType {
         override fun serialize(encoder: Encoder, value: CategoryType) = encoder.encodeInt(value.ordinal)
 
         override fun deserialize(decoder: Decoder): CategoryType =
-            requireNotNull(values().getOrNull(decoder.decodeInt())) { "${decoder.decodeInt()} not in ${values()}" }
+            requireNotNull(values().getOrNull(decoder.decodeInt())) { "${decoder.decodeInt()} not in ${values().toList()}" }
     }
 }

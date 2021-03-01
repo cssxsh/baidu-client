@@ -10,9 +10,9 @@ data class NetDiskDoc(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("docpreview")
-    val docPreview: String,
+    val docPreview: String? = null,
     @SerialName("fs_id")
-    override val fsId: Long,
+    override val id: Long,
     @SerialName("isdir")
     @Serializable(with = NumberToBooleanSerializer::class)
     override val isDir: Boolean,
@@ -25,21 +25,21 @@ data class NetDiskDoc(
     @SerialName("md5")
     override val md5: String,
     @SerialName("object_key")
-    val objectKey: String,
+    private val objectKey: String,
     @SerialName("path")
     override val path: String,
     @SerialName("server_ctime")
-    override val createdTime: Long,
+    override val created: Long,
     @SerialName("server_filename")
     override val filename: String,
     @SerialName("server_mtime")
-    override val modifiedTime: Long,
+    override val modified: Long,
     @SerialName("share")
     val share: Int,
     @SerialName("size")
     override val size: Int,
     @SerialName("thumbs")
-    val thumbs: Map<String, String>,
+    val thumbs: Map<String, String>? = null,
     @SerialName("wpfile")
-    val wpfile: Int,
+    private val wpfile: Int,
 ) : NetDiskFileInfo

@@ -10,22 +10,26 @@ data class NetDiskFile(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("fs_id")
-    override val fsId: Long,
+    override val id: Long,
     @SerialName("md5")
     override val md5: String,
     @SerialName("path")
     override val path: String,
     @SerialName("server_ctime")
-    override val createdTime: Long,
+    override val created: Long,
     @SerialName("server_filename")
     override val filename: String,
     @SerialName("server_mtime")
-    override val modifiedTime: Long,
+    override val modified: Long,
     @SerialName("size")
     override val size: Int,
     @SerialName("thumbs")
-    val thumbs: Map<String, String> = emptyMap(),
+    val thumbs: Map<String, String>? = null,
     @SerialName("isdir")
     @Serializable(with = NumberToBooleanSerializer::class)
-    override val isDir: Boolean = false
+    override val isDir: Boolean = false,
+    @SerialName("local_ctime")
+    val localCreatedTime: Long? = 0,
+    @SerialName("local_mtime")
+    val localModifiedTime: Long? = 0,
 ) : NetDiskFileInfo

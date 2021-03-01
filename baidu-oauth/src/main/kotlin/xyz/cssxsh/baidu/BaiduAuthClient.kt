@@ -9,9 +9,13 @@ interface BaiduAuthClient {
         block: suspend BaiduAuthClient.(HttpClient) -> R,
     ): R
 
-    val clientId: String
+    val appName: String
 
-    val clientSecret: String
+    val appId: Long
+
+    val appKey: String
+
+    val secretKey: String
 
     val accessToken: String
 

@@ -1,61 +1,69 @@
 package xyz.cssxsh.baidu
 
 import kotlinx.coroutines.runBlocking
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import xyz.cssxsh.baidu.disk.*
 import java.io.File
+import java.util.*
 
 internal class BaiduNetDiskClientTest {
 
-    private val token = "123.4414535ab6d23ad18544feb5ffb4f8ed.YaU_YJsvbAaHqciH78PvUeoU8tl9RaLhqYhYAd5.jW75BQ"
+    private val local = Properties().apply {
+        File("../local.properties").inputStream().use {
+            load(it)
+        }
+    }
 
     private val client = BaiduNetDiskClient(
-        appKey = "Ocyz2NgvSGcnZyRs7con1dQNeHPKzBd2",
-        appName = "PixivHelper",
-        appId = 23705658
-    ).apply { setToken(token) }
+        appName = local.getProperty("APP_NAME"),
+        appId = local.getProperty("APP_ID").toLong(),
+        appKey = local.getProperty("APP_KEY"),
+        secretKey = local.getProperty("SECRET_KEY")
+    ).apply { setToken(local.getProperty("ACCESS_TOKEN")) }
 
-    private val file = File("../test/pixez-flutter-0.3.8.apk")
+    private val dir = File(local.getProperty("TEST_DIR"))
+
+    private val file = dir.resolve(local.getProperty("TEST_FILE"))
+
+    private fun <T> T.withPrintln(): T = also { println(it) }
 
     @Test
     fun getUserInfo(): Unit = runBlocking {
-        client.getUserInfo().let {
-            println(it)
-        }
+        client.getUserInfo().withPrintln()
     }
 
     @Test
     fun getQuotaInfo(): Unit = runBlocking {
-        client.getQuotaInfo().let {
-            println(it)
-        }
+        client.getQuotaInfo().withPrintln()
     }
 
     @Test
     fun createDir(): Unit = runBlocking {
-        client.createDir("/test").let {
-            println(it)
-        }
+        client.createDir("/test").withPrintln()
     }
 
     @Test
     fun uploadFile(): Unit = runBlocking {
-        client.uploadFile(file).let {
-            println(it)
-        }
+        client.uploadFile(file).withPrintln()
     }
 
     @Test
     fun loadFile(): Unit = runBlocking {
-        val size = file.length()
-        val content = file.digestContentMd5() // 7afd260afub5fa182b0f60028960f103
-        val slice = file.digestSliceMd5()
-        println(size)
-        println(content)
-        println(slice)
-        client.loadFile(size = size, content = content, slice = slice, path = "/temp_").let {
-            println(it)
-        }
+        val size = file.length().withPrintln()
+        val content = file.digestContentMd5().withPrintln()
+        val slice = file.digestSliceMd5().withPrintln()
+        client.loadFile(size = size, content = content, slice = slice, path = "/temp_").withPrintln()
+    }
+
+    @Test
+    fun listFile(): Unit = runBlocking {
+        client.listFile().withPrintln()
+        client.listAllFile(path = client.appDataFolder).withPrintln()
+        client.listDoc().withPrintln()
+        client.listBt().withPrintln()
+        client.listVideo().withPrintln()
+        client.getCategoryInfo().withPrintln()
+        client.listCategoryFile(categories = listOf(CategoryType.AUDIO)).withPrintln()
+        client.searchFile(key = "apk").withPrintln()
     }
 }
