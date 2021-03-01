@@ -1,4 +1,4 @@
-package xyz.cssxsh.baidu.auth
+package xyz.cssxsh.baidu.oauth
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
@@ -10,8 +10,8 @@ import kotlinx.serialization.encoding.Encoder
 
 /**
  *
- * @see xyz.cssxsh.baidu.auth.AuthorizeError
- * @see xyz.cssxsh.baidu.auth.AuthorizeException
+ * @see xyz.cssxsh.baidu.oauth.AuthorizeError
+ * @see xyz.cssxsh.baidu.oauth.AuthorizeException
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/error)
  */
 @Serializable(with = AuthorizeErrorType.Serializer::class)

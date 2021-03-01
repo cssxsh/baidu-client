@@ -1,4 +1,4 @@
-package xyz.cssxsh.baidu.auth
+package xyz.cssxsh.baidu.oauth
 
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/authorization)

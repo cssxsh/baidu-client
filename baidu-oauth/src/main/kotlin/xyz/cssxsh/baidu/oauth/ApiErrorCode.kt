@@ -1,4 +1,4 @@
-package xyz.cssxsh.baidu.auth
+package xyz.cssxsh.baidu.oauth
 
 /**
  * [wiki](https://openauth.baidu.com/doc/appendix.html)

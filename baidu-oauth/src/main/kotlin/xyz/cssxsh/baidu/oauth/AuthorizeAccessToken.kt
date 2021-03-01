@@ -1,4 +1,4 @@
-package xyz.cssxsh.baidu.auth
+package xyz.cssxsh.baidu.oauth
 
 import kotlinx.serialization.KSerializer
 import kotlinx.serialization.SerialName
@@ -17,7 +17,7 @@ data class AuthorizeAccessToken(
     @SerialName("expires_in")
     val expiresIn: SecondUnit,
     @SerialName("refresh_token")
-    val refreshToken: String,
+    val refreshToken: String = "",
     @SerialName("scope")
     @Serializable(with = ScopeSerializer::class)
     val scope: List<ScopeType>,
@@ -32,8 +32,12 @@ data class AuthorizeAccessToken(
 
         private val SPLIT_REGEX = """([,]|\s)""".toRegex()
 
+        fun splitScope(text: String) = text.split(SPLIT_REGEX).map { value ->
+            requireNotNull(ScopeType.values().find { it.value == value }) { "$value not in ${ScopeType.values().toList()}" }
+        }
+
         override fun deserialize(decoder: Decoder): List<ScopeType> =
-            decoder.decodeString().split(SPLIT_REGEX).map { name -> ScopeType.valueOf(value = name.toUpperCase()) }
+            splitScope(decoder.decodeString())
 
         override fun serialize(encoder: Encoder, value: List<ScopeType>) =
             encoder.encodeString(value.joinToString(" "))

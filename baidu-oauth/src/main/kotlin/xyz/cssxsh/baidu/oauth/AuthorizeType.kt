@@ -1,4 +1,4 @@
-package xyz.cssxsh.baidu.auth
+package xyz.cssxsh.baidu.oauth
 
 /**
  * [doc](https://openauth.baidu.com/doc/doc.html)

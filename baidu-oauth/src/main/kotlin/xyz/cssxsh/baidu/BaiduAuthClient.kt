@@ -1,7 +1,7 @@
 package xyz.cssxsh.baidu
 
 import io.ktor.client.*
-import xyz.cssxsh.baidu.auth.ScopeType
+import xyz.cssxsh.baidu.oauth.ScopeType
 
 interface BaiduAuthClient {
 
