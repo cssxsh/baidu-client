@@ -8,18 +8,18 @@ plugins {
 }
 
 bintray {
-    user = BintraySetting.user
-    key = BintraySetting.key
+    user = BintrayProperties.user
+    key = BintrayProperties.key
     publish = true
-    setPublications(BintraySetting.task)
+    setPublications(BintrayProperties.task)
 
     pkg.apply {
-        userOrg = BintraySetting.org
-        repo = BintraySetting.repo
+        userOrg = BintrayProperties.org
+        repo = BintrayProperties.repo
         name = project.name
-        vcsUrl = BintraySetting.githubUrl
-        githubRepo = BintraySetting.githubRepo
-        setLicenses(BintraySetting.license)
+        vcsUrl = BintrayProperties.githubUrl
+        githubRepo = BintrayProperties.githubRepo
+        setLicenses(BintrayProperties.license)
         version.apply {
             name = project.version.toString()
             released = Date().toString()
@@ -29,34 +29,31 @@ bintray {
 
 publishing {
     publications {
-        create<MavenPublication>(BintraySetting.task) {
-            groupId = project.group.toString()
-            artifactId = project.name
-            version = project.version.toString()
+        create<MavenPublication>(BintrayProperties.task) {
+            from(components["java"])
             artifact(tasks.kotlinSourcesJar)
-            artifact(tasks.jar)
 
             pom {
                 packaging = "jar"
-                name.set(BintraySetting.repo)
-                url.set(BintraySetting.githubUrl)
+                name.set(BintrayProperties.repo)
+                url.set(BintrayProperties.githubUrl)
                 licenses {
                     license {
-                        name.set(BintraySetting.licenseName)
-                        url.set(BintraySetting.licenseUrl)
+                        name.set(BintrayProperties.licenseName)
+                        url.set(BintrayProperties.licenseUrl)
                     }
                 }
                 developers {
                     developer {
-                        id.set(BintraySetting.githubId)
-                        email.set(BintraySetting.githubEmail)
-                        url.set(BintraySetting.githubPage)
+                        id.set(BintrayProperties.githubId)
+                        email.set(BintrayProperties.githubEmail)
+                        url.set(BintrayProperties.githubPage)
                     }
                 }
                 scm {
-                    connection.set(BintraySetting.githubUrl)
-                    developerConnection.set(BintraySetting.githubUrl)
-                    url.set(BintraySetting.githubUrl)
+                    connection.set(BintrayProperties.githubUrl)
+                    developerConnection.set(BintrayProperties.githubUrl)
+                    url.set(BintrayProperties.githubUrl)
                 }
             }
         }

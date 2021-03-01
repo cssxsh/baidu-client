@@ -5,6 +5,8 @@ allprojects {
     version = "0.1.0-dev-1"
 }
 
+BintrayProperties.properties = projectDir.resolve("local.properties")
+
 subprojects {
     repositories {
         mavenLocal()
