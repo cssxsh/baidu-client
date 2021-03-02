@@ -3,6 +3,7 @@ package xyz.cssxsh.baidu.disk
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.cssxsh.baidu.NumberToBooleanSerializer
+import xyz.cssxsh.baidu.RequestIdType
 import xyz.cssxsh.baidu.disk.item.NetDiskBt
 
 @Serializable
@@ -16,7 +17,7 @@ data class NetDiskBtList(
     @SerialName("info")
     val info: List<NetDiskBt>,
     @SerialName("request_id")
-    val requestId: Long,
+    val requestId: RequestIdType,
     @SerialName("has_more")
     @Serializable(with = NumberToBooleanSerializer::class)
     val hasMore: Boolean = false

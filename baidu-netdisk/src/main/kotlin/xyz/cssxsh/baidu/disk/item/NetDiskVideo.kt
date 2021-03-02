@@ -33,7 +33,7 @@ data class NetDiskVideo(
     @SerialName("share")
     val share: Int,
     @SerialName("size")
-    override val size: Int,
+    override val size: Long,
     @SerialName("thumbs")
     val thumbs: Map<String, String>? = null,
     @SerialName("wpfile")

@@ -17,14 +17,14 @@ import java.io.IOException
 import java.time.OffsetDateTime
 import kotlin.time.*
 
-abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : BaiduAuthClient {
+abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : NetDiskClient {
     @Suppress("unused")
     val cookiesStorage = AcceptAllCookiesStorage()
 
     @Suppress("unused")
     suspend fun loadCookies(cookies: List<HttpCookie>) = cookies.forEach { cookie ->
         cookiesStorage.addCookie(
-            NetDiskApi.INDEX_PAGE, Cookie(
+            NetDisk.INDEX_PAGE, Cookie(
                 name = cookie.name,
                 value = cookie.value,
                 expires = cookie.expirationDate?.let { GMTDate((it * 1000).toLong()) },
@@ -49,7 +49,7 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : BaiduAuthClien
         }
         BrowserUserAgent()
         install(UserAgent) {
-            agent = NetDiskApi.USER_AGENT
+            agent = NetDisk.USER_AGENT
         }
         ContentEncoding {
             gzip()
@@ -58,6 +58,9 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : BaiduAuthClien
         }
         install(HttpCookies) {
             storage = cookiesStorage
+        }
+        install(HttpRedirect) {
+            allowHttpsDowngrade = true
         }
         install(HttpTimeout) {
             socketTimeoutMillis = (5).minutes.toLongMilliseconds()
@@ -115,7 +118,7 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : BaiduAuthClien
     override val refreshToken: String
         get() = requireNotNull(refreshTokenValue?.takeIf { it.isNotBlank() })
 
-    open val appDataFolder: String
+    override val appDataFolder: String
         get() = "/apps/$appName"
 
     open fun saveToken(token: AuthorizeAccessToken): Unit = synchronized(expires) {

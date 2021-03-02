@@ -38,25 +38,9 @@ internal class BaiduNetDiskClientTest {
     }
 
     @Test
-    fun createDir(): Unit = runBlocking {
-        client.createDir("/test").withPrintln()
-    }
+    fun getListInfo(): Unit = runBlocking {
+        client.getListInfo().withPrintln()
 
-    @Test
-    fun uploadFile(): Unit = runBlocking {
-        client.uploadFile(file).withPrintln()
-    }
-
-    @Test
-    fun loadFile(): Unit = runBlocking {
-        val size = file.length().withPrintln()
-        val content = file.digestContentMd5().withPrintln()
-        val slice = file.digestSliceMd5().withPrintln()
-        client.loadFile(size = size, content = content, slice = slice, path = "/temp_").withPrintln()
-    }
-
-    @Test
-    fun listFile(): Unit = runBlocking {
         client.listFile().withPrintln()
         client.listAllFile(path = client.appDataFolder).withPrintln()
         client.listDoc().withPrintln()
@@ -65,5 +49,41 @@ internal class BaiduNetDiskClientTest {
         client.getCategoryInfo().withPrintln()
         client.listCategoryFile(categories = listOf(CategoryType.AUDIO)).withPrintln()
         client.searchFile(key = "apk").withPrintln()
+    }
+
+    @Test
+    fun createFileWeb(): Unit = runBlocking {
+        client.createFileWeb(size = 0, isDir = true, path = "/test", uploadId = null).withPrintln()
+    }
+
+    @Test
+    fun createDir(): Unit = runBlocking {
+        client.createDir(path = "/test").withPrintln()
+    }
+
+    @Test
+    fun uploadFile(): Unit = runBlocking {
+        client.uploadFile(file).withPrintln()
+    }
+
+    @Test
+    fun uploadSingleFile(): Unit = runBlocking {
+        client.uploadSingleFile(path = file.name, bytes = file.readBytes()).withPrintln()
+    }
+
+    @Test
+    fun getMetaInfo(): Unit = runBlocking {
+        client.getMetaInfo(path = "/apps/PixivHelper").withPrintln()
+    }
+
+    @Test
+    fun rapidUploadFile(): Unit = runBlocking {
+        client.rapidUploadFile(info = RapidUploadInfo.parse(code = local.getProperty("TEST_CODE"))).withPrintln()
+    }
+
+    @Test
+    fun getFlashCode(): Unit = runBlocking {
+        file.getRapidUploadInfo().withPrintln()
+        client.getRapidUploadInfo(path = file.name).withPrintln()
     }
 }

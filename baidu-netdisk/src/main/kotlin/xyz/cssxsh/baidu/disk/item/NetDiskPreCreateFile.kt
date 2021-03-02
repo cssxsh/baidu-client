@@ -2,6 +2,7 @@ package xyz.cssxsh.baidu.disk.item
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonPrimitive
 import xyz.cssxsh.baidu.NumberToBooleanSerializer
 import xyz.cssxsh.baidu.disk.*
 
@@ -23,9 +24,9 @@ data class NetDiskPreCreateFile(
     @SerialName("path")
     override val path: String,
     @SerialName("request_id")
-    val requestId: Long? = null,
+    val requestId: JsonPrimitive? = null,
     @SerialName("size")
-    override val size: Int,
+    override val size: Long,
     @SerialName("filename")
     override val filename: String = ""
 ) : NetDiskFileInfo

@@ -1,5 +1,10 @@
 package xyz.cssxsh.baidu
 
+import io.ktor.client.features.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.util.*
 import xyz.cssxsh.baidu.disk.*
 import java.io.File
 
@@ -13,7 +18,7 @@ open class BaiduNetDiskClient(
     suspend fun createDir(path: String): NetDiskFileInfo =
         createFile(path = path, size = 0, isDir = true, uploadId = null)
 
-    suspend fun uploadFile(file: File, path: String = "${appDataFolder}/${file.name}"): NetDiskFileInfo {
+    suspend fun uploadFile(file: File, path: String = file.name): NetDiskFileInfo {
         val user = getUserInfo()
         check(file.isFile) {
             "${file.absolutePath}不是文件"
@@ -58,17 +63,23 @@ open class BaiduNetDiskClient(
         )
     }
 
-    suspend fun loadFile(size: Long, content: String, slice: String, path: String): NetDiskFileInfo {
-        val pre = preCreate(
-            path = path,
-            size = size,
-            isDir = false,
-            blocks = emptyList(),
-            content = content,
-            slice = slice,
-            rename = RenameType.BLOCK
-        )
-        check(pre.type == CreateReturnType.EXIST) { pre.toString() }
-        return listFileById(listOf(pre.info!!.id)).list.single()
+    suspend fun rapidUploadFile(info: RapidUploadInfo, rename: RenameType = RenameType.COVER): NetDiskFileInfo =
+        rapidUpload(info.content, info.slice, info.length, info.path, rename).info
+
+    suspend fun getRapidUploadInfo(path: String): RapidUploadInfo {
+        lateinit var content: String
+        lateinit var length: String
+        lateinit var slice: String
+        useHttpClient { client ->
+            client.get<HttpResponse>(downloadFileUrl(path = withAppDataFolder(path))) {
+                header(HttpHeaders.Range, "bytes=0-${NetDisk.SLICE_SIZE - 1}")
+            }.apply {
+                content = requireNotNull(headers[HttpHeaders.ETag])
+                length = requireNotNull(headers[HttpHeaders.ContentRange]).substringAfterLast('/')
+            }.readBytes().let { bytes ->
+                slice = digestMd5(input = bytes)
+            }
+        }
+        return RapidUploadInfo(content = content, slice = slice, length = length.toLong(), path = path)
     }
 }

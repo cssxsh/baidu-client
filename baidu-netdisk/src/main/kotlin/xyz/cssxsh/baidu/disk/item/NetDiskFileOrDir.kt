@@ -42,7 +42,7 @@ data class NetDiskFileOrDir(
     @SerialName("share")
     private val share: Int? = null,
     @SerialName("size")
-    override val size: Int,
+    override val size: Long,
     @SerialName("thumbs")
     val thumbs: Map<String, String>? = null,
     @SerialName("unlist")

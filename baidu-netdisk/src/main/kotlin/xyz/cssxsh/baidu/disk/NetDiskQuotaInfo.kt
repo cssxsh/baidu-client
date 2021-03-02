@@ -2,6 +2,7 @@ package xyz.cssxsh.baidu.disk
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import xyz.cssxsh.baidu.RequestIdType
 
 @Serializable
 data class NetDiskQuotaInfo(
@@ -12,7 +13,7 @@ data class NetDiskQuotaInfo(
     @SerialName("free")
     val free: Long? = null,
     @SerialName("request_id")
-    val requestId: Long,
+    val requestId: RequestIdType,
     @SerialName("total")
     val total: Long,
     @SerialName("used")

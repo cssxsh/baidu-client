@@ -10,5 +10,5 @@ interface NetDiskFileInfo {
     val path: String
     val created: Long
     val modified: Long
-    val size: Int
+    val size: Long
 }

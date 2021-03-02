@@ -30,5 +30,5 @@ data class NetDiskCreateFile(
     @SerialName("server_filename")
     override val filename: String = "",
     @SerialName("size")
-    override val size: Int = 0
+    override val size: Long = 0
 ) : NetDiskFileInfo

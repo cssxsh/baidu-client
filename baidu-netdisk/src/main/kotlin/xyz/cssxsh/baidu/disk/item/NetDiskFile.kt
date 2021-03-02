@@ -22,14 +22,14 @@ data class NetDiskFile(
     @SerialName("server_mtime")
     override val modified: Long,
     @SerialName("size")
-    override val size: Int,
+    override val size: Long,
     @SerialName("thumbs")
     val thumbs: Map<String, String>? = null,
     @SerialName("isdir")
     @Serializable(with = NumberToBooleanSerializer::class)
     override val isDir: Boolean = false,
     @SerialName("local_ctime")
-    val localCreatedTime: Long? = 0,
+    val localCreatedTime: Long = 0,
     @SerialName("local_mtime")
-    val localModifiedTime: Long? = 0,
+    val localModifiedTime: Long = 0,
 ) : NetDiskFileInfo

@@ -33,7 +33,7 @@ data class NetDiskDetail(
     @SerialName("server_mtime")
     override val modified: Long,
     @SerialName("size")
-    override val size: Int,
+    override val size: Long,
     @SerialName("thumbs")
     val thumbs: Map<String, String>? = null,
     @SerialName("width")

@@ -33,7 +33,7 @@ data class NetDiskBt(
     @SerialName("share")
     private val share: Int,
     @SerialName("size")
-    override val size: Int,
+    override val size: Long,
     @SerialName("wpfile")
     private val wpfile: Int,
 ) : NetDiskFileInfo
