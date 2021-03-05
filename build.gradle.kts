@@ -2,7 +2,7 @@
 
 allprojects {
     group = "xyz.cssxsh.baidu"
-    version = "0.1.0-dev-1"
+    version = "0.1.0-dev-6"
 }
 
 BintrayProperties.properties = projectDir.resolve("local.properties")
