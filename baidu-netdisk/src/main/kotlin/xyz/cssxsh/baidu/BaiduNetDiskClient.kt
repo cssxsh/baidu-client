@@ -6,6 +6,9 @@ import io.ktor.http.*
 import xyz.cssxsh.baidu.disk.*
 import java.io.File
 
+/**
+ * 构建客户端的参数需要到 [百度网盘开放中心](https://pan.baidu.com/union/apply) 申请
+ */
 open class BaiduNetDiskClient(
     override val appId: Long,
     override val appName: String,
@@ -20,7 +23,7 @@ open class BaiduNetDiskClient(
         createFile(path = path, size = 0, isDir = true, uploadId = null)
 
     /**
-     * 分段上传一个文件，默认路径是文件名，文件存在会报错
+     * 分段上传一个文件，默认路径是/apps/${appName}/${file.name}，文件存在会报错
      */
     suspend fun uploadFile(file: File, path: String = file.name): NetDiskFileInfo {
         check(file.isFile) { "${file.absolutePath}不是文件" }

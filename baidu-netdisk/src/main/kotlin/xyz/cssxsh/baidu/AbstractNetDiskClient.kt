@@ -116,13 +116,13 @@ abstract class AbstractNetDiskClient : NetDiskClient {
     }
 
     /**
-     * 用户认证的方式获取 Token, block 输入 认证网页 Url ，返回认证码
+     * 服务端的方式获取 Token, block 输入 认证网页 Url ，返回认证码
      */
     suspend fun authorize(block: suspend (Url) -> String) =
         saveToken(token = getAuthorizeToken(code = block(getWebAuthorizeUrl(type = AuthorizeType.AUTHORIZATION))))
 
     /**
-     * 用户认证的方式获取 Token, block 输入 认证网页 Url ，返回跳转Url
+     * 移动端的方式获取 Token, block 输入 认证网页 Url ，返回跳转Url
      */
     suspend fun implicit(block: suspend (Url) -> Url) =
         saveToken(token = block(getWebAuthorizeUrl(type = AuthorizeType.IMPLICIT)).getAuthorizeToken())
