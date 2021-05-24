@@ -1,5 +1,4 @@
-import xyz.cssxsh.bintray.Config
-import xyz.cssxsh.bintray.setBintray
+import xyz.cssxsh.maven.*
 
 plugins {
     kotlin("jvm")

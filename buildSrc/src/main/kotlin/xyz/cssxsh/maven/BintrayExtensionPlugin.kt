@@ -1,4 +1,4 @@
-package xyz.cssxsh.bintray
+package xyz.cssxsh.maven
 
 import org.gradle.api.Plugin
 import org.gradle.api.Project

@@ -1,14 +1,13 @@
-import xyz.cssxsh.bintray.Config
-import xyz.cssxsh.bintray.setBintray
+import xyz.cssxsh.maven.*
 
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     `maven-publish`
-    id("com.jfrog.bintray")
+    //id("com.jfrog.bintray")
 }
 
-setBintray(Config())
+setGithub()
 
 dependencies {
     implementation(project(":baidu-oauth"))
