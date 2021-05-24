@@ -4,11 +4,11 @@ import xyz.cssxsh.bintray.setBintray
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
-    `maven-publish`
-    id("com.jfrog.bintray")
+//    `maven-publish`
+//    id("com.jfrog.bintray")
 }
 
-setBintray(Config())
+//setBintray(Config())
 
 dependencies {
     implementation(ktor("client", Versions.ktor))

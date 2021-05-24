@@ -14,12 +14,18 @@ internal class BaiduNetDiskClientTest {
         }
     }
 
-    private val client = BaiduNetDiskClient(
-        appName = local.getProperty("APP_NAME"),
-        appId = local.getProperty("APP_ID").toLong(),
-        appKey = local.getProperty("APP_KEY"),
-        secretKey = local.getProperty("SECRET_KEY")
-    ).apply { setToken(local.getProperty("ACCESS_TOKEN")) }
+    private val client by lazy {
+        runBlocking {
+            BaiduNetDiskClient(
+                appName = local.getProperty("APP_NAME"),
+                appId = local.getProperty("APP_ID").toLong(),
+                appKey = local.getProperty("APP_KEY"),
+                secretKey = local.getProperty("SECRET_KEY")
+            ).apply {
+                setToken(local.getProperty("ACCESS_TOKEN"))
+            }
+        }
+    }
 
     private val dir = File(local.getProperty("TEST_DIR"))
 

@@ -3,8 +3,6 @@ package xyz.cssxsh.baidu.disk
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import xyz.cssxsh.baidu.NumberToBooleanSerializer
-import xyz.cssxsh.baidu.RequestIdType
-import xyz.cssxsh.baidu.disk.item.NetDiskFile
 
 @Serializable
 data class NetDiskFileList(

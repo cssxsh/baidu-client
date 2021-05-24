@@ -1,10 +1,8 @@
 package xyz.cssxsh.baidu
 
-import io.ktor.client.features.*
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import io.ktor.util.*
 import xyz.cssxsh.baidu.disk.*
 import java.io.File
 
@@ -13,19 +11,23 @@ open class BaiduNetDiskClient(
     override val appName: String,
     override val appKey: String,
     override val secretKey: String
-) : AbstractNetDiskClient(emptyList()) {
+) : AbstractNetDiskClient() {
 
+    /**
+     * 创建一个目录
+     */
     suspend fun createDir(path: String): NetDiskFileInfo =
         createFile(path = path, size = 0, isDir = true, uploadId = null)
 
+    /**
+     * 分段上传一个文件，默认路径是文件名，文件存在会报错
+     */
     suspend fun uploadFile(file: File, path: String = file.name): NetDiskFileInfo {
+        check(file.isFile) { "${file.absolutePath}不是文件" }
+
         val user = getUserInfo()
-        check(file.isFile) {
-            "${file.absolutePath}不是文件"
-        }
-        check(file.length() <= user.getUpdateLimit()) {
-            "超过当前用户${user}上传上限"
-        }
+        check(file.length() <= user.getUpdateLimit()) { "超过当前用户${user}上传上限" }
+
         val temp = ByteArray(user.getSuperLimit())
         val blocks = file.getBlockList(buffer = temp)
         val pre = preCreate(
@@ -63,16 +65,22 @@ open class BaiduNetDiskClient(
         )
     }
 
+    /**
+     * 快速上传文件 需要Rapid信息，默认为覆盖模式
+     */
     suspend fun rapidUploadFile(info: RapidUploadInfo, rename: RenameType = RenameType.COVER): NetDiskFileInfo =
         rapidUpload(info.content, info.slice, info.length, info.path, rename).info
 
+    /**
+     * 获取文件的Rapid信息
+     */
     suspend fun getRapidUploadInfo(path: String): RapidUploadInfo {
         lateinit var content: String
         lateinit var length: String
         lateinit var slice: String
         useHttpClient { client ->
             client.get<HttpResponse>(downloadFileUrl(path = withAppDataFolder(path))) {
-                header(HttpHeaders.Range, "bytes=0-${NetDisk.SLICE_SIZE - 1}")
+                header(HttpHeaders.Range, "bytes=0-${SLICE_SIZE - 1}")
             }.apply {
                 content = requireNotNull(headers[HttpHeaders.ETag])
                 length = requireNotNull(headers[HttpHeaders.ContentRange]).substringAfterLast('/')

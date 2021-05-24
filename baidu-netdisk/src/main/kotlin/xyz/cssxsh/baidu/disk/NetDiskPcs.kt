@@ -16,7 +16,7 @@ suspend fun NetDiskClient.superFile(
     data: ByteArray,
     size: Int,
 ): NetDiskSuperFile = useHttpClient { client ->
-    client.post(NetDisk.PCS_SUPER_FILE) {
+    client.post(PCS_SUPER_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "upload")
         parameter("type", "tmpfile")
@@ -40,7 +40,7 @@ suspend fun NetDiskClient.uploadSingleFile(
     bytes: ByteArray,
     size: Int = bytes.size,
 ): NetDiskSingleFile = useHttpClient { client ->
-    client.post(NetDisk.PCS_FILE) {
+    client.post(PCS_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "upload")
         parameter("path", withAppDataFolder(path))
@@ -59,7 +59,7 @@ suspend fun NetDiskClient.uploadSingleFile(
 suspend fun NetDiskClient.getMetaInfo(
     path: String
 ): NetDiskMetaList = useHttpClient { client ->
-    client.post(NetDisk.PCS_FILE) {
+    client.post(PCS_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "meta")
         parameter("path", withAppDataFolder(path))
@@ -71,7 +71,7 @@ suspend fun NetDiskClient.getMetaInfo(
  */
 fun NetDiskClient.downloadFileUrl(
     path: String
-): Url = URLBuilder(NetDisk.PCS_FILE).apply {
+): Url = URLBuilder(PCS_FILE).apply {
     parameters.apply {
         appendParameter("access_token", accessToken)
         appendParameter("method", "download")

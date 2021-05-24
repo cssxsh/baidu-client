@@ -15,7 +15,7 @@ suspend fun NetDiskClient.getQuotaInfo(
     checkFree: Boolean? = null,
     checkExpire: Boolean? = null,
 ): NetDiskQuotaInfo = useHttpClient { client ->
-    client.get(NetDisk.API_QUOTA) {
+    client.get(API_QUOTA) {
         parameter("access_token", accessToken)
         parameter("checkfree", checkFree?.toInt())
         parameter("checkexpire", checkExpire?.toInt())
@@ -27,10 +27,10 @@ suspend fun NetDiskClient.getQuotaInfo(
  */
 suspend fun NetDiskClient.getCategoryInfo(
     categories: List<CategoryType>? = null,
-    path: String? = null,
+    path: String = "",
     recursion: Boolean? = null,
 ): NetDiskCategoryList = useHttpClient { client ->
-    client.get(NetDisk.API_CATEGORY_INFO) {
+    client.get(API_CATEGORY_INFO) {
         parameter("access_token", accessToken)
         parameter("category", categories?.joinToString(",") { it.ordinal.toString() })
         parameter("parent_path", withAppDataFolder(path))
@@ -42,7 +42,7 @@ suspend fun NetDiskClient.getCategoryInfo(
  * XXX
  */
 suspend fun NetDiskClient.getListInfo(
-    dir: String? = null,
+    dir: String = "",
     order: OrderType? = null,
     desc: Boolean? = null,
     start: Int? = null,
@@ -50,8 +50,8 @@ suspend fun NetDiskClient.getListInfo(
     web: Boolean? = null,
     folder: Boolean? = null,
     showEmpty: Int? = null,
-): NetDiskMultiList = useHttpClient { client ->
-    client.get(NetDisk.API_LIST) {
+): NetDiskList<NetDiskFileOrDir> = useHttpClient { client ->
+    client.get(API_LIST) {
         parameter("access_token", accessToken)
         parameter("method", "list")
         parameter("dir", withAppDataFolder(dir))
@@ -75,7 +75,7 @@ suspend fun NetDiskClient.rapidUpload(
     path: String,
     rename: RenameType? = null
 ): NetDiskRapidInfo = useHttpClient { client ->
-    client.post(NetDisk.API_RAPID_UPLOAD) {
+    client.post(API_RAPID_UPLOAD) {
         parameter("access_token", accessToken)
         body = FormDataContent(Parameters.build {
             appendParameter("rtype", rename?.ordinal)
@@ -104,7 +104,7 @@ suspend fun NetDiskClient.createFileWeb(
     zipQuality: Int? = null,
     zipSign: Int? = null,
 ): NetDiskCreateFile = useHttpClient { client ->
-    client.post(NetDisk.API_CREATE) {
+    client.post(API_CREATE) {
         parameter("access_token", accessToken)
         parameter("method", "create")
         body = FormDataContent(Parameters.build {

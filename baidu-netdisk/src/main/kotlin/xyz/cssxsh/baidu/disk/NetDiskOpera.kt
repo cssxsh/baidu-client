@@ -1,9 +1,7 @@
 package xyz.cssxsh.baidu.disk
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import xyz.cssxsh.baidu.RequestIdType
 
 @Serializable
 data class NetDiskOpera(

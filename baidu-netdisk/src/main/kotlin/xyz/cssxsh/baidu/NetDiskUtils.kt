@@ -2,16 +2,12 @@ package xyz.cssxsh.baidu
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.JsonPrimitive
 import xyz.cssxsh.baidu.disk.*
 import java.io.File
 import java.io.RandomAccessFile
 import java.security.MessageDigest
 
-typealias RequestIdType = JsonPrimitive
-
-fun NetDiskClient.withAppDataFolder(path: String?) =
-    if (path.orEmpty().startsWith("/")) path.orEmpty() else "${appDataFolder}/${path}"
+fun NetDiskClient.withAppDataFolder(path: String = "") = if (path.startsWith("/")) path else "${appDataFolder}/${path}"
 
 internal fun NetDiskUserInfo.getUpdateLimit(): Long = when (vipType) {
     // 4GB
@@ -77,7 +73,7 @@ internal fun File.digestContentMd5(blockSize: Int = 4 shl 20): String {
 }
 
 internal fun File.digestSliceMd5(): String {
-    val temp = ByteArray(NetDisk.SLICE_SIZE.toLong().coerceAtMost(length()).toInt())
+    val temp = ByteArray(SLICE_SIZE.toLong().coerceAtMost(length()).toInt())
     readBlock(buffer = temp)
     return digestMd5(input = temp)
 }
@@ -92,16 +88,20 @@ data class RapidUploadInfo(
     val length: Long,
     @SerialName("path")
     val path: String,
-) {
-    fun format(): String = "$content#$slice#$length#$path"
+)
 
-    companion object {
-        fun parse(code: String): RapidUploadInfo = code.split('#').let { (content, slice, length, path) ->
-            RapidUploadInfo(content = content, slice = slice, length = length.toLong(), path = path)
-        }
+fun RapidUploadInfo.format(): String = "$content#$slice#$length#$path"
+
+fun RapidUploadInfo.Companion.parse(code: String): RapidUploadInfo {
+    return code.split('#').let { (content, slice, length, path) ->
+        RapidUploadInfo(content = content, slice = slice, length = length.toLong(), path = path)
     }
 }
 
-fun File.getRapidUploadInfo(path: String = name) =
-    RapidUploadInfo(content = digestContentMd5(), slice = digestSliceMd5(), length = length(), path = path)
+fun File.getRapidUploadInfo(path: String = name) = RapidUploadInfo(
+    content = digestContentMd5(),
+    slice = digestSliceMd5(),
+    length = length(),
+    path = path
+)
 

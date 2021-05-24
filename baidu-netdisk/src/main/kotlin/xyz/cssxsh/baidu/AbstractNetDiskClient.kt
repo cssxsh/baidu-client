@@ -7,40 +7,19 @@ import io.ktor.client.features.compression.*
 import io.ktor.client.features.cookies.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
-import io.ktor.client.request.*
 import io.ktor.http.*
-import io.ktor.util.date.*
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.disk.*
 import java.io.IOException
 import java.time.OffsetDateTime
 import kotlin.time.*
 
-abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : NetDiskClient {
+abstract class AbstractNetDiskClient : NetDiskClient {
     @Suppress("unused")
     val cookiesStorage = AcceptAllCookiesStorage()
-
-    @Suppress("unused")
-    suspend fun loadCookies(cookies: List<HttpCookie>) = cookies.forEach { cookie ->
-        cookiesStorage.addCookie(
-            NetDisk.INDEX_PAGE, Cookie(
-                name = cookie.name,
-                value = cookie.value,
-                expires = cookie.expirationDate?.let { GMTDate((it * 1000).toLong()) },
-                path = cookie.path,
-                domain = cookie.domain,
-                secure = cookie.secure,
-                httpOnly = cookie.httpOnly
-            )
-        )
-    }
-
-    init {
-        runBlocking {
-            loadCookies(cookies)
-        }
-    }
 
     protected open fun client(): HttpClient = HttpClient(OkHttp) {
         Json {
@@ -49,7 +28,7 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : NetDiskClient 
         }
         BrowserUserAgent()
         install(UserAgent) {
-            agent = NetDisk.USER_AGENT
+            agent = USER_AGENT
         }
         ContentEncoding {
             gzip()
@@ -101,16 +80,20 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : NetDiskClient 
         ScopeType.NET_DISK
     )
 
-    override val redirect: String = AuthorizeApi.DEFAULT_REDIRECT
+    override val redirect: String = DEFAULT_REDIRECT
 
     @Suppress("unused")
     protected open var accessTokenValue: String? = null
 
     @Suppress("unused")
-    protected open var expires: OffsetDateTime = OffsetDateTime.now()
+    open var expires: OffsetDateTime = OffsetDateTime.now()
+        protected set
 
     @Suppress("unused")
     protected open var refreshTokenValue: String? = null
+
+    @Suppress("unused")
+    protected val mutex = Mutex()
 
     override val accessToken: String
         get() = requireNotNull(accessTokenValue?.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() })
@@ -121,25 +104,33 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : NetDiskClient 
     override val appDataFolder: String
         get() = "/apps/$appName"
 
-    open fun saveToken(token: AuthorizeAccessToken): Unit = synchronized(expires) {
+    open suspend fun saveToken(token: AuthorizeAccessToken): Unit = mutex.withLock {
         accessTokenValue = token.accessToken
         refreshTokenValue = token.refreshToken
         expires = OffsetDateTime.now().plusSeconds(token.expiresIn)
     }
 
-    fun setToken(token: String, expiresIn: SecondUnit = AuthorizeApi.ACCESS_EXPIRES): Unit = synchronized(expires) {
+    suspend fun setToken(token: String, expiresIn: SecondUnit = ACCESS_EXPIRES): Unit = mutex.withLock {
         accessTokenValue = token
         expires = OffsetDateTime.now().plusSeconds(expiresIn)
     }
 
+    /**
+     * 用户认证的方式获取 Token, block 输入 认证网页 Url ，返回认证码
+     */
     suspend fun authorize(block: suspend (Url) -> String) =
         saveToken(token = getAuthorizeToken(code = block(getWebAuthorizeUrl(type = AuthorizeType.AUTHORIZATION))))
 
+    /**
+     * 用户认证的方式获取 Token, block 输入 认证网页 Url ，返回跳转Url
+     */
     suspend fun implicit(block: suspend (Url) -> Url) =
         saveToken(token = block(getWebAuthorizeUrl(type = AuthorizeType.IMPLICIT)).getAuthorizeToken())
 
-    suspend fun credentials() =
-        saveToken(token = getCredentialsToken())
+    /**
+     * 获取临时 Token，莫得意义
+     */
+    suspend fun credentials() = saveToken(token = getCredentialsToken())
 
     private suspend fun AuthorizeDeviceCode.wait(): AuthorizeAccessToken = withTimeout(expiresIn.seconds) {
         var tokens: AuthorizeAccessToken? = null
@@ -148,7 +139,7 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : NetDiskClient 
                 getDeviceToken(code = deviceCode)
             }.onFailure {
                 if (it is AuthorizeException) {
-                    when(it.type) {
+                    when (it.type) {
                         AuthorizeErrorType.AUTHORIZATION_PENDING -> {
                             delay(interval.seconds)
                         }
@@ -165,17 +156,16 @@ abstract class AbstractNetDiskClient(cookies: List<HttpCookie>) : NetDiskClient 
         tokens!!
     }
 
+    /**
+     * 设备认证的方式获取 Token, block 第一个参数是 直接网页认证的Url，第二个是 二维码认证的图片Url
+     */
     suspend fun device(block: suspend (Url, Url) -> Unit) = saveToken(token = getDeviceCode().let { code ->
         block(getDeviceAuthorizeUrl(code = code.userCode), Url(code.qrcodeUrl))
         code.wait()
     })
 
-    @JvmName("device_")
-    suspend fun device(block: suspend (ByteArray) -> Unit) = saveToken(token = getDeviceCode().let { code ->
-        block(useHttpClient { it.get(code.qrcodeUrl) })
-        code.wait()
-    })
-
-    suspend fun refresh() =
-        saveToken(token = getRefreshToken())
+    /**
+     * 刷新 Token
+     */
+    suspend fun refresh() = saveToken(token = getRefreshToken())
 }

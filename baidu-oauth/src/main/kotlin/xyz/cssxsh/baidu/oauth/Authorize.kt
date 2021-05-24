@@ -15,7 +15,7 @@ fun BaiduAuthClient.getWebAuthorizeUrl(
     confirm: Boolean? = null,
     login: LoginType? = null,
     extend: Map<String, Any?>? = null
-): Url = URLBuilder(AuthorizeApi.AUTHORIZE).apply {
+): Url = URLBuilder(AUTHORIZE).apply {
     parameters.apply {
         appendParameter("client_id", appKey)
         appendParameter("response_type", type)
@@ -39,7 +39,7 @@ fun Url.getAuthorizeToken(): AuthorizeAccessToken = AuthorizeAccessToken(
     accessToken = parameters["access_token"].orEmpty(),
     expiresIn = parameters["expires_in"]?.toLong() ?: 0,
     refreshToken = "",
-    scope = AuthorizeAccessToken.ScopeSerializer.splitScope(parameters["scope"].orEmpty()),
+    scope = ScopeSerializer.splitScope(parameters["scope"].orEmpty()),
     sessionKey = parameters["session_key"].orEmpty(),
     sessionSecret = parameters["session_secret"].orEmpty()
 )
@@ -54,7 +54,7 @@ fun Url.getAuthorizeCode(): String =
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
  */
 suspend fun BaiduAuthClient.getAuthorizeToken(code: String): AuthorizeAccessToken = useHttpClient { client ->
-    client.post(AuthorizeApi.TOKEN) {
+    client.post(TOKEN) {
         parameter("grant_type", GrantType.AUTHORIZATION)
         parameter("code", code)
         parameter("client_id", appKey)
@@ -67,7 +67,7 @@ suspend fun BaiduAuthClient.getAuthorizeToken(code: String): AuthorizeAccessToke
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/client)
  */
 suspend fun BaiduAuthClient.getCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
-    client.post(AuthorizeApi.TOKEN) {
+    client.post(TOKEN) {
         parameter("grant_type", GrantType.CREDENTIALS)
         parameter("client_id", appKey)
         parameter("client_secret", secretKey)
@@ -79,7 +79,7 @@ suspend fun BaiduAuthClient.getCredentialsToken(): AuthorizeAccessToken = useHtt
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
 suspend fun BaiduAuthClient.getDeviceCode(): AuthorizeDeviceCode = useHttpClient { client ->
-    client.post(AuthorizeApi.DEVICE_CODE) {
+    client.post(DEVICE_CODE) {
         parameter("client_id", appKey)
         parameter("response_type", "device_code")
         parameter("scope", scope.joinToString(","))
@@ -95,7 +95,7 @@ fun getDeviceAuthorizeUrl(
     force: Boolean? = null,
     redirect: String? = null,
     extend: Map<String, Any?>? = null
-): Url = URLBuilder(AuthorizeApi.DEVICE).apply {
+): Url = URLBuilder(DEVICE).apply {
     parameters.apply {
         appendParameter("code", code)
         appendParameter("display", display)
@@ -111,7 +111,7 @@ fun getDeviceAuthorizeUrl(
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
 suspend fun BaiduAuthClient.getDeviceToken(code: String): AuthorizeAccessToken = useHttpClient { client ->
-    client.post(AuthorizeApi.TOKEN) {
+    client.post(TOKEN) {
         parameter("grant_type", GrantType.DEVICE)
         parameter("code", code)
         parameter("client_id", appKey)
@@ -123,7 +123,7 @@ suspend fun BaiduAuthClient.getDeviceToken(code: String): AuthorizeAccessToken =
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
 suspend fun BaiduAuthClient.getRefreshToken(): AuthorizeAccessToken = useHttpClient { client ->
-    client.post(AuthorizeApi.TOKEN) {
+    client.post(TOKEN) {
         parameter("grant_type", GrantType.REFRESH)
         parameter("refresh_token", refreshToken)
         parameter("client_id", appKey)

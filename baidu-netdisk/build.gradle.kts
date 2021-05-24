@@ -1,64 +1,14 @@
-import java.util.Date
+import xyz.cssxsh.bintray.Config
+import xyz.cssxsh.bintray.setBintray
 
 plugins {
-    kotlin("jvm") version Versions.kotlin
-    kotlin("plugin.serialization") version Versions.kotlin
+    kotlin("jvm")
+    kotlin("plugin.serialization")
     `maven-publish`
-    id("com.jfrog.bintray") version Versions.bintray
+    id("com.jfrog.bintray")
 }
 
-bintray {
-    user = BintrayProperties.user
-    key = BintrayProperties.key
-    publish = true
-    setPublications(BintrayProperties.task)
-
-    pkg.apply {
-        userOrg = BintrayProperties.org
-        repo = BintrayProperties.repo
-        name = project.name
-        vcsUrl = BintrayProperties.githubUrl
-        githubRepo = BintrayProperties.githubRepo
-        setLicenses(BintrayProperties.license)
-        version.apply {
-            name = project.version.toString()
-            released = Date().toString()
-        }
-    }
-}
-
-publishing {
-    publications {
-        create<MavenPublication>(BintrayProperties.task) {
-            from(components["java"])
-            artifact(tasks.kotlinSourcesJar)
-
-            pom {
-                packaging = "jar"
-                name.set(BintrayProperties.repo)
-                url.set(BintrayProperties.githubUrl)
-                licenses {
-                    license {
-                        name.set(BintrayProperties.licenseName)
-                        url.set(BintrayProperties.licenseUrl)
-                    }
-                }
-                developers {
-                    developer {
-                        id.set(BintrayProperties.githubId)
-                        email.set(BintrayProperties.githubEmail)
-                        url.set(BintrayProperties.githubPage)
-                    }
-                }
-                scm {
-                    connection.set(BintrayProperties.githubUrl)
-                    developerConnection.set(BintrayProperties.githubUrl)
-                    url.set(BintrayProperties.githubUrl)
-                }
-            }
-        }
-    }
-}
+setBintray(Config())
 
 dependencies {
     implementation(project(":baidu-oauth"))

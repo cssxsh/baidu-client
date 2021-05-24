@@ -12,7 +12,7 @@ import xyz.cssxsh.baidu.*
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF)
  */
 suspend fun NetDiskClient.getUserInfo(): NetDiskUserInfo = useHttpClient { client ->
-    client.get(NetDisk.PAN_NAS) {
+    client.get(PAN_NAS) {
         parameter("access_token", accessToken)
         parameter("method", "uinfo")
     }
@@ -22,7 +22,7 @@ suspend fun NetDiskClient.getUserInfo(): NetDiskUserInfo = useHttpClient { clien
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8)
  */
 suspend fun NetDiskClient.listFile(
-    dir: String? = null,
+    dir: String = "",
     order: OrderType? = null,
     desc: Boolean? = null,
     start: Int? = null,
@@ -30,8 +30,8 @@ suspend fun NetDiskClient.listFile(
     web: Boolean? = null,
     folder: Boolean? = null,
     showEmpty: Int? = null,
-): NetDiskMultiList = useHttpClient { client ->
-    client.get(NetDisk.PAN_FILE) {
+): NetDiskList<NetDiskFileOrDir> = useHttpClient { client ->
+    client.get(PAN_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "list")
         parameter("dir", withAppDataFolder(dir))
@@ -49,7 +49,7 @@ suspend fun NetDiskClient.listFile(
  * XXX
  */
 suspend fun NetDiskClient.listAllFile(
-    path: String? = null,
+    path: String = "",
     order: OrderType? = null,
     desc: Boolean? = null,
     start: Int? = null,
@@ -59,7 +59,7 @@ suspend fun NetDiskClient.listAllFile(
     mtime: Long? = null,
     web: Boolean? = null,
 ): NetDiskFileList = useHttpClient { client ->
-    client.get(NetDisk.PAN_MULTIMEDIA) {
+    client.get(PAN_MULTIMEDIA) {
         parameter("access_token", accessToken)
         parameter("method", "listall")
         parameter("path", withAppDataFolder(path))
@@ -82,11 +82,11 @@ suspend fun NetDiskClient.listDoc(
     num: Int? = null,
     order: OrderType? = null,
     desc: Boolean? = null,
-    path: String? = null,
+    path: String = "",
     recursion: Boolean? = null,
     web: Boolean? = null,
-): NetDiskDocList = useHttpClient { client ->
-    client.get(NetDisk.PAN_FILE) {
+): NetDiskList<NetDiskDoc> = useHttpClient { client ->
+    client.get(PAN_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "doclist")
         parameter("page", page)
@@ -107,10 +107,10 @@ suspend fun NetDiskClient.listVideo(
     num: Int? = null,
     order: OrderType? = null,
     desc: Boolean? = null,
-    path: String? = null,
+    path: String = "",
     recursion: Boolean? = null,
-): NetDiskVideoList = useHttpClient { client ->
-    client.get(NetDisk.PAN_FILE) {
+): NetDiskList<NetDiskVideo> = useHttpClient { client ->
+    client.get(PAN_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "videolist")
         parameter("page", page)
@@ -130,10 +130,10 @@ suspend fun NetDiskClient.listBt(
     num: Int? = null,
     order: OrderType? = null,
     desc: Boolean? = null,
-    path: String? = null,
+    path: String = "",
     recursion: Boolean? = null,
-): NetDiskBtList = useHttpClient { client ->
-    client.get(NetDisk.PAN_FILE) {
+): NetDiskList<NetDiskBt> = useHttpClient { client ->
+    client.get(PAN_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "btlist")
         parameter("page", page)
@@ -150,7 +150,7 @@ suspend fun NetDiskClient.listBt(
  */
 suspend fun NetDiskClient.listCategoryFile(
     categories: List<CategoryType>,
-    path: String? = null,
+    path: String = "",
     recursion: Boolean? = null,
     ext: List<String> = emptyList(),
     start: Int? = null,
@@ -158,7 +158,7 @@ suspend fun NetDiskClient.listCategoryFile(
     order: OrderType? = null,
     desc: Boolean? = null,
 ): NetDiskFileList = useHttpClient { client ->
-    client.get(NetDisk.PAN_MULTIMEDIA) {
+    client.get(PAN_MULTIMEDIA) {
         parameter("access_token", accessToken)
         parameter("method", "categorylist")
         parameter("category", categories.joinToString(",") { it.ordinal.toString() })
@@ -182,8 +182,8 @@ suspend fun NetDiskClient.searchFile(
     page: Int? = null,
     num: Int? = null,
     web: Boolean? = null,
-): NetDiskMultiList = useHttpClient { client ->
-    client.get(NetDisk.PAN_FILE) {
+): NetDiskList<NetDiskFileOrDir> = useHttpClient { client ->
+    client.get(PAN_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "search")
         parameter("key", key)
@@ -200,12 +200,12 @@ suspend fun NetDiskClient.searchFile(
  */
 suspend fun NetDiskClient.listFileById(
     ids: List<Long>,
-    path: String? = null,
+    path: String = "",
     thumb: Boolean? = null,
     link: Boolean? = null,
     extra: Boolean? = null,
 ): NetDiskDetailList = useHttpClient { client ->
-    client.get(NetDisk.PAN_MULTIMEDIA) {
+    client.get(PAN_MULTIMEDIA) {
         parameter("access_token", accessToken)
         parameter("method", "filemetas")
         parameter("fsids", ids)
@@ -224,7 +224,7 @@ suspend fun NetDiskClient.operaFile(// TODO DEBUG
     opera: FileOpera,
     type: FileOnDupType? = null,
 ): NetDiskOpera = useHttpClient { client ->
-    client.get(NetDisk.PAN_FILE) {
+    client.get(PAN_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "filemanager")
         parameter("opera", opera.name)
@@ -251,7 +251,7 @@ suspend fun NetDiskClient.preCreate(
     rename: RenameType? = null,
     uploadId: String? = null,
 ): NetDiskPreCreate = useHttpClient { client ->
-    client.post(NetDisk.PAN_FILE) {
+    client.post(PAN_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "precreate")
         body = FormDataContent(Parameters.build {
@@ -287,7 +287,7 @@ suspend fun NetDiskClient.createFile(
     zipQuality: Int? = null,
     zipSign: Int? = null,
 ): NetDiskCreateFile = useHttpClient { client ->
-    client.post(NetDisk.PAN_FILE) {
+    client.post(PAN_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "create")
         body = FormDataContent(Parameters.build {
