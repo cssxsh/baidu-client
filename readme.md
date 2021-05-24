@@ -24,8 +24,28 @@
 客户端工作目录为`/apps/${appName}`
 
 已完成的功能
-1. [Oauth](#Baidu Oauth)验证登录
+1. [Oauth](#Baidu Oauth) 验证登录
 1. 上传文件
 1. 列出文件
 1. 搜索文件
 1. [秒传链接](https://www.bilibili.com/read/cv7817063/) 获取和解析
+
+## Gradle引用包
+
+到 [Personal Access Tokens](https://github.com/settings/tokens) 申请一个token  
+然后添加repository
+```
+repositories {
+    maven {
+        url = uri("https://maven.pkg.github.com/baidu-client")
+        credentials {
+            username = "${github.id}"
+            password = "${github.token}"
+        }
+    }
+}
+
+dependencies {
+    implementation("xyz.cssxsh.baidu:baidu-netdisk:${version}")
+}
+```
