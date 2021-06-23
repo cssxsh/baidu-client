@@ -4,10 +4,10 @@ import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.descriptors.PrimitiveKind
 import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.SerialKind
 import kotlinx.serialization.descriptors.buildSerialDescriptor
 import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
+import xyz.cssxsh.baidu.LowerCaseSerializer
 
 /**
  * [wiki](https://openauth.baidu.com/doc/appendix.html)
@@ -156,14 +156,7 @@ enum class AuthorizeErrorType(val message: String) {
      */
     INVALID_REFERER(message = "Invalid Referer");
 
-    companion object Serializer : KSerializer<AuthorizeErrorType> {
-        override val descriptor: SerialDescriptor
-            get() = buildSerialDescriptor("AuthorizeErrorTypeSerializer", SerialKind.ENUM)
-
-        override fun serialize(encoder: Encoder, value: AuthorizeErrorType) = encoder.encodeString(value.name.toLowerCase())
-
-        override fun deserialize(decoder: Decoder): AuthorizeErrorType = valueOf(decoder.decodeString().toUpperCase())
-    }
+    companion object Serializer : KSerializer<AuthorizeErrorType> by LowerCaseSerializer()
 }
 
 /**

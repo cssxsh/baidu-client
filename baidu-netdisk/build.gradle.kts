@@ -25,7 +25,6 @@ kotlin {
             languageSettings.useExperimentalAnnotation("kotlinx.serialization.ExperimentalSerializationApi")
             languageSettings.useExperimentalAnnotation("kotlinx.serialization.InternalSerializationApi")
             languageSettings.useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
-            languageSettings.useExperimentalAnnotation("kotlin.time.ExperimentalTime")
         }
     }
 }
