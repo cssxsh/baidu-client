@@ -15,7 +15,6 @@ import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.disk.*
 import java.io.IOException
 import java.time.OffsetDateTime
-import kotlin.time.*
 
 abstract class AbstractNetDiskClient : NetDiskClient {
     @Suppress("unused")
@@ -42,9 +41,9 @@ abstract class AbstractNetDiskClient : NetDiskClient {
             allowHttpsDowngrade = true
         }
         install(HttpTimeout) {
-            socketTimeoutMillis = (5).minutes.toLongMilliseconds()
-            connectTimeoutMillis = (5).minutes.toLongMilliseconds()
-            requestTimeoutMillis = (5).minutes.toLongMilliseconds()
+            socketTimeoutMillis = 5 * 60 * 1000L
+            connectTimeoutMillis = 5 * 60 * 1000L
+            requestTimeoutMillis = 5 * 60 * 1000L
         }
         HttpResponseValidator {
             handleResponseException { cause ->
@@ -132,7 +131,7 @@ abstract class AbstractNetDiskClient : NetDiskClient {
      */
     suspend fun credentials() = saveToken(token = getCredentialsToken())
 
-    private suspend fun AuthorizeDeviceCode.wait(): AuthorizeAccessToken = withTimeout(expiresIn.seconds) {
+    private suspend fun AuthorizeDeviceCode.wait(): AuthorizeAccessToken = withTimeout(expiresIn * 1000L) {
         var tokens: AuthorizeAccessToken? = null
         while (isActive && tokens == null) {
             tokens = runCatching {
@@ -141,10 +140,10 @@ abstract class AbstractNetDiskClient : NetDiskClient {
                 if (it is AuthorizeException) {
                     when (it.type) {
                         AuthorizeErrorType.AUTHORIZATION_PENDING -> {
-                            delay(interval.seconds)
+                            delay(interval * 1000L)
                         }
                         AuthorizeErrorType.SLOW_DOWN -> {
-                            delay(interval.seconds)
+                            delay(interval * 1000L)
                         }
                         else -> throw it
                     }
