@@ -109,7 +109,7 @@ abstract class AbstractNetDiskClient : NetDiskClient {
         expires = OffsetDateTime.now().plusSeconds(token.expiresIn)
     }
 
-    suspend fun setToken(token: String, expiresIn: SecondUnit = ACCESS_EXPIRES): Unit = mutex.withLock {
+    suspend fun setToken(token: String, expiresIn: Long = ACCESS_EXPIRES): Unit = mutex.withLock {
         accessTokenValue = token
         expires = OffsetDateTime.now().plusSeconds(expiresIn)
     }
@@ -152,7 +152,7 @@ abstract class AbstractNetDiskClient : NetDiskClient {
                 }
             }.getOrNull()
         }
-        tokens!!
+        tokens ?: throw CancellationException()
     }
 
     /**

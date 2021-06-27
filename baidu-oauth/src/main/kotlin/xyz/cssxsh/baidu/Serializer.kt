@@ -34,10 +34,10 @@ inline fun <reified E: Enum<E>> OrdinalSerializer() = OrdinalSerializer(kClass =
 class LowerCaseSerializer<E: Enum<E>>(kClass: KClass<E>, private val values: Array<E>): KSerializer<E> {
     override val descriptor: SerialDescriptor = buildSerialDescriptor(kClass.qualifiedName!!, SerialKind.ENUM)
 
-    override fun serialize(encoder: Encoder, value: E) = encoder.encodeString(value.name.toLowerCase())
+    override fun serialize(encoder: Encoder, value: E) = encoder.encodeString(value.name.lowercase())
 
     override fun deserialize(decoder: Decoder): E {
-        val text = decoder.decodeString().toUpperCase()
+        val text = decoder.decodeString().uppercase()
         return requireNotNull(values.first { it.name == text }) { "$text not in ${values.asList()}" }
     }
 }

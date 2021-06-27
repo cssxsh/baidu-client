@@ -72,7 +72,7 @@ enum class FileOnDupType {
     OVERWRITE,
     SKIP;
 
-    override fun toString(): String = name.toLowerCase()
+    override fun toString(): String = name.lowercase()
 
     companion object Serializer : KSerializer<FileOnDupType> by LowerCaseSerializer()
 }
