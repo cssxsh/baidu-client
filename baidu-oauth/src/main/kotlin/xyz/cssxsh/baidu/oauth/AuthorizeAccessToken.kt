@@ -2,14 +2,13 @@ package xyz.cssxsh.baidu.oauth
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import xyz.cssxsh.baidu.SecondUnit
 
 @Serializable
 data class AuthorizeAccessToken(
     @SerialName("access_token")
     val accessToken: String,
     @SerialName("expires_in")
-    val expiresIn: SecondUnit,
+    val expiresIn: Long,
     @SerialName("refresh_token")
     val refreshToken: String = "",
     @SerialName("scope")

@@ -5,11 +5,6 @@ import io.ktor.client.statement.*
 import io.ktor.http.*
 import xyz.cssxsh.baidu.oauth.AuthorizeException
 
-/**
- * Unit second
- */
-typealias SecondUnit = Long
-
 fun ParametersBuilder.appendParameter(key: String, value: Any?) {
     value?.let { append(key, it.toString()) }
 }

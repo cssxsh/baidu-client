@@ -2,16 +2,15 @@ package xyz.cssxsh.baidu.oauth
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import xyz.cssxsh.baidu.SecondUnit
 
 @Serializable
 data class AuthorizeDeviceCode(
     @SerialName("device_code")
     val deviceCode: String,
     @SerialName("expires_in")
-    val expiresIn: SecondUnit,
+    val expiresIn: Long,
     @SerialName("interval")
-    val interval: SecondUnit,
+    val interval: Long,
     @SerialName("qrcode_url")
     val qrcodeUrl: String,
     @SerialName("user_code")
