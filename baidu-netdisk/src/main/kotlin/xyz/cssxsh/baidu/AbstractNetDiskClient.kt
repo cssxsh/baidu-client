@@ -152,7 +152,7 @@ abstract class AbstractNetDiskClient : NetDiskClient {
                 }
             }.getOrNull()
         }
-        tokens!!
+        tokens ?: throw CancellationException()
     }
 
     /**
