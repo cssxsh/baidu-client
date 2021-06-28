@@ -20,12 +20,13 @@ abstract class AbstractNetDiskClient : NetDiskClient {
     @Suppress("unused")
     val cookiesStorage = AcceptAllCookiesStorage()
 
+    val timeout: Long = 30 * 1000L
+
     protected open fun client(): HttpClient = HttpClient(OkHttp) {
         Json {
             serializer = KotlinxSerializer()
             accept(ContentType.Text.Html)
         }
-        BrowserUserAgent()
         install(UserAgent) {
             agent = USER_AGENT
         }
@@ -41,37 +42,34 @@ abstract class AbstractNetDiskClient : NetDiskClient {
             allowHttpsDowngrade = true
         }
         install(HttpTimeout) {
-            socketTimeoutMillis = 5 * 60 * 1000L
-            connectTimeoutMillis = 5 * 60 * 1000L
-            requestTimeoutMillis = 5 * 60 * 1000L
+            socketTimeoutMillis = timeout
+            connectTimeoutMillis = timeout
+            requestTimeoutMillis = timeout
         }
         HttpResponseValidator {
             handleResponseException { cause ->
-                if (cause is ClientRequestException) {
-                    cause.toAuthorizeExceptionOrNull()?.let {
-                        throw it
-                    }
-                }
+                throw (cause as? ClientRequestException)?.toAuthorizeExceptionOrNull() ?: return@handleResponseException
             }
         }
     }
 
     open val apiIgnore: suspend (Throwable) -> Boolean = { it is IOException }
 
-    override suspend fun <R> useHttpClient(
-        block: suspend BaiduAuthClient.(HttpClient) -> R,
-    ): R = withContext(Dispatchers.IO) {
+    override suspend fun <R> useHttpClient(block: suspend BaiduAuthClient.(HttpClient) -> R): R = supervisorScope {
         client().use { client ->
-            runCatching {
-                block(client)
-            }.getOrElse { throwable ->
-                if (isActive && apiIgnore(throwable)) {
-                    useHttpClient(block = block)
-                } else {
-                    throw throwable
+            while (isActive) {
+                runCatching {
+                    block(client)
+                }.onFailure { throwable ->
+                    if (isActive && apiIgnore(throwable)) {
+                        useHttpClient(block = block)
+                    } else {
+                        throw throwable
+                    }
                 }
             }
         }
+        throw CancellationException()
     }
 
     override val scope = listOf(
@@ -132,9 +130,8 @@ abstract class AbstractNetDiskClient : NetDiskClient {
     suspend fun credentials() = saveToken(token = getCredentialsToken())
 
     private suspend fun AuthorizeDeviceCode.wait(): AuthorizeAccessToken = withTimeout(expiresIn * 1000L) {
-        var tokens: AuthorizeAccessToken? = null
-        while (isActive && tokens == null) {
-            tokens = runCatching {
+        while (isActive) {
+            runCatching {
                 getDeviceToken(code = deviceCode)
             }.onFailure {
                 if (it is AuthorizeException) {
@@ -150,9 +147,11 @@ abstract class AbstractNetDiskClient : NetDiskClient {
                 } else {
                     throw it
                 }
-            }.getOrNull()
+            }.onSuccess {
+                return@withTimeout it
+            }
         }
-        tokens ?: throw CancellationException()
+        throw CancellationException()
     }
 
     /**
