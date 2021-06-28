@@ -3,17 +3,17 @@ package xyz.cssxsh.baidu
 import io.ktor.client.*
 import xyz.cssxsh.baidu.oauth.ScopeType
 
-interface BaiduAuthClient {
+interface BaiduAuthClient: BaiduAuthConfig {
 
     suspend fun <R> useHttpClient(block: suspend BaiduAuthClient.(HttpClient) -> R): R
 
-    val appName: String
+    override val appName: String
 
-    val appId: Long
+    override val appId: Long
 
-    val appKey: String
+    override val appKey: String
 
-    val secretKey: String
+    override val secretKey: String
 
     val accessToken: String
 

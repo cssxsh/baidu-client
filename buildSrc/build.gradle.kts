@@ -4,20 +4,10 @@ plugins {
 
 repositories {
     mavenLocal()
-    gradlePluginPortal()
     maven(url = "https://maven.aliyun.com/repository/releases")
-    maven(url = "https://mirrors.huaweicloud.com/repository/maven")
-    // bintray dl.bintray.com -> bintray.proxy.ustclug.org
-    maven(url = "https://bintray.proxy.ustclug.org/kotlin/kotlin-dev")
-    maven(url = "https://bintray.proxy.ustclug.org/kotlin/kotlinx/")
-    // central
-    maven(url = "https://maven.aliyun.com/repository/central")
+    maven(url = "https://maven.aliyun.com/repository/public")
     mavenCentral()
-    // jcenter
-    maven(url = "https://maven.aliyun.com/repository/jcenter")
     jcenter()
-}
-
-dependencies {
-    implementation("com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.5")
+    maven(url = "https://maven.aliyun.com/repository/gradle-plugin")
+    gradlePluginPortal()
 }

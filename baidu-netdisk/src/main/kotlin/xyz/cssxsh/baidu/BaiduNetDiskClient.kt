@@ -9,18 +9,20 @@ import java.io.File
 /**
  * 构建客户端的参数需要到 [百度网盘开放中心](https://pan.baidu.com/union/apply) 申请
  */
-open class BaiduNetDiskClient(
-    override val appId: Long,
-    override val appName: String,
-    override val appKey: String,
-    override val secretKey: String
-) : AbstractNetDiskClient() {
+open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient(), BaiduAuthConfig by config {
+    constructor(appId: Long, appName: String, appKey: String, secretKey: String): this(object : BaiduAuthConfig {
+        override val appName: String = appName
+        override val appId: Long = appId
+        override val appKey: String = appKey
+        override val secretKey: String = secretKey
+    })
 
     /**
      * 创建一个目录
      */
-    suspend fun createDir(path: String): NetDiskFileInfo =
-        createFile(path = path, size = 0, isDir = true, uploadId = null)
+    suspend fun createDir(path: String): NetDiskFileInfo {
+        return createFile(path, 0, true, null)
+    }
 
     /**
      * 分段上传一个文件，默认路径是/apps/${appName}/${file.name}，文件存在会报错
@@ -71,8 +73,9 @@ open class BaiduNetDiskClient(
     /**
      * 快速上传文件 需要Rapid信息，默认为覆盖模式
      */
-    suspend fun rapidUploadFile(info: RapidUploadInfo, rename: RenameType = RenameType.COVER): NetDiskFileInfo =
-        rapidUpload(info.content, info.slice, info.length, info.path, rename).info
+    suspend fun rapidUploadFile(info: RapidUploadInfo, rename: RenameType = RenameType.COVER): NetDiskFileInfo {
+        return rapidUpload(info.content, info.slice, info.length, info.path, rename).info
+    }
 
     /**
      * 获取文件的Rapid信息
