@@ -31,9 +31,9 @@ open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient()
         check(file.isFile) { "${file.absolutePath}不是文件" }
 
         val user = getUserInfo()
-        check(file.length() <= user.getUpdateLimit()) { "超过当前用户${user}上传上限" }
+        check(file.length() <= user.vip.updateLimit) { "超过当前用户${user}上传上限" }
 
-        val temp = ByteArray(user.getSuperLimit())
+        val temp = ByteArray(user.vip.superLimit)
         val blocks = file.getBlockList(buffer = temp)
         val pre = preCreate(
             path = path,

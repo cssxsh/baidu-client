@@ -22,10 +22,10 @@ enum class RenameType {
 }
 
 @Serializable(with = VipType.Serializer::class)
-enum class VipType {
-    ORDINARY,
-    MEMBER,
-    SUPER_MEMBER;
+enum class VipType(val updateLimit: Long, val superLimit: Int) {
+    ORDINARY(4L shl 30,  4 shl 20),
+    MEMBER(10L shl 30, 16 shl 20),
+    SUPER_MEMBER(20L shl 30, 32 shl 20);
 
     companion object Serializer : KSerializer<VipType> by OrdinalSerializer()
 }

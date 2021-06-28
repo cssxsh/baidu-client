@@ -9,24 +9,6 @@ import java.security.MessageDigest
 
 fun NetDiskClient.withAppDataFolder(path: String = "") = if (path.startsWith("/")) path else "${appDataFolder}/${path}"
 
-internal fun NetDiskUserInfo.getUpdateLimit(): Long = when (vipType) {
-    // 4GB
-    VipType.ORDINARY -> 4L shl 30
-    // 10G
-    VipType.MEMBER -> 10L shl 30
-    // 20G
-    VipType.SUPER_MEMBER -> 20L shl 30
-}
-
-internal fun NetDiskUserInfo.getSuperLimit(): Int = when (vipType) {
-    // 4MB
-    VipType.ORDINARY -> 4 shl 20
-    // 10G
-    VipType.MEMBER -> 16 shl 20
-    // 20G
-    VipType.SUPER_MEMBER -> 32 shl 20
-}
-
 internal data class BlockInfo(
     val offset: Long,
     val length: Int,

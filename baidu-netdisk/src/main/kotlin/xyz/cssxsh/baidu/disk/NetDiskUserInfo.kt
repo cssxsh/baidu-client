@@ -20,5 +20,5 @@ data class NetDiskUserInfo(
     @SerialName("uk")
     val uk: Long,
     @SerialName("vip_type")
-    val vipType: VipType
+    val vip: VipType
 )
