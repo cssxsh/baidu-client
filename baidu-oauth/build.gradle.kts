@@ -4,7 +4,6 @@ plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
     `maven-publish`
-    //id("com.jfrog.bintray")
 }
 
 setGithub()
@@ -29,18 +28,7 @@ kotlin {
 }
 
 tasks {
-
     test {
         useJUnitPlatform()
-    }
-
-    compileKotlin {
-        kotlinOptions.freeCompilerArgs += "-Xjvm-default=all"
-        kotlinOptions.jvmTarget = "11"
-    }
-
-    compileTestKotlin {
-        kotlinOptions.freeCompilerArgs += "-Xjvm-default=all"
-        kotlinOptions.jvmTarget = "11"
     }
 }
