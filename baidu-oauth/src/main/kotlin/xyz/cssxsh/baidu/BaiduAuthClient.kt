@@ -5,9 +5,7 @@ import xyz.cssxsh.baidu.oauth.ScopeType
 
 interface BaiduAuthClient {
 
-    suspend fun <R> useHttpClient(
-        block: suspend BaiduAuthClient.(HttpClient) -> R,
-    ): R
+    suspend fun <R> useHttpClient(block: suspend BaiduAuthClient.(HttpClient) -> R): R
 
     val appName: String
 
