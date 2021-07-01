@@ -58,7 +58,7 @@ fun Project.setGithub(config: Config = Config()) {
         }
         publications {
             create<MavenPublication>("github") {
-                from(components["java"])
+                from(components["kotlin"])
                 artifact(tasks.named<Jar>("kotlinSourcesJar"))
 
                 pom {

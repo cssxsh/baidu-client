@@ -25,6 +25,13 @@ kotlin {
             languageSettings.useExperimentalAnnotation("kotlinx.serialization.InternalSerializationApi")
         }
     }
+    target {
+        compilations.configureEach {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
+        }
+    }
 }
 
 tasks {
