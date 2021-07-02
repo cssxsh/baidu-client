@@ -26,6 +26,13 @@ kotlin {
             languageSettings.useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
         }
     }
+    target {
+        compilations.configureEach {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
+        }
+    }
 }
 
 tasks {

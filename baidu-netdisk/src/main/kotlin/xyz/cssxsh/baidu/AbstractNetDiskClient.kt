@@ -72,10 +72,7 @@ abstract class AbstractNetDiskClient : NetDiskClient {
         throw CancellationException()
     }
 
-    override val scope = listOf(
-        ScopeType.BASIC,
-        ScopeType.NET_DISK
-    )
+    override val scope = listOf(ScopeType.BASIC, ScopeType.NET_DISK)
 
     override val redirect: String = DEFAULT_REDIRECT
 
@@ -101,69 +98,9 @@ abstract class AbstractNetDiskClient : NetDiskClient {
     override val appDataFolder: String
         get() = "/apps/$appName"
 
-    open suspend fun saveToken(token: AuthorizeAccessToken): Unit = mutex.withLock {
+    override suspend fun saveToken(token: AuthorizeAccessToken): Unit = mutex.withLock {
         accessTokenValue = token.accessToken
         refreshTokenValue = token.refreshToken
         expires = OffsetDateTime.now().plusSeconds(token.expiresIn)
     }
-
-    suspend fun setToken(token: String, expiresIn: Long = ACCESS_EXPIRES): Unit = mutex.withLock {
-        accessTokenValue = token
-        expires = OffsetDateTime.now().plusSeconds(expiresIn)
-    }
-
-    /**
-     * 服务端的方式获取 Token, block 输入 认证网页 Url ，返回认证码
-     */
-    suspend fun authorize(block: suspend (Url) -> String) =
-        saveToken(token = getAuthorizeToken(code = block(getWebAuthorizeUrl(type = AuthorizeType.AUTHORIZATION))))
-
-    /**
-     * 移动端的方式获取 Token, block 输入 认证网页 Url ，返回跳转Url
-     */
-    suspend fun implicit(block: suspend (Url) -> Url) =
-        saveToken(token = block(getWebAuthorizeUrl(type = AuthorizeType.IMPLICIT)).getAuthorizeToken())
-
-    /**
-     * 获取临时 Token，莫得意义
-     */
-    suspend fun credentials() = saveToken(token = getCredentialsToken())
-
-    private suspend fun AuthorizeDeviceCode.wait(): AuthorizeAccessToken = withTimeout(expiresIn * 1000L) {
-        while (isActive) {
-            runCatching {
-                getDeviceToken(code = deviceCode)
-            }.onFailure {
-                if (it is AuthorizeException) {
-                    when (it.type) {
-                        AuthorizeErrorType.AUTHORIZATION_PENDING -> {
-                            delay(interval * 1000L)
-                        }
-                        AuthorizeErrorType.SLOW_DOWN -> {
-                            delay(interval * 1000L)
-                        }
-                        else -> throw it
-                    }
-                } else {
-                    throw it
-                }
-            }.onSuccess {
-                return@withTimeout it
-            }
-        }
-        throw CancellationException()
-    }
-
-    /**
-     * 设备认证的方式获取 Token, block 第一个参数是 直接网页认证的Url，第二个是 二维码认证的图片Url
-     */
-    suspend fun device(block: suspend (Url, Url) -> Unit) = saveToken(token = getDeviceCode().let { code ->
-        block(getDeviceAuthorizeUrl(code = code.userCode), Url(code.qrcodeUrl))
-        code.wait()
-    })
-
-    /**
-     * 刷新 Token
-     */
-    suspend fun refresh() = saveToken(token = getRefreshToken())
 }

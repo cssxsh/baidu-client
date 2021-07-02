@@ -35,20 +35,25 @@ fun BaiduAuthClient.getWebAuthorizeUrl(
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/implicit)
  */
-fun Url.getAuthorizeToken(): AuthorizeAccessToken = AuthorizeAccessToken(
-    accessToken = parameters["access_token"].orEmpty(),
-    expiresIn = parameters["expires_in"]?.toLong() ?: 0,
-    refreshToken = "",
-    scope = ScopeSerializer.splitScope(parameters["scope"].orEmpty()),
-    sessionKey = parameters["session_key"].orEmpty(),
-    sessionSecret = parameters["session_secret"].orEmpty()
-)
+fun Url.getAuthorizeToken(): AuthorizeAccessToken {
+    return if (parameters.isEmpty() && fragment.isNotBlank()) {
+        Url(toString().replace('#', '?')).getAuthorizeToken()
+    } else {
+        AuthorizeAccessToken(
+            accessToken = requireNotNull(parameters["access_token"]) { "Not Found access_token" },
+            expiresIn = requireNotNull(parameters["expires_in"]) { "Not Found expires_in" }.toLong(),
+            refreshToken = parameters["refresh_token"].orEmpty(),
+            scope = ScopesSerializer.splitScope(parameters["scope"].orEmpty()),
+            sessionKey = parameters["session_key"].orEmpty(),
+            sessionSecret = parameters["session_secret"].orEmpty()
+        )
+    }
+}
 
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
  */
-fun Url.getAuthorizeCode(): String =
-    parameters["code"].orEmpty()
+fun Url.getAuthorizeCode(): String = parameters["code"].orEmpty()
 
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
@@ -66,9 +71,21 @@ suspend fun BaiduAuthClient.getAuthorizeToken(code: String): AuthorizeAccessToke
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/client)
  */
-suspend fun BaiduAuthClient.getCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
+suspend fun BaiduAuthClient.getClientCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
-        parameter("grant_type", GrantType.CREDENTIALS)
+        parameter("grant_type", GrantType.CLIENT_CREDENTIALS)
+        parameter("client_id", appKey)
+        parameter("client_secret", secretKey)
+        parameter("scope", scope.joinToString(","))
+    }
+}
+
+/**
+ * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/client)
+ */
+suspend fun BaiduAuthClient.getDeveloperCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
+    client.post(TOKEN) {
+        parameter("grant_type", GrantType.DEVELOPER_CREDENTIALS)
         parameter("client_id", appKey)
         parameter("client_secret", secretKey)
         parameter("scope", scope.joinToString(","))
@@ -114,6 +131,17 @@ suspend fun BaiduAuthClient.getDeviceToken(code: String): AuthorizeAccessToken =
     client.post(TOKEN) {
         parameter("grant_type", GrantType.DEVICE)
         parameter("code", code)
+        parameter("client_id", appKey)
+        parameter("client_secret", secretKey)
+    }
+}
+
+/**
+ * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
+ */
+suspend fun BaiduAuthClient.getDeviceQrcode(code: AuthorizeDeviceCode): ByteArray = useHttpClient { client ->
+    client.get(code.qrcodeUrl) {
+        parameter("grant_type", GrantType.DEVICE)
         parameter("client_id", appKey)
         parameter("client_secret", secretKey)
     }

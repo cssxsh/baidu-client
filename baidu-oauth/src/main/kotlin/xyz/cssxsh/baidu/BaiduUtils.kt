@@ -13,4 +13,3 @@ fun Boolean.toInt(): Int = if (this) 1 else 0
 
 suspend fun ClientRequestException.toAuthorizeExceptionOrNull() =
     runCatching { AuthorizeException(response.readText()) }.getOrNull()
-
