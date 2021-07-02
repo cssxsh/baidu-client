@@ -240,7 +240,12 @@ enum class GrantType(val value: String) {
      *
      * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/client)
      */
-    CREDENTIALS(value = "client_credentials"),
+    CLIENT_CREDENTIALS(value = "client_credentials"),
+
+    /**
+     * [CLIENT_CREDENTIALS]
+     */
+    DEVELOPER_CREDENTIALS(value = "developer_credentials"),
 
     /**
      * 适用于一些输入受限的设备上（如只有数码液晶显示屏的打印机、电视机等）。
