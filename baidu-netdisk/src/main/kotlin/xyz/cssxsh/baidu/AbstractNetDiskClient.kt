@@ -13,62 +13,65 @@ import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.disk.*
+import java.io.Closeable
 import java.io.IOException
 import java.time.OffsetDateTime
 
-abstract class AbstractNetDiskClient : NetDiskClient {
+abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
     @Suppress("unused")
     val cookiesStorage = AcceptAllCookiesStorage()
 
     val timeout: Long = 30 * 1000L
 
-    protected open fun client(): HttpClient = HttpClient(OkHttp) {
-        Json {
-            serializer = KotlinxSerializer()
-            accept(ContentType.Text.Html)
-        }
-        install(UserAgent) {
-            agent = USER_AGENT
-        }
-        ContentEncoding {
-            gzip()
-            deflate()
-            identity()
-        }
-        install(HttpCookies) {
-            storage = cookiesStorage
-        }
-        install(HttpRedirect) {
-            allowHttpsDowngrade = true
-        }
-        install(HttpTimeout) {
-            socketTimeoutMillis = timeout
-            connectTimeoutMillis = timeout
-            requestTimeoutMillis = timeout
-        }
-        HttpResponseValidator {
-            handleResponseException { cause ->
-                throw (cause as? ClientRequestException)?.toAuthorizeExceptionOrNull() ?: return@handleResponseException
+    protected open val client: HttpClient by lazy {
+        HttpClient(OkHttp) {
+            Json {
+                serializer = KotlinxSerializer()
+                accept(ContentType.Text.Html)
+            }
+            install(UserAgent) {
+                agent = USER_AGENT
+            }
+            ContentEncoding {
+                gzip()
+                deflate()
+                identity()
+            }
+            install(HttpCookies) {
+                storage = cookiesStorage
+            }
+            install(HttpRedirect) {
+                allowHttpsDowngrade = true
+            }
+            install(HttpTimeout) {
+                socketTimeoutMillis = timeout
+                connectTimeoutMillis = timeout
+                requestTimeoutMillis = timeout
+            }
+            HttpResponseValidator {
+                handleResponseException { cause ->
+                    throw (cause as? ClientRequestException)?.toAuthorizeExceptionOrNull() ?: return@handleResponseException
+                }
             }
         }
     }
 
+    override fun close() { client.close() }
+
     open val apiIgnore: suspend (Throwable) -> Boolean = { it is IOException }
 
     override suspend fun <R> useHttpClient(block: suspend BaiduAuthClient.(HttpClient) -> R): R = supervisorScope {
-        client().use { client ->
-            while (isActive) {
-                runCatching {
-                    block(client)
-                }.onFailure { throwable ->
-                    if (isActive && apiIgnore(throwable)) {
-                        useHttpClient(block = block)
-                    } else {
-                        throw throwable
-                    }
-                }.onSuccess {
-                    return@supervisorScope it
+        while (isActive) {
+            runCatching {
+                block(client)
+            }.onFailure { throwable ->
+                if (isActive && apiIgnore(throwable)) {
+                    //
+                } else {
+                    throw throwable
                 }
+            }.onSuccess {
+                return@supervisorScope it
             }
         }
         throw CancellationException()
