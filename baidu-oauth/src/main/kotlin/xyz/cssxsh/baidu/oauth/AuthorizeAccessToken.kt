@@ -12,7 +12,7 @@ data class AuthorizeAccessToken(
     @SerialName("refresh_token")
     val refreshToken: String = "",
     @SerialName("scope")
-    @Serializable(with = ScopeSerializer::class)
+    @Serializable(with = ScopesSerializer::class)
     val scope: List<ScopeType>,
     @SerialName("session_key")
     val sessionKey: String,
