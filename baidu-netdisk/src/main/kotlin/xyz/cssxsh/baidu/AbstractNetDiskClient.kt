@@ -66,6 +66,8 @@ abstract class AbstractNetDiskClient : NetDiskClient {
                     } else {
                         throw throwable
                     }
+                }.onSuccess {
+                    return@supervisorScope it
                 }
             }
         }
