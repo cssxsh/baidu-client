@@ -57,7 +57,6 @@ interface BaiduAuthClient : BaiduAuthConfig {
      */
     suspend fun device(block: suspend (Url, Url) -> Unit) = saveToken(token = getDeviceCode().let { code ->
         withTimeout(code.expiresIn * 1000L) {
-            println(code)
             launch { block(getDeviceAuthorizeUrl(code = code.userCode), Url(code.qrcodeUrl)) }
             while (isActive) {
                 runCatching {
