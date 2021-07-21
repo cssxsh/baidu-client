@@ -4,7 +4,6 @@ import io.ktor.client.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import xyz.cssxsh.baidu.oauth.*
-import java.io.File
 
 interface BaiduAuthClient : BaiduAuthConfig {
 
@@ -58,18 +57,7 @@ interface BaiduAuthClient : BaiduAuthConfig {
      */
     suspend fun device(block: suspend (Url, Url) -> Unit) = saveToken(token = getDeviceCode().let { code ->
         withTimeout(code.expiresIn * 1000L) {
-            println(code)
-            launch {
-                block(getDeviceAuthorizeUrl(code = code.userCode), Url(code.qrcodeUrl))
-                runCatching {
-                    getDeviceQrcode(code)
-                }.onFailure {
-                    println(it.toString())
-                }.onSuccess {
-                    File("../test/temp.png")
-                }
-            }
-            //
+            launch { block(getDeviceAuthorizeUrl(code = code.userCode), Url(code.qrcodeUrl)) }
             while (isActive) {
                 runCatching {
                     getDeviceToken(code = code.deviceCode)
