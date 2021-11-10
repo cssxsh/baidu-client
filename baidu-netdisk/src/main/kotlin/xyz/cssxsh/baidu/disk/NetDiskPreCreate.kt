@@ -14,7 +14,7 @@ data class NetDiskPreCreate(
     @SerialName("request_id")
     val requestId: RequestIdType,
     @SerialName("return_type")
-    val type: CreateReturnType,
+    val type: CreateReturnType = CreateReturnType.TEMP_,
     @SerialName("uploadid")
     val uploadId: String = "",
     @SerialName("info")
