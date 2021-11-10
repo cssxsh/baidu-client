@@ -1,12 +1,14 @@
-import xyz.cssxsh.maven.*
-
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
-    `maven-publish`
+    id("net.mamoe.maven-central-publish")
 }
 
-setGithub()
+mavenCentralPublish {
+    useCentralS01()
+    singleDevGithubProject("cssxsh", "baidu-client", "cssxsh")
+    licenseFromGitHubProject("AGPL-3.0", "master")
+}
 
 dependencies {
     implementation(project(":baidu-oauth"))
@@ -14,16 +16,15 @@ dependencies {
     implementation(ktor("client-serialization", Versions.ktor))
     implementation(ktor("client-encoding", Versions.ktor))
     implementation(ktor("client-okhttp", Versions.ktor))
-    testImplementation(kotlin("test-junit5"))
-    testImplementation(junit("jupiter", Versions.junit))
+    testImplementation(kotlin("test"))
 }
 
 kotlin {
     sourceSets {
         all {
-            languageSettings.useExperimentalAnnotation("kotlinx.serialization.ExperimentalSerializationApi")
-            languageSettings.useExperimentalAnnotation("kotlinx.serialization.InternalSerializationApi")
-            languageSettings.useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
+//            languageSettings.useExperimentalAnnotation("kotlinx.serialization.ExperimentalSerializationApi")
+//            languageSettings.useExperimentalAnnotation("kotlinx.serialization.InternalSerializationApi")
+//            languageSettings.useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
         }
     }
     target {

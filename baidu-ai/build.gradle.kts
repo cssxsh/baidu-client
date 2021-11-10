@@ -1,10 +1,6 @@
-import xyz.cssxsh.maven.*
-
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
-//    `maven-publish`
-//    id("com.jfrog.bintray")
 }
 
 //setBintray(Config())
@@ -14,16 +10,15 @@ dependencies {
     implementation(ktor("client-serialization", Versions.ktor))
     implementation(ktor("client-encoding", Versions.ktor))
     implementation(ktor("client-okhttp", Versions.ktor))
-    testImplementation(kotlin("test-junit5"))
-    testImplementation(junit("jupiter", Versions.junit))
+    testImplementation(kotlin("test"))
 }
 
 kotlin {
     sourceSets {
         all {
-            languageSettings.useExperimentalAnnotation("kotlin.ExperimentalStdlibApi")
-            languageSettings.useExperimentalAnnotation("kotlinx.serialization.ExperimentalSerializationApi")
-            languageSettings.useExperimentalAnnotation("kotlinx.serialization.InternalSerializationApi")
+//            languageSettings.useExperimentalAnnotation("kotlin.ExperimentalStdlibApi")
+//            languageSettings.useExperimentalAnnotation("kotlinx.serialization.ExperimentalSerializationApi")
+//            languageSettings.useExperimentalAnnotation("kotlinx.serialization.InternalSerializationApi")
         }
     }
 }
