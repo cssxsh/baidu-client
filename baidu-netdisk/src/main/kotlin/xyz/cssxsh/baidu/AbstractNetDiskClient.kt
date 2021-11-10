@@ -10,6 +10,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
+import kotlinx.serialization.json.*
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.disk.*
 import java.io.*
@@ -21,10 +22,14 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
 
     protected open val timeout: Long = 30 * 1000L
 
+    protected open val json = Json {
+        ignoreUnknownKeys = true
+    }
+
     protected open val client: HttpClient by lazy {
         HttpClient(OkHttp) {
             Json {
-                serializer = KotlinxSerializer()
+                serializer = KotlinxSerializer(json)
                 accept(ContentType.Text.Html)
             }
             install(UserAgent) {
@@ -60,16 +65,14 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
 
     override suspend fun <R> useHttpClient(block: suspend BaiduAuthClient.(HttpClient) -> R): R = supervisorScope {
         while (isActive) {
-            runCatching {
-                block(client)
-            }.onFailure { throwable ->
+            try {
+                return@supervisorScope  block(client)
+            } catch (throwable: Throwable) {
                 if (isActive && apiIgnore(throwable)) {
                     //
                 } else {
                     throw throwable
                 }
-            }.onSuccess {
-                return@supervisorScope it
             }
         }
         throw CancellationException()
