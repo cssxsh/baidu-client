@@ -21,7 +21,7 @@ open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient()
      * 创建一个目录
      */
     suspend fun createDir(path: String): NetDiskFileInfo {
-        return createFile(path, 0, true, null)
+        return createFile(path = path, size = 0, isDir = true, rename = RenameType.NO)
     }
 
     /**
