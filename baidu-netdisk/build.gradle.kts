@@ -22,9 +22,7 @@ dependencies {
 kotlin {
     sourceSets {
         all {
-//            languageSettings.useExperimentalAnnotation("kotlinx.serialization.ExperimentalSerializationApi")
-//            languageSettings.useExperimentalAnnotation("kotlinx.serialization.InternalSerializationApi")
-//            languageSettings.useExperimentalAnnotation("kotlin.ExperimentalUnsignedTypes")
+            languageSettings.optIn("kotlin.RequiresOptIn")
         }
     }
     target {

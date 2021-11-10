@@ -3,8 +3,10 @@ package xyz.cssxsh.baidu
 import io.ktor.client.features.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import xyz.cssxsh.baidu.oauth.AuthorizeException
+import io.ktor.util.*
+import xyz.cssxsh.baidu.oauth.*
 
+@OptIn(InternalAPI::class)
 fun ParametersBuilder.appendParameter(key: String, value: Any?) {
     value?.let { append(key, it.toString()) }
 }

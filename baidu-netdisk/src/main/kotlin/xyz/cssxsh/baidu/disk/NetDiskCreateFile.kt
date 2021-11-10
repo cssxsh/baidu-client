@@ -1,8 +1,7 @@
 package xyz.cssxsh.baidu.disk
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import xyz.cssxsh.baidu.NumberToBooleanSerializer
+import kotlinx.serialization.*
+import xyz.cssxsh.baidu.*
 
 @Serializable
 data class NetDiskCreateFile(

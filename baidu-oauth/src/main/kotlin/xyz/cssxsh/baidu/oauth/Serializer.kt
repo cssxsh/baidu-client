@@ -1,13 +1,11 @@
+@file:OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
+
 package xyz.cssxsh.baidu.oauth
 
-import kotlinx.serialization.KSerializer
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.descriptors.PrimitiveKind
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.descriptors.buildSerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import xyz.cssxsh.baidu.LowerCaseSerializer
+import kotlinx.serialization.*
+import kotlinx.serialization.descriptors.*
+import kotlinx.serialization.encoding.*
+import xyz.cssxsh.baidu.*
 
 /**
  * [wiki](https://openauth.baidu.com/doc/appendix.html)
@@ -282,63 +280,62 @@ enum class LoginType(val value: String) {
  * [developer-web](https://developer.baidu.com/)
  */
 @Serializable(ScopeTypeSerializer::class)
-data class ScopeType(val test: String) {
+data class ScopeType(val value: String) {
 
     companion object {
 
         /**
          * 用户基本权限，可以获取用户的基本信息 。
          */
-        val BASIC = ScopeType(test = "basic")
+        val BASIC = ScopeType(value = "basic")
 
         /**
          * 往用户的百度首页上发送消息提醒，相关API任何应用都能使用，
          * 但要想将消息提醒在百度首页显示，需要第三方在注册应用时额外填写相关信息。
          */
-        val SUPER_MESSAGE = ScopeType(test = "super_msg")
+        val SUPER_MESSAGE = ScopeType(value = "super_msg")
 
         /**
          * 	获取用户在个人云存储中存放的数据。
          */
-        val NET_DISK = ScopeType(test = "netdisk")
+        val NET_DISK = ScopeType(value = "netdisk")
 
         /**
          * 	可以访问公共的开放API。
          */
-        val PUBLIC = ScopeType(test = "public")
+        val PUBLIC = ScopeType(value = "public")
 
         /**
          * 可以访问Hao123 提供的开放API接口该权限需要申请开通，请将具体的理由和用途发邮件给tuangou@baidu.com。
          */
-        val HAO123 = ScopeType(test = "hao123")
+        val HAO123 = ScopeType(value = "hao123")
 
         /**
          * XXX
          */
-        val EMAIL = ScopeType(test = "email")
+        val EMAIL = ScopeType(value = "email")
 
         /**
          * XXX
          */
-        val MOBILE = ScopeType(test = "mobile")
+        val MOBILE = ScopeType(value = "mobile")
     }
 
-    override fun toString(): String = test
+    override fun toString(): String = value
 }
 
 object ScopeTypeSerializer : KSerializer<ScopeType> {
     override val descriptor: SerialDescriptor =
         buildSerialDescriptor("ScopeTypeSerializer", PrimitiveKind.STRING)
 
-    override fun deserialize(decoder: Decoder): ScopeType = ScopeType(test = decoder.decodeString())
+    override fun deserialize(decoder: Decoder): ScopeType = ScopeType(value = decoder.decodeString())
 
-    override fun serialize(encoder: Encoder, value: ScopeType) = encoder.encodeString(value.test)
+    override fun serialize(encoder: Encoder, value: ScopeType) = encoder.encodeString(value.value)
 
 }
 
 object ScopesSerializer : KSerializer<List<ScopeType>> {
-    override val descriptor: SerialDescriptor
-        = buildSerialDescriptor("ScopesSerializer", PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor = buildSerialDescriptor("ScopesSerializer", PrimitiveKind.STRING)
 
     private val SPLIT_REGEX = """([,]|\s|[+])""".toRegex()
 

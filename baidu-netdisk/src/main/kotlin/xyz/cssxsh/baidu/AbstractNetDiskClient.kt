@@ -9,19 +9,17 @@ import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
+import kotlinx.coroutines.sync.*
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.disk.*
-import java.io.Closeable
-import java.io.IOException
-import java.time.OffsetDateTime
+import java.io.*
+import java.time.*
 
 abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
     @Suppress("unused")
     val cookiesStorage = AcceptAllCookiesStorage()
 
-    val timeout: Long = 30 * 1000L
+    protected open val timeout: Long = 30 * 1000L
 
     protected open val client: HttpClient by lazy {
         HttpClient(OkHttp) {

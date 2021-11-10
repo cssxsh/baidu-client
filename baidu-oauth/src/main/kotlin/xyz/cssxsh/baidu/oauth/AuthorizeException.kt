@@ -1,8 +1,7 @@
 package xyz.cssxsh.baidu.oauth
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 
 /**
  *
@@ -18,7 +17,6 @@ data class AuthorizeError(
 )
 
 /**
- *
  * @see AuthorizeErrorType
  * @see AuthorizeAccessToken
  */

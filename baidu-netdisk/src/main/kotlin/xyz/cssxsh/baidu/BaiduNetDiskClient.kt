@@ -4,13 +4,13 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import xyz.cssxsh.baidu.disk.*
-import java.io.File
+import java.io.*
 
 /**
  * 构建客户端的参数需要到 [百度网盘开放中心](https://pan.baidu.com/union/apply) 申请
  */
 open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient(), BaiduAuthConfig by config {
-    constructor(appId: Long, appName: String, appKey: String, secretKey: String): this(object : BaiduAuthConfig {
+    constructor(appId: Long, appName: String, appKey: String, secretKey: String) : this(object : BaiduAuthConfig {
         override val appName: String = appName
         override val appId: Long = appId
         override val appKey: String = appKey
@@ -47,11 +47,11 @@ open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient()
         if (pre.blocks.isEmpty()) {
             blocks[0].exist = false
         } else {
-            pre.blocks.forEach { index ->
+            for (index in pre.blocks) {
                 blocks[index].exist = false
             }
         }
-        blocks.filterNot { it.exist }.mapIndexed { index, info ->
+        for ((index, info) in blocks.filterNot { it.exist }.withIndex()) {
             file.readBlock(buffer = temp, offset = info.offset, length = info.length)
             superFile(
                 path = path,
