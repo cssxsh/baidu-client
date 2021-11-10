@@ -23,13 +23,6 @@ kotlin {
             languageSettings.optIn("kotlin.RequiresOptIn")
         }
     }
-    target {
-        compilations.configureEach {
-            kotlinOptions {
-                jvmTarget = "11"
-            }
-        }
-    }
 }
 
 tasks {
