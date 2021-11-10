@@ -11,7 +11,7 @@ mavenCentralPublish {
 }
 
 dependencies {
-    implementation(project(":baidu-oauth"))
+    api(project(":baidu-oauth"))
     implementation(ktor("client", Versions.ktor))
     implementation(ktor("client-serialization", Versions.ktor))
     implementation(ktor("client-encoding", Versions.ktor))
@@ -23,6 +23,13 @@ kotlin {
     sourceSets {
         all {
             languageSettings.optIn("kotlin.RequiresOptIn")
+        }
+    }
+    target {
+        compilations.configureEach {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
         }
     }
 }
