@@ -34,18 +34,9 @@
 
 ## Gradle引用包
 
-到 [Personal Access Tokens](https://github.com/settings/tokens) 申请一个token  
-然后添加repository
-
 ```
 repositories {
-    maven {
-        url = uri("https://maven.pkg.github.com/cssxsh/baidu-client")
-        credentials {
-            username = "${github.id}"
-            password = "${github.token}"
-        }
-    }
+    mavenCentral()
 }
 
 dependencies {
