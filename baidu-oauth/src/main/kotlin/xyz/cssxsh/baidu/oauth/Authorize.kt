@@ -14,6 +14,7 @@ fun BaiduAuthClient.getWebAuthorizeUrl(
     force: Boolean? = null,
     confirm: Boolean? = null,
     login: LoginType? = null,
+    qrcode: Boolean = true,
     extend: Map<String, Any?>? = null
 ): Url = URLBuilder(AUTHORIZE).apply {
     parameters.apply {
@@ -26,6 +27,7 @@ fun BaiduAuthClient.getWebAuthorizeUrl(
         appendParameter("force_login", force?.toInt())
         appendParameter("confirm_login", confirm?.toInt())
         appendParameter("login_type", login)
+        appendParameter("qrcode", qrcode.toInt())
         extend?.forEach { (name, value) ->
             appendParameter(name, value)
         }
