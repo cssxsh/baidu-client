@@ -1,7 +1,7 @@
 package xyz.cssxsh.baidu
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
+import okio.ByteString.Companion.toByteString
 import xyz.cssxsh.baidu.disk.*
 import java.io.File
 import java.io.RandomAccessFile
@@ -19,8 +19,8 @@ internal data class BlockInfo(
 internal fun digestMd5(input: ByteArray, size: Int = input.size): String {
     return MessageDigest.getInstance("md5").also {
         it.update(input, 0, size)
-    }.digest().asUByteArray().joinToString("") {
-        """%02x""".format(it.toInt())
+    }.digest().joinToString("") {
+        """%02x""".format(it.toInt() and 0xFF)
     }
 }
 
@@ -49,13 +49,13 @@ internal fun File.digestContentMd5(blockSize: Int = 4 shl 20): String {
         forEachBlock(blockSize) { buffer, read ->
             it.update(buffer, 0, read)
         }
-    }.digest().asUByteArray().joinToString("") {
-        """%02x""".format(it.toInt())
+    }.digest().joinToString("") {
+        """%02x""".format(it.toInt() and 0xFF)
     }
 }
 
 internal fun File.digestSliceMd5(): String {
-    val temp = ByteArray(SLICE_SIZE.toLong().coerceAtMost(length()).toInt())
+    val temp = ByteArray(if (SLICE_SIZE < length()) length().toInt() else SLICE_SIZE)
     readBlock(buffer = temp)
     return digestMd5(input = temp)
 }
