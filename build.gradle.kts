@@ -2,7 +2,7 @@
 
 allprojects {
     group = "xyz.cssxsh.baidu"
-    version = "0.1.0-dev-14"
+    version = "0.1.0-dev-15"
 }
 
 subprojects {
