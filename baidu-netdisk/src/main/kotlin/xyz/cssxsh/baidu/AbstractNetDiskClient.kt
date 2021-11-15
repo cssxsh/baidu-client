@@ -53,20 +53,22 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
             }
             HttpResponseValidator {
                 handleResponseException { cause ->
-                    throw (cause as? ClientRequestException)?.toAuthorizeExceptionOrNull() ?: return@handleResponseException
+                    throw (cause as? ClientRequestException)
+                        ?.toAuthorizeExceptionOrNull()
+                        ?: return@handleResponseException
                 }
             }
         }
     }
 
-    override fun close() { client.close() }
+    override fun close() = client.close()
 
     open val apiIgnore: suspend (Throwable) -> Boolean = { it is IOException }
 
     override suspend fun <R> useHttpClient(block: suspend BaiduAuthClient.(HttpClient) -> R): R = supervisorScope {
         while (isActive) {
             try {
-                return@supervisorScope  block(client)
+                return@supervisorScope block(client)
             } catch (throwable: Throwable) {
                 if (isActive && apiIgnore(throwable)) {
                     //

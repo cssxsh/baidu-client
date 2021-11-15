@@ -3,7 +3,7 @@
 pluginManagement {
     plugins {
         kotlin("jvm") version "1.5.31"
-        kotlin("plugin.serialization") version  "1.5.31"
+        kotlin("plugin.serialization") version "1.5.31"
         id("net.mamoe.maven-central-publish") version "0.6.1"
     }
     repositories {

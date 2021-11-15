@@ -165,7 +165,7 @@ data class NetDiskMeta(
     val videoTag: Int, // XXX
     @SerialName("wpfile")
     private val wpfile: Int
-): NetDiskFileInfo
+) : NetDiskFileInfo
 
 @Serializable
 data class NetDiskVideo(
