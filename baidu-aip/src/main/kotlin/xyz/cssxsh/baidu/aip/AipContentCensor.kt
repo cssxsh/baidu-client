@@ -4,8 +4,8 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.util.*
-import kotlinx.serialization.json.*
 import xyz.cssxsh.baidu.*
+import xyz.cssxsh.baidu.aip.censor.*
 
 open class AipContentCensor(override val client: BaiduApiClient) : AipApplication {
     companion object {
@@ -15,7 +15,7 @@ open class AipContentCensor(override val client: BaiduApiClient) : AipApplicatio
         internal const val VOICE_CENSOR = "https://aip.baidubce.com/rest/2.0/solution/v1/voice_censor/v2/user_defined"
     }
 
-    suspend fun image(url: String, gif: Boolean = false): JsonObject {
+    suspend fun image(url: String, gif: Boolean = false): CensorResult.Image {
         return client.useHttpClient { http ->
             http.post(IMAGE_CENSOR) {
                 parameter("access_token", accessToken)
@@ -28,7 +28,7 @@ open class AipContentCensor(override val client: BaiduApiClient) : AipApplicatio
         }
     }
 
-    suspend fun image(bytes: ByteArray, gif: Boolean = false): JsonObject {
+    suspend fun image(bytes: ByteArray, gif: Boolean = false): CensorResult.Image {
         @OptIn(InternalAPI::class)
         val base64 = bytes.encodeBase64()
         // TODO: check
@@ -44,7 +44,7 @@ open class AipContentCensor(override val client: BaiduApiClient) : AipApplicatio
         }
     }
 
-    suspend fun text(plain: String): JsonObject {
+    suspend fun text(plain: String): CensorResult.Text {
         // TODO: check20000
         return client.useHttpClient { http ->
             http.post(TEXT_CENSOR) {
@@ -57,7 +57,11 @@ open class AipContentCensor(override val client: BaiduApiClient) : AipApplicatio
         }
     }
 
-    suspend fun video(name: String, url: String, id: String? = null, urls: List<String>, info: JsonArray): JsonObject {
+    suspend fun video(name: String, url: String, id: String?, info: List<VideoInfo>? = null): CensorResult.Video {
+        return video(name, listOf(url), id, info)
+    }
+
+    suspend fun video(name: String, urls: List<String>, id: String?, info: List<VideoInfo>? = null): CensorResult.Video {
         // TODO: check
         return client.useHttpClient { http ->
             http.post(VIDEO_CENSOR) {
@@ -65,18 +69,21 @@ open class AipContentCensor(override val client: BaiduApiClient) : AipApplicatio
 
                 body = FormDataContent(Parameters.build {
                     append("name", name)
-                    append("videoUrl", url)
-                    append("extId", id ?: url)
                     for ((index, item) in urls.withIndex()) {
-                        append("videoUrl${index + 2}", item)
+                        if (index == 0) {
+                            append("videoUrl", item)
+                        } else {
+                            append("videoUrl${index + 1}", item)
+                        }
                     }
+                    append("extId", id ?: urls.first())
                     append("extInfo", info.toString())
                 })
             }
         }
     }
 
-    suspend fun voice(url: String, format: String, rawText: Boolean, split: Boolean): JsonObject {
+    suspend fun voice(url: String, format: String, rawText: Boolean, split: Boolean): CensorResult.Voice {
         // TODO: check20000
         return client.useHttpClient { http ->
             http.post(VOICE_CENSOR) {
@@ -92,7 +99,7 @@ open class AipContentCensor(override val client: BaiduApiClient) : AipApplicatio
         }
     }
 
-    suspend fun voice(bytes: ByteArray, format: String, rawText: Boolean, split: Boolean): JsonObject {
+    suspend fun voice(bytes: ByteArray, format: String, rawText: Boolean, split: Boolean): CensorResult.Voice {
         @OptIn(InternalAPI::class)
         val base64 = bytes.encodeBase64()
         // TODO: check
