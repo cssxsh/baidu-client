@@ -32,24 +32,21 @@ internal fun AuthClient.getWebAuthorizeUrl(
     login: LoginType? = null,
     qrcode: Boolean = true,
     extend: Map<String, Any?>? = null
-): Url {
-    val builder = URLBuilder(AUTHORIZE)
-    with(builder.parameters) {
-        appendParameter("client_id", appKey)
-        appendParameter("response_type", type)
-        appendParameter("redirect_uri", redirect)
-        appendParameter("scope", scope.joinToString(","))
-        appendParameter("display", display)
-        appendParameter("state", state)
-        appendParameter("force_login", force?.toInt())
-        appendParameter("confirm_login", confirm?.toInt())
-        appendParameter("login_type", login)
-        appendParameter("qrcode", qrcode.toInt())
-        extend?.forEach { (name, value) ->
-            appendParameter(name, value)
-        }
+): Url = with(HttpRequestBuilder(AUTHORIZE)) {
+    parameter("client_id", appKey)
+    parameter("response_type", type)
+    parameter("redirect_uri", redirect)
+    parameter("scope", scope.joinToString(","))
+    parameter("display", display)
+    parameter("state", state)
+    parameter("force_login", force?.toInt())
+    parameter("confirm_login", confirm?.toInt())
+    parameter("login_type", login)
+    parameter("qrcode", qrcode.toInt())
+    for ((name, value) in extend.orEmpty()) {
+        parameter(name, value)
     }
-    return builder.build()
+    url.build()
 }
 
 /**
@@ -132,18 +129,15 @@ internal fun getDeviceAuthorizeUrl(
     force: Boolean? = null,
     redirect: String? = null,
     extend: Map<String, Any?>? = null
-): Url {
-    val builder = URLBuilder(DEVICE)
-    with(builder.parameters) {
-        appendParameter("code", code)
-        appendParameter("display", display)
-        appendParameter("force_login", force?.toInt())
-        appendParameter("redirect_uri", redirect)
-        extend?.forEach { (name, value) ->
-            appendParameter(name, value)
-        }
+): Url = with(HttpRequestBuilder(AUTHORIZE)) {
+    parameter("code", code)
+    parameter("display", display)
+    parameter("force_login", force?.toInt())
+    parameter("redirect_uri", redirect)
+    for ((name, value) in extend.orEmpty()) {
+        parameter(name, value)
     }
-    return builder.build()
+    url.build()
 }
 
 /**
