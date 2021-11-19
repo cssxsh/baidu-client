@@ -1,6 +1,6 @@
 # Baidu Api Client
 
-> 百度API的Kotlin Jvm SDK，目前实现的有 `Oauth认证` 和 `百度网盘`
+> 百度API的Kotlin Jvm SDK
 
 ![baidu-oauth](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-oauth)
 ![baidu-aip](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-aip)
@@ -54,5 +54,9 @@ repositories {
 dependencies {
     implementation("xyz.cssxsh.baidu:baidu-netdisk:${version}")
     implementation("xyz.cssxsh.baidu:baidu-oauth:${version}")
+}
+
+java {
+    disableAutoTargetJvm()
 }
 ```
