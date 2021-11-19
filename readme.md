@@ -2,7 +2,11 @@
 
 > 百度API的Kotlin Jvm SDK，目前实现的有 `Oauth认证` 和 `百度网盘`
 
-## Baidu Oauth
+![baidu-oauth](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-oauth)
+![baidu-aip](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-aip)
+![baidu-netdisk](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-netdisk)
+
+## Baidu User Oauth
 
 部分SDK的前置库  
 有三种[验证方式](https://developer.baidu.com/wiki/index.php?title=docs/oauth/application)
@@ -27,10 +31,18 @@
 已完成的功能
 
 1. 验证登录
-1. 上传文件
-1. 列出文件
-1. 搜索文件
-1. [秒传链接](https://zhuanlan.zhihu.com/p/356900770) 获取和解析
+2. 上传文件
+3. 列出文件
+4. 搜索文件
+5. [秒传链接](https://zhuanlan.zhihu.com/p/356900770) 获取和解析
+
+## Baidu AIP
+
+[AIP文档](https://ai.baidu.com/ai-doc)
+
+目前实现的功能有
+
+* AipContentCensor 智能内容审核
 
 ## Gradle引用包
 
