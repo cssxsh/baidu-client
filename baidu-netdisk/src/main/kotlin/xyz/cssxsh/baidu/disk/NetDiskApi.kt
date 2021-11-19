@@ -3,9 +3,15 @@ package xyz.cssxsh.baidu.disk
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
+import io.ktor.util.*
 import kotlinx.serialization.builtins.*
 import kotlinx.serialization.json.*
 import xyz.cssxsh.baidu.*
+
+@OptIn(InternalAPI::class)
+internal fun ParametersBuilder.appendParameter(key: String, value: Any?) {
+    value?.let { append(key, it.toString()) }
+}
 
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E7%BD%91%E7%9B%98%E5%AE%B9%E9%87%8F%E4%BF%A1%E6%81%AF)
@@ -38,7 +44,7 @@ suspend fun NetDiskClient.getCategoryInfo(
 }
 
 /**
- * XXX
+ * XXX: doc
  */
 suspend fun NetDiskClient.getListInfo(
     dir: String = "",
@@ -65,7 +71,7 @@ suspend fun NetDiskClient.getListInfo(
 }
 
 /**
- * XXX
+ * XXX: doc
  */
 suspend fun NetDiskClient.rapidUpload(
     content: String,
@@ -87,7 +93,7 @@ suspend fun NetDiskClient.rapidUpload(
 }
 
 /**
- * XXX
+ * XXX: doc
  */
 suspend fun NetDiskClient.createFileWeb(
     path: String,
