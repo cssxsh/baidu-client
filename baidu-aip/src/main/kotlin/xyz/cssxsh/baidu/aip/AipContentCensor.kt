@@ -50,8 +50,9 @@ open class AipContentCensor(override val client: BaiduApiClient) : AipApplicatio
             http.post(TEXT_CENSOR) {
                 parameter("access_token", accessToken)
 
-                body = plain
-                contentType(ContentType.Application.FormUrlEncoded)
+                body = FormDataContent(Parameters.build {
+                    append("text", plain)
+                })
             }
         }
     }
