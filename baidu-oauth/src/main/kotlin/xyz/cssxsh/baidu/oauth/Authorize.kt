@@ -7,7 +7,7 @@ import xyz.cssxsh.baidu.*
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
  */
-fun BaiduAuthClient.getWebAuthorizeUrl(
+fun BaiduUserAuthClient.getWebAuthorizeUrl(
     type: AuthorizeType,
     state: String? = null,
     display: DisplayType = DisplayType.PAGE,
@@ -60,7 +60,7 @@ fun Url.getAuthorizeCode(): String = parameters["code"].orEmpty()
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
  */
-suspend fun BaiduAuthClient.getAuthorizeToken(code: String): AuthorizeAccessToken = useHttpClient { client ->
+suspend fun BaiduUserAuthClient.getAuthorizeToken(code: String): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.AUTHORIZATION)
         parameter("code", code)
@@ -73,7 +73,7 @@ suspend fun BaiduAuthClient.getAuthorizeToken(code: String): AuthorizeAccessToke
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/client)
  */
-suspend fun BaiduAuthClient.getClientCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
+suspend fun BaiduUserAuthClient.getClientCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.CLIENT_CREDENTIALS)
         parameter("client_id", appKey)
@@ -85,7 +85,7 @@ suspend fun BaiduAuthClient.getClientCredentialsToken(): AuthorizeAccessToken = 
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/client)
  */
-suspend fun BaiduAuthClient.getDeveloperCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
+suspend fun BaiduUserAuthClient.getDeveloperCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.DEVELOPER_CREDENTIALS)
         parameter("client_id", appKey)
@@ -97,7 +97,7 @@ suspend fun BaiduAuthClient.getDeveloperCredentialsToken(): AuthorizeAccessToken
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
-suspend fun BaiduAuthClient.getDeviceCode(): AuthorizeDeviceCode = useHttpClient { client ->
+suspend fun BaiduUserAuthClient.getDeviceCode(): AuthorizeDeviceCode = useHttpClient { client ->
     client.post(DEVICE_CODE) {
         parameter("client_id", appKey)
         parameter("response_type", "device_code")
@@ -129,7 +129,7 @@ fun getDeviceAuthorizeUrl(
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
-suspend fun BaiduAuthClient.getDeviceToken(code: String): AuthorizeAccessToken = useHttpClient { client ->
+suspend fun BaiduUserAuthClient.getDeviceToken(code: String): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.DEVICE)
         parameter("code", code)
@@ -141,7 +141,7 @@ suspend fun BaiduAuthClient.getDeviceToken(code: String): AuthorizeAccessToken =
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
-suspend fun BaiduAuthClient.getDeviceQrcode(code: AuthorizeDeviceCode): ByteArray = useHttpClient { client ->
+suspend fun BaiduUserAuthClient.getDeviceQrcode(code: AuthorizeDeviceCode): ByteArray = useHttpClient { client ->
     client.get(code.qrcodeUrl) {
         parameter("grant_type", GrantType.DEVICE)
         parameter("client_id", appKey)
@@ -152,7 +152,7 @@ suspend fun BaiduAuthClient.getDeviceQrcode(code: AuthorizeDeviceCode): ByteArra
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
-suspend fun BaiduAuthClient.getRefreshToken(): AuthorizeAccessToken = useHttpClient { client ->
+suspend fun BaiduUserAuthClient.getRefreshToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.REFRESH)
         parameter("refresh_token", refreshToken)

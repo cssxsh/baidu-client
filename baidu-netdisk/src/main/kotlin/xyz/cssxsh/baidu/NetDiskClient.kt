@@ -2,7 +2,7 @@ package xyz.cssxsh.baidu
 
 import kotlinx.serialization.json.*
 
-interface NetDiskClient : BaiduAuthClient {
+interface NetDiskClient : BaiduUserAuthClient {
     val appDataFolder: String
 
     companion object {
