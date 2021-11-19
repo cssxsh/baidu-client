@@ -6,6 +6,7 @@ plugins {
 //setBintray(Config())
 
 dependencies {
+    api(project(":baidu-oauth"))
     implementation(ktor("client", Versions.ktor))
     implementation(ktor("client-serialization", Versions.ktor))
     implementation(ktor("client-encoding", Versions.ktor))
@@ -16,26 +17,25 @@ dependencies {
 kotlin {
     sourceSets {
         all {
-//            languageSettings.useExperimentalAnnotation("kotlin.ExperimentalStdlibApi")
-//            languageSettings.useExperimentalAnnotation("kotlinx.serialization.ExperimentalSerializationApi")
-//            languageSettings.useExperimentalAnnotation("kotlinx.serialization.InternalSerializationApi")
+            languageSettings.optIn("kotlin.RequiresOptIn")
+        }
+    }
+    target {
+        compilations.configureEach {
+            kotlinOptions {
+                jvmTarget = "11"
+            }
         }
     }
 }
 
-tasks {
+java {
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
+}
 
+tasks {
     test {
         useJUnitPlatform()
-    }
-
-    compileKotlin {
-        kotlinOptions.freeCompilerArgs += "-Xjvm-default=all"
-        kotlinOptions.jvmTarget = "11"
-    }
-
-    compileTestKotlin {
-        kotlinOptions.freeCompilerArgs += "-Xjvm-default=all"
-        kotlinOptions.jvmTarget = "11"
     }
 }

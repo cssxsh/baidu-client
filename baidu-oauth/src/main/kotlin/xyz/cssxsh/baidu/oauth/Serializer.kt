@@ -319,6 +319,9 @@ data class ScopeType(val value: String) {
          * XXX
          */
         val MOBILE = ScopeType(value = "mobile")
+
+
+        val WISE_ADAPT = ScopeType(value = "wise_adapt")
     }
 
     override fun toString(): String = value
