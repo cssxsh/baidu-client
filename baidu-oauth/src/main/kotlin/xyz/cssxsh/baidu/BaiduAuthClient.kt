@@ -16,4 +16,6 @@ interface BaiduAuthClient : BaiduAuthConfig {
     val scope: List<ScopeType>
 
     suspend fun saveToken(token: AuthorizeAccessToken)
+
+    suspend fun refresh(): AuthorizeAccessToken
 }

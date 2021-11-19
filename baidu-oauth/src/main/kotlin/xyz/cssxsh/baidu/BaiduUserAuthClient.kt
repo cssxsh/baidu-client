@@ -71,5 +71,5 @@ interface BaiduUserAuthClient : BaiduAuthClient {
     /**
      * 刷新 Token
      */
-    suspend fun refresh(): AuthorizeAccessToken = getRefreshToken().also { saveToken(token = it) }
+    override suspend fun refresh(): AuthorizeAccessToken = getRefreshToken().also { saveToken(token = it) }
 }

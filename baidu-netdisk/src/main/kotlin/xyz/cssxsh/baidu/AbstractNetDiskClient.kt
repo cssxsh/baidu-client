@@ -12,6 +12,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.disk.*
+import xyz.cssxsh.baidu.exption.*
 import java.io.*
 import java.time.*
 
@@ -90,10 +91,12 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
     protected val mutex = Mutex()
 
     override val accessToken: String
-        get() = requireNotNull(accessTokenValue?.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() })
+        get() = accessTokenValue?.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() }
+            ?: throw NotTokenException("AccessToken", this)
 
     override val refreshToken: String
-        get() = requireNotNull(refreshTokenValue?.takeIf { it.isNotBlank() })
+        get() = refreshTokenValue?.takeIf { it.isNotBlank() }
+            ?: throw NotTokenException("RefreshToken", this)
 
     override val appDataFolder: String
         get() = "/apps/$appName"

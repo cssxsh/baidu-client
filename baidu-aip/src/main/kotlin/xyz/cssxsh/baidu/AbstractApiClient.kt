@@ -10,6 +10,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
+import xyz.cssxsh.baidu.exption.*
 import xyz.cssxsh.baidu.oauth.*
 import java.io.*
 import java.time.*
@@ -88,10 +89,12 @@ abstract class AbstractApiClient : AipClient, Closeable {
     protected val mutex = Mutex()
 
     override val accessToken: String
-        get() = requireNotNull(accessTokenValue?.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() })
+        get() = accessTokenValue?.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() }
+            ?: throw NotTokenException("AccessToken", this)
 
     override val refreshToken: String
-        get() = requireNotNull(refreshTokenValue?.takeIf { it.isNotBlank() })
+        get() = refreshTokenValue?.takeIf { it.isNotBlank() }
+            ?: throw NotTokenException("RefreshToken", this)
 
     protected fun save(token: AuthorizeAccessToken) {
         accessTokenValue = token.accessToken
