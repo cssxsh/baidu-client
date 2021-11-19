@@ -20,10 +20,10 @@ interface AipClient : BaiduAuthClient {
     /**
      * 获取 Token
      */
-    suspend fun token() = saveToken(token = getClientCredentialsToken())
+    suspend fun token(): AuthorizeAccessToken = getClientCredentialsToken().also { saveToken(token = it) }
 
     /**
      * 刷新 Token
      */
-    suspend fun refresh() = saveToken(token = getRefreshToken())
+    suspend fun refresh(): AuthorizeAccessToken = getRefreshToken().also { saveToken(token = it) }
 }
