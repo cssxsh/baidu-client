@@ -22,7 +22,7 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
     protected open val client: HttpClient by lazy {
         HttpClient(OkHttp) {
             Json {
-                serializer = KotlinxSerializer(NetDiskClient.Json)
+                serializer = KotlinxSerializer(BaiduJson)
                 accept(ContentType.Text.Html)
             }
             install(UserAgent) {

@@ -21,7 +21,7 @@ abstract class AbstractApiClient : AipClient, Closeable {
     protected open val client: HttpClient by lazy {
         HttpClient(OkHttp) {
             Json {
-                serializer = KotlinxSerializer(AipClient.Json)
+                serializer = KotlinxSerializer(BaiduJson)
                 accept(ContentType.Text.Html)
             }
             CurlUserAgent()

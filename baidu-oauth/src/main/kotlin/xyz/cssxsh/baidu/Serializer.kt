@@ -5,7 +5,15 @@ package xyz.cssxsh.baidu
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
+import kotlinx.serialization.json.*
 import kotlin.reflect.*
+
+internal const val IGNORE_UNKNOWN_KEYS = "xyz.cssxsh.baidu.json.ignore"
+
+val BaiduJson = Json {
+    isLenient = true
+    ignoreUnknownKeys = System.getProperty(IGNORE_UNKNOWN_KEYS, "true").toBoolean()
+}
 
 
 @Serializer(forClass = Boolean::class)
