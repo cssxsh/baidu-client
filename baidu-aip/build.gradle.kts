@@ -1,9 +1,14 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
+    id("net.mamoe.maven-central-publish")
 }
 
-//setBintray(Config())
+mavenCentralPublish {
+    useCentralS01()
+    singleDevGithubProject("cssxsh", "baidu-client", "cssxsh")
+    licenseFromGitHubProject("AGPL-3.0", "master")
+}
 
 dependencies {
     api(project(":baidu-oauth"))
