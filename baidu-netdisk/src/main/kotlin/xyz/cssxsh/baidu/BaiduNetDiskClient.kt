@@ -4,18 +4,16 @@ import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
 import xyz.cssxsh.baidu.disk.*
+import xyz.cssxsh.baidu.oauth.*
 import java.io.*
 
 /**
  * 构建客户端的参数需要到 [百度网盘开放中心](https://pan.baidu.com/union/apply) 申请
  */
 open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient(), BaiduAuthConfig by config {
-    constructor(appId: Long, appName: String, appKey: String, secretKey: String) : this(object : BaiduAuthConfig {
-        override val appName: String = appName
-        override val appId: Long = appId
-        override val appKey: String = appKey
-        override val secretKey: String = secretKey
-    })
+    constructor(config: BaiduAuthConfig, token: AuthorizeAccessToken) : this(config) {
+        save(token = token)
+    }
 
     /**
      * 创建一个目录

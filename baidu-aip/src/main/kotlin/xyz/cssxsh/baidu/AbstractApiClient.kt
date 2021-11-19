@@ -92,9 +92,11 @@ abstract class AbstractApiClient : AipClient, Closeable {
     override val refreshToken: String
         get() = requireNotNull(refreshTokenValue?.takeIf { it.isNotBlank() })
 
-    override suspend fun saveToken(token: AuthorizeAccessToken): Unit = mutex.withLock {
+    protected fun save(token: AuthorizeAccessToken) {
         accessTokenValue = token.accessToken
         refreshTokenValue = token.refreshToken
         expires = OffsetDateTime.now().plusSeconds(token.expiresIn)
     }
+
+    override suspend fun saveToken(token: AuthorizeAccessToken): Unit = mutex.withLock { save(token) }
 }

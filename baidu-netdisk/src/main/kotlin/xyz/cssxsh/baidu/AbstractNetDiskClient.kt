@@ -97,9 +97,11 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
     override val appDataFolder: String
         get() = "/apps/$appName"
 
-    override suspend fun saveToken(token: AuthorizeAccessToken): Unit = mutex.withLock {
+    protected fun save(token: AuthorizeAccessToken) {
         accessTokenValue = token.accessToken
         refreshTokenValue = token.refreshToken
         expires = OffsetDateTime.now().plusSeconds(token.expiresIn)
     }
+
+    override suspend fun saveToken(token: AuthorizeAccessToken): Unit = mutex.withLock { save(token) }
 }
