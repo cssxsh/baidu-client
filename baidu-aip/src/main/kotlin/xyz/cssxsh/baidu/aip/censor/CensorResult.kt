@@ -174,7 +174,7 @@ sealed class CensorResult : CensorStatus {
             @SerialName("text")
             val text: String,
             @SerialName("auditData")
-            val auditData: List<CensorItem.Hit> = emptyList()
+            val auditData: List<Text.Record> = emptyList()
         ) : CensorStatus
     }
 }
