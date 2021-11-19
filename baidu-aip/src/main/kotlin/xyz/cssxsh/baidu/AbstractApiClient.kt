@@ -71,7 +71,8 @@ abstract class AbstractApiClient : AipClient, Closeable {
         throw CancellationException()
     }
 
-    override val scope = listOf(ScopeType.PUBLIC, ScopeType.WISE_ADAPT)
+    override var scope = listOf(ScopeType.PUBLIC, ScopeType.WISE_ADAPT)
+        protected set
 
     @Suppress("unused")
     protected open var accessTokenValue: String? = null
@@ -96,6 +97,7 @@ abstract class AbstractApiClient : AipClient, Closeable {
         accessTokenValue = token.accessToken
         refreshTokenValue = token.refreshToken
         expires = OffsetDateTime.now().plusSeconds(token.expiresIn)
+        scope = token.scope
     }
 
     override suspend fun saveToken(token: AuthorizeAccessToken): Unit = mutex.withLock { save(token) }

@@ -73,7 +73,8 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
         throw CancellationException()
     }
 
-    override val scope = listOf(ScopeType.BASIC, ScopeType.NET_DISK)
+    override var scope = listOf(ScopeType.BASIC, ScopeType.NET_DISK)
+        protected set
 
     @Suppress("unused")
     protected open var accessTokenValue: String? = null
@@ -101,6 +102,7 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
         accessTokenValue = token.accessToken
         refreshTokenValue = token.refreshToken
         expires = OffsetDateTime.now().plusSeconds(token.expiresIn)
+        scope = token.scope
     }
 
     override suspend fun saveToken(token: AuthorizeAccessToken): Unit = mutex.withLock { save(token) }
