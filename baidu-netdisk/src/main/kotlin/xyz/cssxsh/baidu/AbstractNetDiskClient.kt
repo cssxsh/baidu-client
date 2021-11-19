@@ -10,7 +10,6 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
-import kotlinx.serialization.json.*
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.disk.*
 import java.io.*
@@ -20,26 +19,16 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
     @Suppress("unused")
     val cookiesStorage = AcceptAllCookiesStorage()
 
-    protected open val timeout: Long = 30 * 1000L
-
-    protected open val json = Json {
-        ignoreUnknownKeys = true
-    }
-
     protected open val client: HttpClient by lazy {
         HttpClient(OkHttp) {
             Json {
-                serializer = KotlinxSerializer(json)
+                serializer = KotlinxSerializer(NetDiskClient.Json)
                 accept(ContentType.Text.Html)
             }
             install(UserAgent) {
                 agent = USER_AGENT
             }
-            ContentEncoding {
-                gzip()
-                deflate()
-                identity()
-            }
+            ContentEncoding()
             install(HttpCookies) {
                 storage = cookiesStorage
             }
@@ -47,15 +36,19 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
                 allowHttpsDowngrade = true
             }
             install(HttpTimeout) {
-                socketTimeoutMillis = timeout
-                connectTimeoutMillis = timeout
-                requestTimeoutMillis = timeout
+                socketTimeoutMillis = NetDiskClient.Timeout
+                connectTimeoutMillis = NetDiskClient.Timeout
+                requestTimeoutMillis = NetDiskClient.Timeout
             }
             HttpResponseValidator {
                 handleResponseException { cause ->
-                    throw (cause as? ClientRequestException)
-                        ?.toAuthorizeExceptionOrNull()
-                        ?: return@handleResponseException
+                    if (cause is ClientRequestException) {
+                        throw try {
+                            AuthorizeException(cause)
+                        } catch (cause: Throwable) {
+                            return@handleResponseException
+                        }
+                    }
                 }
             }
         }

@@ -1,7 +1,8 @@
 package xyz.cssxsh.baidu.oauth
 
+import io.ktor.client.call.*
+import io.ktor.client.features.*
 import kotlinx.serialization.*
-import kotlinx.serialization.json.*
 
 /**
  *
@@ -20,8 +21,9 @@ data class AuthorizeError(
  * @see AuthorizeErrorType
  * @see AuthorizeAccessToken
  */
-class AuthorizeException(private val json: AuthorizeError) : IllegalStateException(json.description) {
-    constructor(context: String) : this(Json.decodeFromString(AuthorizeError.serializer(), context))
+class AuthorizeException(val data: AuthorizeError, cause: Throwable) : IllegalStateException(data.description, cause) {
 
-    val type: AuthorizeErrorType by json::error
+    val type: AuthorizeErrorType by data::error
 }
+
+suspend fun AuthorizeException(cause: ClientRequestException) = AuthorizeException(cause.response.receive(), cause)
