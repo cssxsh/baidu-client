@@ -1,7 +1,12 @@
 package xyz.cssxsh.baidu
 
 import kotlinx.serialization.json.*
+import xyz.cssxsh.baidu.oauth.*
 
+/**
+ * * AIP 文档 [https://ai.baidu.com/ai-doc]
+ * * Token 认证 [https://ai.baidu.com/ai-doc/REFERENCE/Ck3dwjhhu]
+ */
 interface AipClient : BaiduAuthClient {
 
     companion object {
@@ -11,4 +16,14 @@ interface AipClient : BaiduAuthClient {
             ignoreUnknownKeys = true
         }
     }
+
+    /**
+     * 获取 Token
+     */
+    suspend fun token() = saveToken(token = getClientCredentialsToken())
+
+    /**
+     * 刷新 Token
+     */
+    suspend fun refresh() = saveToken(token = getRefreshToken())
 }

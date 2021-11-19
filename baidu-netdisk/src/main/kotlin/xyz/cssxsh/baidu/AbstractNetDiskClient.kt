@@ -75,8 +75,6 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
 
     override val scope = listOf(ScopeType.BASIC, ScopeType.NET_DISK)
 
-    override val redirect: String = DEFAULT_REDIRECT
-
     @Suppress("unused")
     protected open var accessTokenValue: String? = null
 

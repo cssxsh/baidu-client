@@ -73,8 +73,6 @@ abstract class AbstractApiClient : AipClient, Closeable {
 
     override val scope = listOf(ScopeType.PUBLIC, ScopeType.WISE_ADAPT)
 
-    override val redirect: String = DEFAULT_REDIRECT
-
     @Suppress("unused")
     protected open var accessTokenValue: String? = null
 

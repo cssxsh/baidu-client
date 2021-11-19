@@ -11,7 +11,7 @@ interface BaiduAuthClient : BaiduAuthConfig {
 
     val refreshToken: String
 
-    val redirect: String
+    val redirect: String get() = DEFAULT_REDIRECT
 
     val scope: List<ScopeType>
 
