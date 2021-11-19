@@ -78,24 +78,24 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
         protected set
 
     @Suppress("unused")
-    protected open var accessTokenValue: String? = null
+    protected open var accessTokenValue: String = ""
 
     @Suppress("unused")
     open var expires: OffsetDateTime = OffsetDateTime.now()
         protected set
 
     @Suppress("unused")
-    protected open var refreshTokenValue: String? = null
+    protected open var refreshTokenValue: String = ""
 
     @Suppress("unused")
     protected val mutex = Mutex()
 
     override val accessToken: String
-        get() = accessTokenValue?.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() }
+        get() = accessTokenValue.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() }
             ?: throw NotTokenException("AccessToken", this)
 
     override val refreshToken: String
-        get() = refreshTokenValue?.takeIf { it.isNotBlank() }
+        get() = refreshTokenValue.takeIf { it.isNotBlank() }
             ?: throw NotTokenException("RefreshToken", this)
 
     override val appDataFolder: String
