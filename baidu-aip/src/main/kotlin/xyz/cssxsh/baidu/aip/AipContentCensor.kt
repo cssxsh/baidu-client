@@ -7,6 +7,7 @@ import io.ktor.util.*
 import xyz.cssxsh.baidu.*
 import xyz.cssxsh.baidu.aip.censor.*
 
+@OptIn(InternalAPI::class)
 open class AipContentCensor(override val client: BaiduApiClient) : AipApplication {
     companion object {
         internal const val IMAGE_CENSOR = "https://aip.baidubce.com/rest/2.0/solution/v1/img_censor/v2/user_defined"
