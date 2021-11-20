@@ -10,7 +10,7 @@ import io.ktor.client.features.json.serializer.*
 import io.ktor.http.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
-import xyz.cssxsh.baidu.exption.*
+import xyz.cssxsh.baidu.exception.*
 import xyz.cssxsh.baidu.oauth.*
 import java.io.*
 import java.time.*

@@ -1,4 +1,4 @@
-package xyz.cssxsh.baidu.exption
+package xyz.cssxsh.baidu.exception
 
 import xyz.cssxsh.baidu.BaiduAuthClient
 

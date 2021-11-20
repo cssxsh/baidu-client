@@ -12,7 +12,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.sync.*
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.disk.*
-import xyz.cssxsh.baidu.exption.*
+import xyz.cssxsh.baidu.exception.*
 import java.io.*
 import java.time.*
 
