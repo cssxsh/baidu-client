@@ -3,13 +3,9 @@ package xyz.cssxsh.baidu
 import io.ktor.client.*
 import xyz.cssxsh.baidu.oauth.*
 
-interface BaiduAuthClient : BaiduAuthConfig {
+interface BaiduAuthClient : BaiduAuthConfig, BaiduAuthToken {
 
     suspend fun <R> useHttpClient(block: suspend BaiduAuthClient.(HttpClient) -> R): R
-
-    val accessToken: String
-
-    val refreshToken: String
 
     val redirect: String get() = DEFAULT_REDIRECT
 

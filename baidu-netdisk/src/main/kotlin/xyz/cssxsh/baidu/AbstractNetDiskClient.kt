@@ -81,7 +81,7 @@ abstract class AbstractNetDiskClient : NetDiskClient, Closeable {
     protected open var accessTokenValue: String = ""
 
     @Suppress("unused")
-    open var expires: OffsetDateTime = OffsetDateTime.now()
+    override var expires: OffsetDateTime = OffsetDateTime.MIN
         protected set
 
     @Suppress("unused")
