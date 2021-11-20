@@ -86,7 +86,7 @@ internal suspend fun AuthClient.getAuthorizeToken(code: String): AuthorizeAccess
 }
 
 /**
- * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/client)
+ * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/client)
  */
 internal suspend fun AuthClient.getClientCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
@@ -98,7 +98,8 @@ internal suspend fun AuthClient.getClientCredentialsToken(): AuthorizeAccessToke
 }
 
 /**
- * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/client)
+ * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/client)
+ * @see [getClientCredentialsToken]
  */
 internal suspend fun AuthClient.getDeveloperCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {

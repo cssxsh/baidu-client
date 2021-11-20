@@ -17,5 +17,7 @@ interface BaiduAuthClient : BaiduAuthConfig {
 
     suspend fun saveToken(token: AuthorizeAccessToken)
 
+    suspend fun token(): AuthorizeAccessToken
+
     suspend fun refresh(): AuthorizeAccessToken
 }

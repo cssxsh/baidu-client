@@ -15,7 +15,7 @@ interface AipClient : BaiduAuthClient {
     /**
      * 获取 Token
      */
-    suspend fun token(): AuthorizeAccessToken = getClientCredentialsToken().also { saveToken(token = it) }
+    override suspend fun token(): AuthorizeAccessToken = getClientCredentialsToken().also { saveToken(token = it) }
 
     /**
      * 刷新 Token

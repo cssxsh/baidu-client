@@ -78,10 +78,9 @@ enum class ApiErrorCode(val code: Int, val message: String) {
 }
 
 /**
- *
+ * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/error)
  * @see xyz.cssxsh.baidu.oauth.AuthorizeError
  * @see xyz.cssxsh.baidu.oauth.AuthorizeException
- * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/error)
  */
 @Serializable(with = AuthorizeErrorType.Serializer::class)
 enum class AuthorizeErrorType(val message: String) {
@@ -241,7 +240,7 @@ enum class GrantType(val value: String) {
     CLIENT_CREDENTIALS(value = "client_credentials"),
 
     /**
-     * [CLIENT_CREDENTIALS]
+     * @see [CLIENT_CREDENTIALS]
      */
     DEVELOPER_CREDENTIALS(value = "developer_credentials"),
 

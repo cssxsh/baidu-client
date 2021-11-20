@@ -32,14 +32,20 @@ interface BaiduUserAuthClient : BaiduAuthClient {
     }
 
     /**
-     * 获取临时 Token，莫得意义
+     * 获取临时 Token，没有用户授权
      */
     suspend fun credentials(): AuthorizeAccessToken = getClientCredentialsToken().also { saveToken(token = it) }
 
     /**
-     * 获取临时 Token，莫得意义
+     * 获取临时 Token，没有用户授权
      */
     suspend fun developer(): AuthorizeAccessToken = getDeveloperCredentialsToken().also { saveToken(token = it) }
+
+    /**
+     * Client Credentials 授权，仅得到部分授权
+     */
+    @Deprecated(message = "BaiduUserAuthClient Power By User.", replaceWith = ReplaceWith("credentials()"))
+    override suspend fun token(): AuthorizeAccessToken = credentials()
 
     /**
      * 设备认证的方式获取 Token, block 第一个参数是 直接网页认证的Url，第二个是 二维码认证的图片Url
