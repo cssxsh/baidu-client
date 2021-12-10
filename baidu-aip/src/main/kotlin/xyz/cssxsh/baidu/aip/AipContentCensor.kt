@@ -8,7 +8,7 @@ import xyz.cssxsh.baidu.*
 import xyz.cssxsh.baidu.aip.censor.*
 
 @OptIn(InternalAPI::class)
-open class AipContentCensor(override val client: BaiduApiClient) : AipApplication {
+open class AipContentCensor(override val client: AipClient) : AipApplication {
     companion object {
         internal const val IMAGE_CENSOR = "https://aip.baidubce.com/rest/2.0/solution/v1/img_censor/v2/user_defined"
         internal const val TEXT_CENSOR = "https://aip.baidubce.com/rest/2.0/solution/v1/text_censor/v2/user_defined"
