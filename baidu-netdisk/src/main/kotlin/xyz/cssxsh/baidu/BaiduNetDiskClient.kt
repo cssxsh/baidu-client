@@ -72,7 +72,8 @@ open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient()
      * 快速上传文件 需要Rapid信息，默认为覆盖模式
      */
     suspend fun rapidUploadFile(info: RapidUploadInfo, rename: RenameType = RenameType.COVER): NetDiskFileInfo {
-        return rapidUpload(info.content, info.slice, info.length, info.path, rename).info
+        val result = rapidUpload(info.content, info.slice, info.length, info.path, rename)
+        return requireNotNull(result.info) { "快速上传失败 ${result.errno}" }
     }
 
     /**

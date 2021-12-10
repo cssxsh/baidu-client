@@ -7,7 +7,7 @@ data class NetDiskRapidInfo(
     @SerialName("errno")
     val errno: Int,
     @SerialName("info")
-    val info: NetDiskPreCreateFile,
+    val info: NetDiskPreCreateFile? = null,
     @SerialName("request_id")
     val requestId: RequestIdType
 )
