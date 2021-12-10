@@ -3,8 +3,8 @@ package xyz.cssxsh.baidu
 import xyz.cssxsh.baidu.oauth.*
 
 /**
- * * AIP 文档 [https://ai.baidu.com/ai-doc]
- * * Token 认证 [https://ai.baidu.com/ai-doc/REFERENCE/Ck3dwjhhu]
+ * * [AIP 文档](https://ai.baidu.com/ai-doc)
+ * * [Token 认证](https://ai.baidu.com/ai-doc/REFERENCE/Ck3dwjhhu)
  */
 interface AipClient : BaiduAuthClient {
 

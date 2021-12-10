@@ -11,7 +11,7 @@ sealed class CensorResult : CensorStatus {
     @Serializable
     data class Image(
         @SerialName("log_id")
-        override val logId: Long,
+        override val logId: Long = 0,
         @SerialName("error_code")
         override val errorCode: Long? = null,
         @SerialName("error_msg")
@@ -60,7 +60,7 @@ sealed class CensorResult : CensorStatus {
     @Serializable
     data class Text(
         @SerialName("log_id")
-        override val logId: Long,
+        override val logId: Long = 0,
         @SerialName("error_code")
         override val errorCode: Long? = null,
         @SerialName("error_msg")
@@ -101,7 +101,7 @@ sealed class CensorResult : CensorStatus {
     @Serializable
     data class Video(
         @SerialName("log_id")
-        override val logId: Long,
+        override val logId: Long = 0,
         @SerialName("error_code")
         override val errorCode: Long? = null,
         @SerialName("error_msg")
@@ -142,7 +142,7 @@ sealed class CensorResult : CensorStatus {
     @Serializable
     data class Voice(
         @SerialName("log_id")
-        override val logId: Long,
+        override val logId: Long = 0,
         @SerialName("error_code")
         override val errorCode: Long? = null,
         @SerialName("error_msg")

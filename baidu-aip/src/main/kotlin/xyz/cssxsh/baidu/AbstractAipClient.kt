@@ -15,7 +15,7 @@ import xyz.cssxsh.baidu.oauth.*
 import java.io.*
 import java.time.*
 
-abstract class AbstractApiClient : AipClient, Closeable {
+abstract class AbstractAipClient : AipClient, Closeable {
     @Suppress("unused")
     val cookiesStorage = AcceptAllCookiesStorage()
 
