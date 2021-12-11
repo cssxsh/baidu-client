@@ -2,9 +2,9 @@
 
 > 百度API的Kotlin Jvm SDK
 
-![baidu-oauth](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-oauth)
-![baidu-aip](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-aip)
-![baidu-netdisk](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-netdisk)
+* oauth ![baidu-oauth](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-oauth)
+* aip ![baidu-aip](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-aip)
+* netdisk ![baidu-netdisk](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-netdisk)
 
 ## Baidu User Oauth
 
@@ -52,8 +52,9 @@ repositories {
 }
 
 dependencies {
-    implementation("xyz.cssxsh.baidu:baidu-netdisk:${version}")
     implementation("xyz.cssxsh.baidu:baidu-oauth:${version}")
+    implementation("xyz.cssxsh.baidu:baidu-netdisk:${version}")
+    implementation("xyz.cssxsh.baidu:baidu-aip:${version}")
 }
 
 java {
