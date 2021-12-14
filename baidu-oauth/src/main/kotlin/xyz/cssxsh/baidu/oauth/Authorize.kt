@@ -32,7 +32,8 @@ internal fun AuthClient.getWebAuthorizeUrl(
     login: LoginType? = null,
     qrcode: Boolean = true,
     extend: Map<String, Any?>? = null
-): Url = with(HttpRequestBuilder(AUTHORIZE)) {
+): Url = with(HttpRequestBuilder()) {
+    url(AUTHORIZE)
     parameter("client_id", appKey)
     parameter("response_type", type)
     parameter("redirect_uri", redirect)
@@ -130,7 +131,8 @@ internal fun getDeviceAuthorizeUrl(
     force: Boolean? = null,
     redirect: String? = null,
     extend: Map<String, Any?>? = null
-): Url = with(HttpRequestBuilder(AUTHORIZE)) {
+): Url = with(HttpRequestBuilder()) {
+    url(AUTHORIZE)
     parameter("code", code)
     parameter("display", display)
     parameter("force_login", force?.toInt())
