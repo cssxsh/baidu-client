@@ -136,7 +136,7 @@ sealed class CensorResult : CensorStatus {
             val frameTimeStamp: Int,
             @SerialName("frameUrl")
             val frameUrl: String
-        ): CensorStatus
+        ) : CensorStatus
     }
 
     @Serializable
