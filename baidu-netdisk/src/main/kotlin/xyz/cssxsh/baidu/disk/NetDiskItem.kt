@@ -15,7 +15,7 @@ data class NetDiskList<NetDiskFileInfo>(
     @SerialName("info")
     val info: List<NetDiskFileInfo>,
     @SerialName("contentlist")
-    private val contentList: JsonArray? = null,
+    internal val contentList: JsonArray? = null,
     @SerialName("request_id")
     val requestId: RequestIdType,
     @SerialName("has_more")
@@ -39,7 +39,7 @@ data class NetDiskBt(
     @SerialName("md5")
     override val md5: String,
     @SerialName("object_key")
-    private val objectKey: String,
+    internal val objectKey: String,
     @SerialName("path")
     override val path: String,
     @SerialName("server_ctime")
@@ -49,11 +49,11 @@ data class NetDiskBt(
     @SerialName("server_mtime")
     override val modified: Long,
     @SerialName("share")
-    private val share: Int,
+    internal val share: Int,
     @SerialName("size")
     override val size: Long,
     @SerialName("wpfile")
-    private val wpfile: Int,
+    internal val wpfile: Int,
 ) : NetDiskFileInfo
 
 @Serializable
@@ -76,7 +76,7 @@ data class NetDiskDoc(
     @SerialName("md5")
     override val md5: String,
     @SerialName("object_key")
-    private val objectKey: String,
+    internal val objectKey: String,
     @SerialName("path")
     override val path: String,
     @SerialName("server_ctime")
@@ -92,7 +92,7 @@ data class NetDiskDoc(
     @SerialName("thumbs")
     val thumbs: Map<String, String>? = null,
     @SerialName("wpfile")
-    private val wpfile: Int,
+    internal val wpfile: Int,
 ) : NetDiskFileInfo
 
 @Serializable
@@ -106,15 +106,15 @@ data class NetDiskMeta(
     @SerialName("ctime")
     override val created: Long,
     @SerialName("extent_int3")
-    private val extentInt3: Int,
+    internal val extentInt3: Int,
     @SerialName("extent_tinyint1")
-    private val extentTinyint1: Int,
+    internal val extentTinyint1: Int,
     @SerialName("extent_tinyint2")
-    private val extentTinyint2: Int,
+    internal val extentTinyint2: Int,
     @SerialName("extent_tinyint3")
-    private val extentTinyint3: Int,
+    internal val extentTinyint3: Int,
     @SerialName("extent_tinyint4")
-    private val extentTinyint4: Int,
+    internal val extentTinyint4: Int,
     @SerialName("file_key")
     val fileKey: String = "",
     @SerialName("fs_id")
@@ -154,7 +154,7 @@ data class NetDiskMeta(
     @SerialName("server_mtime")
     val serverModifiedTime: Long,
     @SerialName("share")
-    private val share: Int,
+    internal val share: Int,
     @SerialName("size")
     override val size: Long,
     @SerialName("status")
@@ -164,7 +164,7 @@ data class NetDiskMeta(
     @SerialName("videotag")
     val videoTag: Int, // XXX
     @SerialName("wpfile")
-    private val wpfile: Int
+    internal val wpfile: Int
 ) : NetDiskFileInfo
 
 @Serializable
@@ -183,7 +183,7 @@ data class NetDiskVideo(
     @SerialName("md5")
     override val md5: String,
     @SerialName("object_key")
-    private val objectKey: String,
+    internal val objectKey: String,
     @SerialName("path")
     override val path: String,
     @SerialName("server_ctime")
@@ -199,7 +199,7 @@ data class NetDiskVideo(
     @SerialName("thumbs")
     val thumbs: Map<String, String>? = null,
     @SerialName("wpfile")
-    private val wpfile: Int,
+    internal val wpfile: Int,
 ) : NetDiskFileInfo
 
 @Serializable
@@ -333,7 +333,7 @@ data class NetDiskFileOrDir(
     @SerialName("path")
     override val path: String,
     @SerialName("pl")
-    private val pl: Int? = null,
+    internal val pl: Int? = null,
     @SerialName("server_atime")
     val accessed: Long? = null,
     @SerialName("server_ctime")
@@ -343,17 +343,17 @@ data class NetDiskFileOrDir(
     @SerialName("server_mtime")
     override val modified: Long,
     @SerialName("share")
-    private val share: Int? = null,
+    internal val share: Int? = null,
     @SerialName("size")
     override val size: Long,
     @SerialName("thumbs")
     val thumbs: Map<String, String>? = null,
     @SerialName("unlist")
-    private val unlist: Int? = null,
+    internal val unlist: Int? = null,
     @SerialName("wpfile")
-    private val wpfile: Int? = null,
+    internal val wpfile: Int? = null,
     @SerialName("extent_tinyint1")
-    private val extentTinyint1: Int? = null
+    internal val extentTinyint1: Int? = null
 ) : NetDiskFileInfo
 
 @Serializable
@@ -361,7 +361,7 @@ data class NetDiskCategory(
     @SerialName("count")
     val count: Long,
     @SerialName("real_server_mtime_2")
-    private val realServerMtime2: Long,
+    internal val realServerMtime2: Long,
     @SerialName("size")
     val size: Long,
     @SerialName("total")
