@@ -13,6 +13,7 @@ mavenCentralPublish {
 dependencies {
     implementation(ktor("client", Versions.ktor))
     implementation(ktor("client-serialization", Versions.ktor))
+    implementation(ktor("client-encoding", Versions.ktor))
     implementation(ktor("client-okhttp", Versions.ktor))
     testImplementation(kotlin("test"))
 }

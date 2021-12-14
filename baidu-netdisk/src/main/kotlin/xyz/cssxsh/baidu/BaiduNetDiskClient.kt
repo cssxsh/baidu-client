@@ -6,13 +6,14 @@ import io.ktor.http.*
 import xyz.cssxsh.baidu.disk.*
 import xyz.cssxsh.baidu.oauth.*
 import java.io.*
+import java.time.*
 
 /**
  * 构建客户端的参数需要到 [百度网盘开放中心](https://pan.baidu.com/union/apply) 申请
  */
 open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient(), BaiduAuthConfig by config {
-    constructor(config: BaiduAuthConfig, token: AuthorizeAccessToken) : this(config) {
-        save(token = token)
+    constructor(config: BaiduAuthConfig, token: AuthorizeAccessToken, time: OffsetDateTime) : this(config) {
+        save(token = token, time = time)
     }
 
     /**

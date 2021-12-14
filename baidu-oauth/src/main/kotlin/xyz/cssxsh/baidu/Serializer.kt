@@ -12,10 +12,11 @@ import kotlin.reflect.*
 
 internal const val IGNORE_UNKNOWN_KEYS = "xyz.cssxsh.baidu.json.ignore"
 
-val BaiduJson = Json {
-    isLenient = true
-    ignoreUnknownKeys = System.getProperty(IGNORE_UNKNOWN_KEYS, "true").toBoolean()
-}
+val BaiduJson
+    get() = Json {
+        isLenient = true
+        ignoreUnknownKeys = System.getProperty(IGNORE_UNKNOWN_KEYS, "true").toBoolean()
+    }
 
 @Serializer(forClass = Boolean::class)
 object NumberToBooleanSerializer : KSerializer<Boolean> {
