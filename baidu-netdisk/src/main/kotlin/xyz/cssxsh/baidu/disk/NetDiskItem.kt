@@ -5,7 +5,7 @@ import kotlinx.serialization.json.*
 import xyz.cssxsh.baidu.*
 
 @Serializable
-data class NetDiskList<NetDiskFileInfo>(
+public data class NetDiskList<NetDiskFileInfo>(
     @SerialName("errno")
     val errno: Int,
     @SerialName("guid")
@@ -24,7 +24,7 @@ data class NetDiskList<NetDiskFileInfo>(
 )
 
 @Serializable
-data class NetDiskBt(
+public data class NetDiskBt(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("fs_id")
@@ -57,7 +57,7 @@ data class NetDiskBt(
 ) : NetDiskFileInfo
 
 @Serializable
-data class NetDiskDoc(
+public data class NetDiskDoc(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("docpreview")
@@ -96,7 +96,7 @@ data class NetDiskDoc(
 ) : NetDiskFileInfo
 
 @Serializable
-data class NetDiskMeta(
+public data class NetDiskMeta(
     @SerialName("app_id")
     val appId: Int,
     @SerialName("block_list")
@@ -168,7 +168,7 @@ data class NetDiskMeta(
 ) : NetDiskFileInfo
 
 @Serializable
-data class NetDiskVideo(
+public data class NetDiskVideo(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("fs_id")
@@ -203,7 +203,7 @@ data class NetDiskVideo(
 ) : NetDiskFileInfo
 
 @Serializable
-data class NetDiskPreCreateFile(
+public data class NetDiskPreCreateFile(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("ctime")
@@ -228,7 +228,7 @@ data class NetDiskPreCreateFile(
 ) : NetDiskFileInfo
 
 @Serializable
-data class NetDiskFile(
+public data class NetDiskFile(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("fs_id")
@@ -257,7 +257,7 @@ data class NetDiskFile(
 ) : NetDiskFileInfo
 
 @Serializable
-data class NetDiskDetailList(
+public data class NetDiskDetailList(
     @SerialName("errmsg")
     val message: String,
     @SerialName("errno")
@@ -274,7 +274,7 @@ data class NetDiskDetailList(
 )
 
 @Serializable
-data class NetDiskDetail(
+public data class NetDiskDetail(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("date_taken")
@@ -309,7 +309,7 @@ data class NetDiskDetail(
 ) : NetDiskFileInfo
 
 @Serializable
-data class NetDiskFileOrDir(
+public data class NetDiskFileOrDir(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("dir_empty")
@@ -357,7 +357,7 @@ data class NetDiskFileOrDir(
 ) : NetDiskFileInfo
 
 @Serializable
-data class NetDiskCategory(
+public data class NetDiskCategory(
     @SerialName("count")
     val count: Long,
     @SerialName("real_server_mtime_2")

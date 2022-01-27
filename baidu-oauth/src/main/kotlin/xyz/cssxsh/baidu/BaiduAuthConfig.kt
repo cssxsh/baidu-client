@@ -1,12 +1,12 @@
 package xyz.cssxsh.baidu
 
-interface BaiduAuthConfig {
+public interface BaiduAuthConfig {
 
-    val appName: String
+    public val appName: String
 
-    val appId: Long
+    public val appId: Long
 
-    val appKey: String
+    public val appKey: String
 
-    val secretKey: String
+    public val secretKey: String
 }

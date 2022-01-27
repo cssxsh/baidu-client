@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.disk
 import kotlinx.serialization.*
 
 @Serializable
-data class NetDiskCategoryList(
+public data class NetDiskCategoryList(
     @SerialName("errno")
     val errno: Int,
     @SerialName("info")

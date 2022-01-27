@@ -15,11 +15,11 @@ import xyz.cssxsh.baidu.oauth.*
 import java.io.*
 import java.time.*
 
-abstract class AbstractBaiduAuthClient : BaiduAuthClient, Closeable {
+public abstract class AbstractBaiduAuthClient : BaiduAuthClient, Closeable {
     @Suppress("unused")
     protected open val cookiesStorage: CookiesStorage = AcceptAllCookiesStorage()
 
-    protected open val timeout: Long get() = BaiduUserAuthClient.AUTHORIZE_TIMEOUT
+    protected open val timeout: Long get() = BaiduUserAuthClient.TIMEOUT
 
     protected open val userAgent: String = "curl/7.61.0"
 
@@ -56,7 +56,7 @@ abstract class AbstractBaiduAuthClient : BaiduAuthClient, Closeable {
         }
     }
 
-    override fun close() = client.close()
+    public override fun close(): Unit = client.close()
 
     protected open val apiIgnore: suspend (Throwable) -> Boolean = { it is IOException }
 
@@ -75,7 +75,7 @@ abstract class AbstractBaiduAuthClient : BaiduAuthClient, Closeable {
         throw CancellationException()
     }
 
-    override var scope = listOf(ScopeType.PUBLIC)
+    override var scope: List<ScopeType> = listOf(ScopeType.PUBLIC)
         protected set
 
     @Suppress("unused")
@@ -89,7 +89,7 @@ abstract class AbstractBaiduAuthClient : BaiduAuthClient, Closeable {
         protected set
 
     @Suppress("unused")
-    protected val mutex = Mutex()
+    protected val mutex: Mutex = Mutex()
 
     override val accessToken: String
         get() = accessTokenValue.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() }

@@ -1,5 +1,3 @@
-@file:OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
-
 package xyz.cssxsh.baidu.oauth
 
 import kotlinx.serialization.*
@@ -10,7 +8,7 @@ import xyz.cssxsh.baidu.*
 /**
  * [wiki](https://openauth.baidu.com/doc/appendix.html)
  */
-enum class ApiErrorCode(val code: Int, val message: String) {
+public enum class ApiErrorCode(public val code: Int, public val message: String) {
     /**
      * 未知错误，如果频繁发生此错误，请联系developer_support@baidu.com
      */
@@ -83,7 +81,7 @@ enum class ApiErrorCode(val code: Int, val message: String) {
  * @see xyz.cssxsh.baidu.oauth.AuthorizeException
  */
 @Serializable(with = AuthorizeErrorType.Serializer::class)
-enum class AuthorizeErrorType(val message: String) {
+public enum class AuthorizeErrorType(public val message: String) {
     /**
      * 请求缺少某个必需参数，包含一个不支持的参数或参数值，或者格式不正确。
      */
@@ -153,13 +151,13 @@ enum class AuthorizeErrorType(val message: String) {
      */
     INVALID_REFERER(message = "Invalid Referer");
 
-    companion object Serializer : KSerializer<AuthorizeErrorType> by LowerCaseSerializer()
+    public companion object Serializer : KSerializer<AuthorizeErrorType> by LowerCaseSerializer()
 }
 
 /**
  * [doc](https://openauth.baidu.com/doc/doc.html)
  */
-enum class AuthorizeType(val value: String) {
+public enum class AuthorizeType(public val value: String) {
 
     /**
      * 又称Web Server Flow，适用于所有有Server端配合的应用。
@@ -183,7 +181,7 @@ enum class AuthorizeType(val value: String) {
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/authorization)
  */
-enum class DisplayType(val value: String) {
+public enum class DisplayType(public val value: String) {
     /**
      * 全屏形式的授权页面(默认)，适用于web应用。
      */
@@ -220,7 +218,7 @@ enum class DisplayType(val value: String) {
 /**
  * [doc](https://openauth.baidu.com/doc/doc.html)
  */
-enum class GrantType(val value: String) {
+public enum class GrantType(public val value: String) {
 
     /**
      * 又称Web Server Flow，适用于所有有Server端配合的应用。
@@ -266,7 +264,7 @@ enum class GrantType(val value: String) {
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
  */
-enum class LoginType(val value: String) {
+public enum class LoginType(public val value: String) {
     /**
      * 授权页面会默认使用短信动态密码注册登陆方式。
      */
@@ -279,71 +277,83 @@ enum class LoginType(val value: String) {
  * [developer-web](https://developer.baidu.com/)
  */
 @Serializable(ScopeTypeSerializer::class)
-data class ScopeType(val value: String) {
+public data class ScopeType(val value: String) {
 
-    companion object {
+    public companion object EXAMPLE {
 
         /**
          * 用户基本权限，可以获取用户的基本信息 。
          */
-        val BASIC = ScopeType(value = "basic")
+        public val BASIC: ScopeType = ScopeType(value = "basic")
 
         /**
          * 往用户的百度首页上发送消息提醒，相关API任何应用都能使用，
          * 但要想将消息提醒在百度首页显示，需要第三方在注册应用时额外填写相关信息。
          */
-        val SUPER_MESSAGE = ScopeType(value = "super_msg")
+        public val SUPER_MESSAGE: ScopeType = ScopeType(value = "super_msg")
 
         /**
          * 	获取用户在个人云存储中存放的数据。
          */
-        val NET_DISK = ScopeType(value = "netdisk")
+        public val NET_DISK: ScopeType = ScopeType(value = "netdisk")
 
         /**
          * 	可以访问公共的开放API。
          */
-        val PUBLIC = ScopeType(value = "public")
+        public val PUBLIC: ScopeType = ScopeType(value = "public")
 
         /**
          * 可以访问Hao123 提供的开放API接口该权限需要申请开通，请将具体的理由和用途发邮件给tuangou@baidu.com。
          */
-        val HAO123 = ScopeType(value = "hao123")
+        public val HAO123: ScopeType = ScopeType(value = "hao123")
 
         /**
-         * XXX
+         * 获取邮箱
          */
-        val EMAIL = ScopeType(value = "email")
+        public val EMAIL: ScopeType = ScopeType(value = "email")
 
         /**
-         * XXX
+         * 获取手机
          */
-        val MOBILE = ScopeType(value = "mobile")
+        public val MOBILE: ScopeType = ScopeType(value = "mobile")
 
-
-        val WISE_ADAPT = ScopeType(value = "wise_adapt")
+        /**
+         * 可以访问AIP相关内容
+         */
+        public val WISE_ADAPT: ScopeType = ScopeType(value = "wise_adapt")
     }
 
     override fun toString(): String = value
 }
 
-object ScopeTypeSerializer : KSerializer<ScopeType> {
+public object ScopeTypeSerializer : KSerializer<ScopeType> {
     override val descriptor: SerialDescriptor =
-        buildSerialDescriptor("ScopeTypeSerializer", PrimitiveKind.STRING)
+        PrimitiveSerialDescriptor(ScopeType::class.qualifiedName!!, PrimitiveKind.STRING)
 
-    override fun deserialize(decoder: Decoder): ScopeType = ScopeType(value = decoder.decodeString())
+    override fun deserialize(decoder: Decoder): ScopeType {
+        return ScopeType(value = decoder.decodeString())
+    }
 
-    override fun serialize(encoder: Encoder, value: ScopeType) = encoder.encodeString(value.value)
+    override fun serialize(encoder: Encoder, value: ScopeType){
+        encoder.encodeString(value.value)
+    }
 
 }
 
-object ScopesSerializer : KSerializer<List<ScopeType>> {
-    override val descriptor: SerialDescriptor = buildSerialDescriptor("ScopesSerializer", PrimitiveKind.STRING)
+public object ScopesSerializer : KSerializer<List<ScopeType>> {
+    @OptIn(ExperimentalSerializationApi::class)
+    override val descriptor: SerialDescriptor =
+        listSerialDescriptor(ScopeTypeSerializer.descriptor)
 
     private val SPLIT_REGEX = """([,]|\s|[+])""".toRegex()
 
-    fun splitScope(text: String) = text.split(SPLIT_REGEX).map(::ScopeType)
+    public fun splitScope(text: String): List<ScopeType> = text.split(SPLIT_REGEX).map(::ScopeType)
 
-    override fun deserialize(decoder: Decoder): List<ScopeType> = splitScope(decoder.decodeString())
+    override fun deserialize(decoder: Decoder): List<ScopeType> {
+        return splitScope(decoder.decodeString())
+    }
 
-    override fun serialize(encoder: Encoder, value: List<ScopeType>) = encoder.encodeString(value.joinToString(" "))
+    override fun serialize(encoder: Encoder, value: List<ScopeType>) {
+        encoder.encodeString(value.joinToString(" "))
+    }
 }

@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.disk
 import kotlinx.serialization.*
 
 @Serializable
-data class NetDiskSuperFile(
+public data class NetDiskSuperFile(
     @SerialName("md5")
     val md5: String,
     @SerialName("request_id")

@@ -7,7 +7,9 @@ import java.io.File
 import java.io.RandomAccessFile
 import java.security.MessageDigest
 
-fun NetDiskClient.withAppDataFolder(path: String = "") = if (path.startsWith("/")) path else "${appDataFolder}/${path}"
+public fun NetDiskClient.withAppDataFolder(path: String = ""): String {
+    return if (path.startsWith("/")) path else "${appDataFolder}/${path}"
+}
 
 internal data class BlockInfo(
     val offset: Long,
@@ -61,7 +63,7 @@ internal fun File.digestSliceMd5(): String {
 }
 
 @Serializable
-data class RapidUploadInfo(
+public data class RapidUploadInfo(
     @SerialName("content")
     val content: String,
     @SerialName("slice")
@@ -70,20 +72,26 @@ data class RapidUploadInfo(
     val length: Long,
     @SerialName("path")
     val path: String,
-)
+) {
+    public companion object {
+        @JvmStatic
+        public fun parse(code: String): RapidUploadInfo {
+            return code.split('#').let { (content, slice, length, path) ->
+                RapidUploadInfo(content = content, slice = slice, length = length.toLong(), path = path)
+            }
+        }
 
-fun RapidUploadInfo.format(): String = "$content#$slice#$length#$path"
-
-fun RapidUploadInfo.Companion.parse(code: String): RapidUploadInfo {
-    return code.split('#').let { (content, slice, length, path) ->
-        RapidUploadInfo(content = content, slice = slice, length = length.toLong(), path = path)
+        @JvmStatic
+        public fun calculate(file: File): RapidUploadInfo {
+            return RapidUploadInfo(
+                content = file.digestContentMd5(),
+                slice = file.digestSliceMd5(),
+                length = file.length(),
+                path = file.name
+            )
+        }
     }
-}
 
-fun File.getRapidUploadInfo(path: String = name) = RapidUploadInfo(
-    content = digestContentMd5(),
-    slice = digestSliceMd5(),
-    length = length(),
-    path = path
-)
+    public fun format(): String = "$content#$slice#$length#$path"
+}
 

@@ -2,11 +2,11 @@ package xyz.cssxsh.baidu
 
 import java.time.*
 
-interface BaiduAuthToken {
+public interface BaiduAuthToken {
 
-    val expires: OffsetDateTime
+    public val expires: OffsetDateTime
 
-    val accessToken: String
+    public val accessToken: String
 
-    val refreshToken: String
+    public val refreshToken: String
 }

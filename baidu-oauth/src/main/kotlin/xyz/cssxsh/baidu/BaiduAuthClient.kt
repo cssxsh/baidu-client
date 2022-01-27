@@ -4,17 +4,17 @@ import io.ktor.client.*
 import xyz.cssxsh.baidu.oauth.*
 import java.time.*
 
-interface BaiduAuthClient : BaiduAuthConfig, BaiduAuthToken {
+public interface BaiduAuthClient : BaiduAuthConfig, BaiduAuthToken {
 
-    suspend fun <R> useHttpClient(block: suspend BaiduAuthClient.(HttpClient) -> R): R
+    public suspend fun <R> useHttpClient(block: suspend BaiduAuthClient.(HttpClient) -> R): R
 
-    val redirect: String get() = DEFAULT_REDIRECT
+    public val redirect: String get() = DEFAULT_REDIRECT
 
-    val scope: List<ScopeType>
+    public val scope: List<ScopeType>
 
-    suspend fun saveToken(token: AuthorizeAccessToken, time: OffsetDateTime)
+    public suspend fun saveToken(token: AuthorizeAccessToken, time: OffsetDateTime)
 
-    suspend fun token(): AuthorizeAccessToken
+    public suspend fun token(): AuthorizeAccessToken
 
-    suspend fun refresh(): AuthorizeAccessToken
+    public suspend fun refresh(): AuthorizeAccessToken
 }

@@ -7,16 +7,15 @@ import io.ktor.util.*
 import xyz.cssxsh.baidu.*
 import xyz.cssxsh.baidu.aip.censor.*
 
-@OptIn(InternalAPI::class)
-open class AipContentCensor(override val client: AipClient) : AipApplication {
-    companion object {
+public open class AipContentCensor(override val client: AipClient) : AipApplication {
+    public companion object {
         internal const val IMAGE_CENSOR = "https://aip.baidubce.com/rest/2.0/solution/v1/img_censor/v2/user_defined"
         internal const val TEXT_CENSOR = "https://aip.baidubce.com/rest/2.0/solution/v1/text_censor/v2/user_defined"
         internal const val VIDEO_CENSOR = "https://aip.baidubce.com/rest/2.0/solution/v1/video_censor/v2/user_defined"
         internal const val VOICE_CENSOR = "https://aip.baidubce.com/rest/2.0/solution/v1/voice_censor/v2/user_defined"
     }
 
-    suspend fun image(url: String, gif: Boolean = false): CensorResult.Image {
+    public suspend fun image(url: String, gif: Boolean = false): CensorResult.Image {
         return client.useHttpClient { http ->
             http.post(IMAGE_CENSOR) {
                 parameter("access_token", accessToken)
@@ -29,7 +28,7 @@ open class AipContentCensor(override val client: AipClient) : AipApplication {
         }
     }
 
-    suspend fun image(bytes: ByteArray, gif: Boolean = false): CensorResult.Image {
+    public suspend fun image(bytes: ByteArray, gif: Boolean = false): CensorResult.Image {
         @OptIn(InternalAPI::class)
         val base64 = bytes.encodeBase64()
         // TODO: check
@@ -58,7 +57,7 @@ open class AipContentCensor(override val client: AipClient) : AipApplication {
         }
     }
 
-    suspend fun video(name: String, url: String, id: String?, info: List<VideoInfo>? = null): CensorResult.Video {
+    public suspend fun video(name: String, url: String, id: String?, info: List<VideoInfo>? = null): CensorResult.Video {
         return video(name, listOf(url), id, info)
     }
 
@@ -100,7 +99,7 @@ open class AipContentCensor(override val client: AipClient) : AipApplication {
         }
     }
 
-    suspend fun voice(bytes: ByteArray, format: String, rawText: Boolean, split: Boolean): CensorResult.Voice {
+    public suspend fun voice(bytes: ByteArray, format: String, rawText: Boolean, split: Boolean): CensorResult.Voice {
         @OptIn(InternalAPI::class)
         val base64 = bytes.encodeBase64()
         // TODO: check

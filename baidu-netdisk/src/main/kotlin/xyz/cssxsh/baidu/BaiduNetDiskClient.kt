@@ -11,22 +11,22 @@ import java.time.*
 /**
  * 构建客户端的参数需要到 [百度网盘开放中心](https://pan.baidu.com/union/apply) 申请
  */
-open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient(), BaiduAuthConfig by config {
-    constructor(config: BaiduAuthConfig, token: AuthorizeAccessToken, time: OffsetDateTime) : this(config) {
+public open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient(), BaiduAuthConfig by config {
+    public constructor(config: BaiduAuthConfig, token: AuthorizeAccessToken, time: OffsetDateTime) : this(config) {
         save(token = token, time = time)
     }
 
     /**
      * 创建一个目录
      */
-    suspend fun createDir(path: String): NetDiskFileInfo {
+    public suspend fun createDir(path: String): NetDiskFileInfo {
         return createFile(path = path, size = 0, isDir = true, rename = RenameType.NO)
     }
 
     /**
      * 分段上传一个文件，默认路径是/apps/${appName}/${file.name}，文件存在会报错
      */
-    suspend fun uploadFile(file: File, path: String = file.name): NetDiskFileInfo {
+    public suspend fun uploadFile(file: File, path: String = file.name): NetDiskFileInfo {
         check(file.isFile) { "${file.absolutePath}不是文件" }
 
         val user = getUserInfo()
@@ -72,7 +72,7 @@ open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient()
     /**
      * 快速上传文件 需要Rapid信息，默认为覆盖模式
      */
-    suspend fun rapidUploadFile(info: RapidUploadInfo, rename: RenameType = RenameType.COVER): NetDiskFileInfo {
+    public suspend fun rapidUploadFile(info: RapidUploadInfo, rename: RenameType = RenameType.COVER): NetDiskFileInfo {
         val result = rapidUpload(info.content, info.slice, info.length, info.path, rename)
         return requireNotNull(result.info) { "快速上传失败 ${result.errno}" }
     }
@@ -80,7 +80,7 @@ open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskClient()
     /**
      * 获取文件的Rapid信息
      */
-    suspend fun getRapidUploadInfo(path: String): RapidUploadInfo {
+    public suspend fun getRapidUploadInfo(path: String): RapidUploadInfo {
         lateinit var content: String
         lateinit var length: String
         lateinit var slice: String

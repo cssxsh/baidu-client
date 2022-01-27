@@ -4,7 +4,7 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.*
 
 @Serializable
-data class NetDiskCreateFile(
+public data class NetDiskCreateFile(
     @SerialName("category")
     override val category: CategoryType,
     @SerialName("ctime")

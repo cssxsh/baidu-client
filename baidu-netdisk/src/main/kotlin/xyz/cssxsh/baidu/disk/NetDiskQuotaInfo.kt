@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.disk
 import kotlinx.serialization.*
 
 @Serializable
-data class NetDiskQuotaInfo(
+public data class NetDiskQuotaInfo(
     @SerialName("errno")
     val errno: Int,
     @SerialName("expire")

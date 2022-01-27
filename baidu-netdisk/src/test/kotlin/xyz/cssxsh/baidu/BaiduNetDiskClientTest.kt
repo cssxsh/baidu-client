@@ -6,6 +6,7 @@ import xyz.cssxsh.baidu.disk.*
 import xyz.cssxsh.baidu.exception.*
 import xyz.cssxsh.baidu.oauth.*
 import java.io.*
+import java.time.OffsetDateTime
 import java.util.*
 
 internal class BaiduNetDiskClientTest {
@@ -91,7 +92,7 @@ internal class BaiduNetDiskClientTest {
 
     @Test
     fun getFlashCode(): Unit = runBlocking {
-        file.getRapidUploadInfo().withPrintln()
+        RapidUploadInfo.calculate(file).withPrintln()
         client.getRapidUploadInfo(path = file.name).withPrintln()
     }
 }

@@ -4,12 +4,12 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
 @Serializable
-sealed class CensorResult : CensorStatus {
-    abstract val logId: Long
-    abstract val isHitMd5: Boolean
+public sealed class CensorResult : CensorStatus {
+    public abstract val logId: Long
+    public abstract val isHitMd5: Boolean
 
     @Serializable
-    data class Image(
+    public data class Image(
         @SerialName("log_id")
         override val logId: Long = 0,
         @SerialName("error_code")
@@ -27,7 +27,7 @@ sealed class CensorResult : CensorStatus {
     ) : CensorResult() {
 
         @Serializable
-        data class Record(
+        public data class Record(
             @SerialName("error_code")
             override val errorCode: Long? = null,
             @SerialName("error_msg")
@@ -58,7 +58,7 @@ sealed class CensorResult : CensorStatus {
     }
 
     @Serializable
-    data class Text(
+    public data class Text(
         @SerialName("log_id")
         override val logId: Long = 0,
         @SerialName("error_code")
@@ -76,7 +76,7 @@ sealed class CensorResult : CensorStatus {
     ) : CensorResult() {
 
         @Serializable
-        data class Record(
+        public data class Record(
             @SerialName("error_code")
             override val errorCode: Long? = null,
             @SerialName("error_msg")
@@ -99,7 +99,7 @@ sealed class CensorResult : CensorStatus {
     }
 
     @Serializable
-    data class Video(
+    public data class Video(
         @SerialName("log_id")
         override val logId: Long = 0,
         @SerialName("error_code")
@@ -119,7 +119,7 @@ sealed class CensorResult : CensorStatus {
     ) : CensorResult() {
 
         @Serializable
-        data class Frame(
+        public data class Frame(
             @SerialName("error_code")
             override val errorCode: Long? = null,
             @SerialName("error_msg")
@@ -140,7 +140,7 @@ sealed class CensorResult : CensorStatus {
     }
 
     @Serializable
-    data class Voice(
+    public data class Voice(
         @SerialName("log_id")
         override val logId: Long = 0,
         @SerialName("error_code")
@@ -162,7 +162,7 @@ sealed class CensorResult : CensorStatus {
     ) : CensorResult() {
 
         @Serializable
-        data class Record(
+        public data class Record(
             @SerialName("error_code")
             override val errorCode: Long? = null,
             @SerialName("error_msg")

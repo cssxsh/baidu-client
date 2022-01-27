@@ -4,7 +4,7 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.*
 
 @Serializable
-data class NetDiskFileList(
+public data class NetDiskFileList(
     @SerialName("cursor")
     val cursor: Int,
     @SerialName("errmsg")

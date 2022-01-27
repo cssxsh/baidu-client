@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.disk
 import kotlinx.serialization.*
 
 @Serializable
-data class NetDiskPreCreate(
+public data class NetDiskPreCreate(
     @SerialName("block_list")
     val blocks: List<Int> = emptyList(),
     @SerialName("errno")

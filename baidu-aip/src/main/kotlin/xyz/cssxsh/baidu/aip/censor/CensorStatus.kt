@@ -1,9 +1,9 @@
 package xyz.cssxsh.baidu.aip.censor
 
 
-sealed interface CensorStatus {
-    val errorCode: Long?
-    val errorMessage: String?
-    val conclusion: String
-    val conclusionType: ConclusionType
+public sealed interface CensorStatus {
+    public val errorCode: Long?
+    public val errorMessage: String?
+    public val conclusion: String
+    public val conclusionType: ConclusionType
 }

@@ -4,12 +4,12 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.*
 
 @Serializable(with = ConclusionType.Serializer::class)
-enum class ConclusionType {
+public enum class ConclusionType {
     NONE,
     COMPLIANCE,
     NON_COMPLIANCE,
     SUSPECTED,
     FAILURE;
 
-    companion object Serializer : KSerializer<ConclusionType> by OrdinalSerializer()
+    public companion object Serializer : KSerializer<ConclusionType> by OrdinalSerializer()
 }

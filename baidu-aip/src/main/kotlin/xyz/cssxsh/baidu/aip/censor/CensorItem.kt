@@ -3,12 +3,12 @@ package xyz.cssxsh.baidu.aip.censor
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
-sealed interface CensorItem {
-    val datasetName: String
-    val probability: Double
+public sealed interface CensorItem {
+    public val datasetName: String
+    public val probability: Double
 
     @Serializable
-    data class Star(
+    public data class Star(
         @SerialName("datasetName")
         override val datasetName: String,
         @SerialName("probability")
@@ -18,7 +18,7 @@ sealed interface CensorItem {
     ) : CensorItem
 
     @Serializable
-    data class Hit(
+    public data class Hit(
         @SerialName("datasetName")
         override val datasetName: String,
         @SerialName("probability")

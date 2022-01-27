@@ -9,7 +9,7 @@ import xyz.cssxsh.baidu.*
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E5%88%86%E7%89%87%E4%B8%8A%E4%BC%A0)
  */
-suspend fun NetDiskClient.superFile(
+public suspend fun NetDiskClient.superFile(
     path: String,
     uploadId: String,
     index: Int,
@@ -35,7 +35,7 @@ suspend fun NetDiskClient.superFile(
 /**
  * XXX
  */
-suspend fun NetDiskClient.uploadSingleFile(
+public suspend fun NetDiskClient.uploadSingleFile(
     path: String,
     bytes: ByteArray,
     size: Int = bytes.size,
@@ -56,7 +56,7 @@ suspend fun NetDiskClient.uploadSingleFile(
 /**
  * XXX
  */
-suspend fun NetDiskClient.getMetaInfo(
+public suspend fun NetDiskClient.getMetaInfo(
     path: String
 ): NetDiskMetaList = useHttpClient { client ->
     client.post(PCS_FILE) {
@@ -69,7 +69,7 @@ suspend fun NetDiskClient.getMetaInfo(
 /**
  * XXX
  */
-fun NetDiskClient.downloadFileUrl(
+public fun NetDiskClient.downloadFileUrl(
     path: String
 ): Url = URLBuilder(PCS_FILE).apply {
     parameters.apply {

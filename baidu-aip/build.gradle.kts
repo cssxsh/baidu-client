@@ -20,6 +20,7 @@ dependencies {
 }
 
 kotlin {
+    explicitApi()
     sourceSets {
         all {
             languageSettings.optIn("kotlin.RequiresOptIn")

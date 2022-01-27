@@ -1,60 +1,80 @@
-@file:OptIn(InternalSerializationApi::class, ExperimentalSerializationApi::class)
-
 package xyz.cssxsh.baidu
 
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
 import kotlinx.serialization.json.*
+import kotlinx.serialization.modules.*
 import java.time.*
 import java.time.format.*
 import kotlin.reflect.*
 
+public fun Boolean.toInt(): Int = if (this) 1 else 0
+
 internal const val IGNORE_UNKNOWN_KEYS = "xyz.cssxsh.baidu.json.ignore"
 
-val BaiduJson
-    get() = Json {
-        isLenient = true
-        ignoreUnknownKeys = System.getProperty(IGNORE_UNKNOWN_KEYS, "true").toBoolean()
+internal val BaiduJson = Json {
+    isLenient = true
+    ignoreUnknownKeys = System.getProperty(IGNORE_UNKNOWN_KEYS, "true").toBoolean()
+    serializersModule = SerializersModule {
+        contextual(OffsetDateTimeSerializer)
     }
-
-@Serializer(forClass = Boolean::class)
-object NumberToBooleanSerializer : KSerializer<Boolean> {
-    override val descriptor: SerialDescriptor = buildSerialDescriptor("NumberToBooleanSerializer", PrimitiveKind.INT)
-
-    override fun serialize(encoder: Encoder, value: Boolean) = encoder.encodeInt(value.toInt())
-
-    override fun deserialize(decoder: Decoder): Boolean = decoder.decodeInt() != 0
 }
 
-@Serializer(forClass = OffsetDateTime::class)
-object OffsetDateTimeSerializer : KSerializer<OffsetDateTime> {
+public object NumberToBooleanSerializer : KSerializer<Boolean> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor(Boolean::class.qualifiedName!!, PrimitiveKind.INT)
+
+    override fun serialize(encoder: Encoder, value: Boolean) {
+        encoder.encodeInt(value.toInt())
+    }
+
+    override fun deserialize(decoder: Decoder): Boolean {
+        return decoder.decodeInt() != 0
+    }
+}
+
+public object OffsetDateTimeSerializer : KSerializer<OffsetDateTime> {
 
     private val format: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
 
-    override val descriptor: SerialDescriptor
-        get() = PrimitiveSerialDescriptor(OffsetDateTime::class.qualifiedName!!, PrimitiveKind.STRING)
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor(OffsetDateTime::class.qualifiedName!!, PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: OffsetDateTime): Unit = encoder.encodeString(value.format(format))
+    override fun serialize(encoder: Encoder, value: OffsetDateTime) {
+        encoder.encodeString(value.format(format))
+    }
 
-    override fun deserialize(decoder: Decoder): OffsetDateTime = OffsetDateTime.parse(decoder.decodeString(), format)
+    override fun deserialize(decoder: Decoder): OffsetDateTime {
+        return OffsetDateTime.parse(decoder.decodeString(), format)
+    }
 }
 
-class OrdinalSerializer<E : Enum<E>>(kClass: KClass<E>, private val values: Array<E>) : KSerializer<E> {
-    override val descriptor: SerialDescriptor = buildSerialDescriptor(kClass.qualifiedName!!, SerialKind.ENUM)
+public class OrdinalSerializer<E : Enum<E>>(kClass: KClass<E>, private val values: Array<E>) : KSerializer<E> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor(kClass.qualifiedName!!, PrimitiveKind.INT)
 
-    override fun serialize(encoder: Encoder, value: E) = encoder.encodeInt(value.ordinal)
+    override fun serialize(encoder: Encoder, value: E) {
+        encoder.encodeInt(value.ordinal)
+    }
 
-    override fun deserialize(decoder: Decoder): E =
-        requireNotNull(values.getOrNull(decoder.decodeInt())) { "${decoder.decodeInt()} not in ${values.asList()}" }
+    override fun deserialize(decoder: Decoder): E {
+        return requireNotNull(values.getOrNull(decoder.decodeInt())) { "${decoder.decodeInt()} not in ${values.asList()}" }
+    }
 }
 
-inline fun <reified E : Enum<E>> OrdinalSerializer() = OrdinalSerializer(kClass = E::class, values = enumValues())
+@Suppress("FunctionName")
+public inline fun <reified E : Enum<E>> OrdinalSerializer(): OrdinalSerializer<E> {
+    return OrdinalSerializer(kClass = E::class, values = enumValues())
+}
 
-class LowerCaseSerializer<E : Enum<E>>(kClass: KClass<E>, private val values: Array<E>) : KSerializer<E> {
-    override val descriptor: SerialDescriptor = buildSerialDescriptor(kClass.qualifiedName!!, SerialKind.ENUM)
+public class LowerCaseSerializer<E : Enum<E>>(kClass: KClass<E>, private val values: Array<E>) : KSerializer<E> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor(kClass.qualifiedName!!, PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: E) = encoder.encodeString(value.name.lowercase())
+    override fun serialize(encoder: Encoder, value: E) {
+        encoder.encodeString(value.name.lowercase())
+    }
 
     override fun deserialize(decoder: Decoder): E {
         val text = decoder.decodeString().uppercase()
@@ -62,4 +82,7 @@ class LowerCaseSerializer<E : Enum<E>>(kClass: KClass<E>, private val values: Ar
     }
 }
 
-inline fun <reified E : Enum<E>> LowerCaseSerializer() = LowerCaseSerializer(kClass = E::class, values = enumValues())
+@Suppress("FunctionName")
+public inline fun <reified E : Enum<E>> LowerCaseSerializer(): LowerCaseSerializer<E> {
+    return LowerCaseSerializer(kClass = E::class, values = enumValues())
+}

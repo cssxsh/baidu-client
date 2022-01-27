@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.disk
 import kotlinx.serialization.*
 
 @Serializable
-data class NetDiskSingleFile(
+public data class NetDiskSingleFile(
     @SerialName("ctime")
     val ctime: Int,
     @SerialName("fs_id")

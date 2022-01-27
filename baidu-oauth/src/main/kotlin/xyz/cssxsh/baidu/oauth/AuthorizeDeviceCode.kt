@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.oauth
 import kotlinx.serialization.*
 
 @Serializable
-data class AuthorizeDeviceCode(
+public data class AuthorizeDeviceCode(
     @SerialName("device_code")
     val deviceCode: String,
     @SerialName("expires_in")

@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.disk
 import kotlinx.serialization.*
 
 @Serializable
-data class NetDiskUserInfo(
+public data class NetDiskUserInfo(
     @SerialName("avatar_url")
     val avatar: String,
     @SerialName("baidu_name")

@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.oauth
 import kotlinx.serialization.*
 
 @Serializable
-data class AuthorizeAccessToken(
+public data class AuthorizeAccessToken(
     @SerialName("access_token")
     val accessToken: String,
     @SerialName("expires_in")

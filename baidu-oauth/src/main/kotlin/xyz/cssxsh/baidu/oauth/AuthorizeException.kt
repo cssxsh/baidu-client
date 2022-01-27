@@ -10,7 +10,7 @@ import kotlinx.serialization.*
  * @see AuthorizeException
  */
 @Serializable
-data class AuthorizeError(
+public data class AuthorizeError(
     @SerialName("error")
     val error: AuthorizeErrorType,
     @SerialName("error_description")
@@ -21,9 +21,15 @@ data class AuthorizeError(
  * @see AuthorizeErrorType
  * @see AuthorizeAccessToken
  */
-class AuthorizeException(val data: AuthorizeError, cause: Throwable) : IllegalStateException(data.description, cause) {
+public class AuthorizeException(public val data: AuthorizeError, cause: Throwable) : IllegalStateException(data.description, cause) {
 
-    val type: AuthorizeErrorType by data::error
+    public val type: AuthorizeErrorType get() = data.error
 }
 
-suspend fun AuthorizeException(cause: ClientRequestException) = AuthorizeException(cause.response.receive(), cause)
+/**
+ * @see AuthorizeErrorType
+ * @see AuthorizeAccessToken
+ */
+public suspend fun AuthorizeException(cause: ClientRequestException): AuthorizeException {
+    return AuthorizeException(cause.response.receive(), cause)
+}

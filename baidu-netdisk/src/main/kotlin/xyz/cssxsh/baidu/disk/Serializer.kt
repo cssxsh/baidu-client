@@ -4,7 +4,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import xyz.cssxsh.baidu.*
 
-enum class OrderType(val value: String) {
+public enum class OrderType(public val value: String) {
     NAME(value = "name"),
     SIZE(value = "size"),
     TIME(value = "time");
@@ -12,7 +12,7 @@ enum class OrderType(val value: String) {
     override fun toString(): String = value
 }
 
-enum class RenameType {
+public enum class RenameType {
     NO,
     PATH,
     BLOCK,
@@ -20,28 +20,28 @@ enum class RenameType {
 }
 
 @Serializable(with = VipType.Serializer::class)
-enum class VipType(val updateLimit: Long, val superLimit: Int) {
+public enum class VipType(public val updateLimit: Long, public val superLimit: Int) {
     ORDINARY(4L shl 30, 4 shl 20),
     MEMBER(10L shl 30, 16 shl 20),
     SUPER_MEMBER(20L shl 30, 32 shl 20);
 
-    companion object Serializer : KSerializer<VipType> by OrdinalSerializer()
+    public companion object Serializer : KSerializer<VipType> by OrdinalSerializer()
 }
 
 @Serializable(with = AsyncType.Serializer::class)
-enum class AsyncType {
+public enum class AsyncType {
     SYNC,
     AUTO,
     ASYNC;
 
-    companion object Serializer : KSerializer<AsyncType> by OrdinalSerializer()
+    public companion object Serializer : KSerializer<AsyncType> by OrdinalSerializer()
 }
 
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8)
  */
 @Serializable(with = CategoryType.Serializer::class)
-enum class CategoryType {
+public enum class CategoryType {
     NONE,
     VIDEO,
     AUDIO,
@@ -51,20 +51,20 @@ enum class CategoryType {
     OTHERS,
     SEEDS;
 
-    companion object Serializer : KSerializer<CategoryType> by OrdinalSerializer()
+    public companion object Serializer : KSerializer<CategoryType> by OrdinalSerializer()
 }
 
 @Serializable(with = CreateReturnType.Serializer::class)
-enum class CreateReturnType {
+public enum class CreateReturnType {
     TEMP_,
     NOT_EXIST,
     EXIST;
 
-    companion object Serializer : KSerializer<CreateReturnType> by OrdinalSerializer()
+    public companion object Serializer : KSerializer<CreateReturnType> by OrdinalSerializer()
 }
 
 @Serializable(with = FileOnDupType.Serializer::class)
-enum class FileOnDupType {
+public enum class FileOnDupType {
     FAIL,
     NEWCOPY,
     OVERWRITE,
@@ -72,14 +72,14 @@ enum class FileOnDupType {
 
     override fun toString(): String = name.lowercase()
 
-    companion object Serializer : KSerializer<FileOnDupType> by LowerCaseSerializer()
+    public companion object Serializer : KSerializer<FileOnDupType> by LowerCaseSerializer()
 }
 
 @Serializable
-sealed class FileOpera(val name: String) {
+public sealed class FileOpera(public val name: String) {
 
     @Serializable
-    data class Item(
+    public data class Item(
         @SerialName("path")
         val path: String,
         @SerialName("dest")
@@ -90,25 +90,25 @@ sealed class FileOpera(val name: String) {
         val type: FileOnDupType = FileOnDupType.SKIP
     )
 
-    data class Copy(
+    public data class Copy(
         @SerialName("list")
         val list: List<Item>
     ) : FileOpera(name = "copy")
 
-    data class Move(
+    public data class Move(
         @SerialName("list")
         val list: List<Item>
     ) : FileOpera(name = "mover")
 
-    data class Rename(
+    public data class Rename(
         @SerialName("list")
         val list: List<Item>
     ) : FileOpera(name = "rename")
 
-    data class Delete(
+    public data class Delete(
         @SerialName("list")
         val list: List<String>
     ) : FileOpera(name = "delete")
 }
 
-typealias RequestIdType = JsonPrimitive
+public typealias RequestIdType = JsonPrimitive

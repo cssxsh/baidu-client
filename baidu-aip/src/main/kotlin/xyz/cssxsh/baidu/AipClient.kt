@@ -7,10 +7,10 @@ import java.time.*
  * * [AIP 文档](https://ai.baidu.com/ai-doc)
  * * [Token 认证](https://ai.baidu.com/ai-doc/REFERENCE/Ck3dwjhhu)
  */
-interface AipClient : BaiduAuthClient {
+public interface AipClient : BaiduAuthClient {
 
-    companion object {
-        const val Timeout: Long = 30 * 1000L
+    public companion object {
+        public const val Timeout: Long = 30 * 1000L
     }
 
     /**

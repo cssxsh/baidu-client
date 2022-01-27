@@ -1,9 +1,9 @@
 package xyz.cssxsh.baidu
 
-interface NetDiskClient : BaiduUserAuthClient {
-    val appDataFolder: String
+public interface NetDiskClient : BaiduUserAuthClient {
+    public val appDataFolder: String
 
-    companion object {
-        const val Timeout: Long = 30 * 1000L
+    public companion object {
+        public const val Timeout: Long = 30 * 1000L
     }
 }

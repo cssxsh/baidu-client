@@ -2,13 +2,13 @@
 
 pluginManagement {
     plugins {
-        kotlin("jvm") version "1.5.31"
-        kotlin("plugin.serialization") version "1.5.31"
+        kotlin("jvm") version "1.6.0"
+        kotlin("plugin.serialization") version "1.6.0"
         id("net.mamoe.maven-central-publish") version "0.7.0"
     }
     repositories {
         mavenLocal()
-        maven(url = "https://maven.aliyun.com/repository/public")
+        maven(url = "https://maven.aliyun.com/repository/central")
         mavenCentral()
         maven(url = "https://maven.aliyun.com/repository/gradle-plugin")
         gradlePluginPortal()

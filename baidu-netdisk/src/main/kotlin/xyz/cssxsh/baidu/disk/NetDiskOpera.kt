@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.disk
 import kotlinx.serialization.*
 
 @Serializable
-data class NetDiskOpera(
+public data class NetDiskOpera(
     @SerialName("errno")
     val errno: Int,
     @SerialName("info")
@@ -14,7 +14,7 @@ data class NetDiskOpera(
     val taskId: Long? = null
 ) {
     @Serializable
-    data class Item(
+    public data class Item(
         @SerialName("errno")
         val errno: Int,
         @SerialName("path")
