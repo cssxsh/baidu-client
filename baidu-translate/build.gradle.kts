@@ -4,36 +4,24 @@ plugins {
 }
 
 dependencies {
-    implementation(ktor("client", Versions.ktor))
-    implementation(ktor("client-serialization", Versions.ktor))
-    implementation(ktor("client-encoding", Versions.ktor))
-    implementation(ktor("client-okhttp", Versions.ktor))
+    implementation("io.ktor:ktor-client:1.6.5")
+    implementation("io.ktor:ktor-client-serialization:1.6.5")
+    implementation("io.ktor:ktor-client-encoding:1.6.5")
+    implementation("io.ktor:ktor-client-okhttp:1.6.5")
     testImplementation(kotlin("test"))
 }
 
 kotlin {
+    explicitApi()
     sourceSets {
         all {
-//            languageSettings.useExperimentalAnnotation("kotlin.ExperimentalStdlibApi")
-//            languageSettings.useExperimentalAnnotation("kotlinx.serialization.ExperimentalSerializationApi")
-//            languageSettings.useExperimentalAnnotation("kotlinx.serialization.InternalSerializationApi")
+            languageSettings.optIn("kotlin.RequiresOptIn")
         }
     }
 }
 
 tasks {
-
     test {
         useJUnitPlatform()
-    }
-
-    compileKotlin {
-        kotlinOptions.freeCompilerArgs += "-Xjvm-default=all"
-        kotlinOptions.jvmTarget = "11"
-    }
-
-    compileTestKotlin {
-        kotlinOptions.freeCompilerArgs += "-Xjvm-default=all"
-        kotlinOptions.jvmTarget = "11"
     }
 }
