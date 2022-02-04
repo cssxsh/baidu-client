@@ -56,8 +56,4 @@ dependencies {
     implementation("xyz.cssxsh.baidu:baidu-netdisk:${version}")
     implementation("xyz.cssxsh.baidu:baidu-aip:${version}")
 }
-
-java {
-    disableAutoTargetJvm()
-}
 ```
