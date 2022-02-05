@@ -33,9 +33,9 @@ public sealed class CensorResult : CensorStatus {
             @SerialName("error_msg")
             override val errorMessage: String? = null,
             @SerialName("conclusion")
-            override val conclusion: String,
+            override val conclusion: String = "",
             @SerialName("conclusionType")
-            override val conclusionType: ConclusionType,
+            override val conclusionType: ConclusionType = ConclusionType.NONE,
             @SerialName("type")
             val type: Int,
             @SerialName("subType")
@@ -43,9 +43,9 @@ public sealed class CensorResult : CensorStatus {
             @SerialName("msg")
             val message: String,
             @SerialName("datasetName")
-            override val datasetName: String,
+            override val datasetName: String = "",
             @SerialName("probability")
-            override val probability: Double,
+            override val probability: Double = 1.0,
             @SerialName("stars")
             val stars: List<CensorItem.Star> = emptyList(),
             @SerialName("hits")
@@ -69,10 +69,10 @@ public sealed class CensorResult : CensorStatus {
         override val conclusion: String = "",
         @SerialName("conclusionType")
         override val conclusionType: ConclusionType = ConclusionType.NONE,
-        @SerialName("data")
-        val `data`: List<Record> = emptyList(),
         @SerialName("isHitMd5")
-        override val isHitMd5: Boolean = false
+        override val isHitMd5: Boolean = false,
+        @SerialName("data")
+        val `data`: List<Record> = emptyList()
     ) : CensorResult() {
 
         @Serializable
@@ -82,9 +82,9 @@ public sealed class CensorResult : CensorStatus {
             @SerialName("error_msg")
             override val errorMessage: String? = null,
             @SerialName("conclusion")
-            override val conclusion: String,
+            override val conclusion: String = "",
             @SerialName("conclusionType")
-            override val conclusionType: ConclusionType,
+            override val conclusionType: ConclusionType = ConclusionType.NONE,
             @SerialName("type")
             val type: Int,
             @SerialName("subType")
@@ -115,7 +115,7 @@ public sealed class CensorResult : CensorStatus {
         @SerialName("isHitMd5")
         override val isHitMd5: Boolean = false,
         @SerialName("conclusionTypeGroupInfos")
-        val conclusionTypeGroupInfos: JsonArray = JsonArray(emptyList())
+        val conclusionTypeGroupInfos: JsonArray? = null
     ) : CensorResult() {
 
         @Serializable
@@ -125,9 +125,9 @@ public sealed class CensorResult : CensorStatus {
             @SerialName("error_msg")
             override val errorMessage: String? = null,
             @SerialName("conclusion")
-            override val conclusion: String,
+            override val conclusion: String = "",
             @SerialName("conclusionType")
-            override val conclusionType: ConclusionType,
+            override val conclusionType: ConclusionType  = ConclusionType.NONE,
             @SerialName("data")
             val `data`: List<Image.Record> = emptyList(),
             @SerialName("frameThumbnailUrl")
@@ -168,9 +168,9 @@ public sealed class CensorResult : CensorStatus {
             @SerialName("error_msg")
             override val errorMessage: String? = null,
             @SerialName("conclusion")
-            override val conclusion: String,
+            override val conclusion: String = "",
             @SerialName("conclusionType")
-            override val conclusionType: ConclusionType,
+            override val conclusionType: ConclusionType  = ConclusionType.NONE,
             @SerialName("text")
             val text: String,
             @SerialName("auditData")

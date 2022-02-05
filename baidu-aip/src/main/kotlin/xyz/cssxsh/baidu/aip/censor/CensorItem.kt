@@ -10,24 +10,24 @@ public sealed interface CensorItem {
     @Serializable
     public data class Star(
         @SerialName("datasetName")
-        override val datasetName: String,
+        override val datasetName: String = "",
         @SerialName("probability")
-        override val probability: Double,
+        override val probability: Double = 1.0,
         @SerialName("name")
-        val name: List<String>
+        val name: List<String> = emptyList()
     ) : CensorItem
 
     @Serializable
     public data class Hit(
         @SerialName("datasetName")
-        override val datasetName: String,
+        override val datasetName: String = "",
         @SerialName("probability")
-        override val probability: Double,
+        override val probability: Double = 1.0,
         @SerialName("words")
         val words: List<String> = emptyList(),
         @SerialName("modelHitPositions")
-        val modelHitPositions: JsonArray = JsonArray(emptyList()),
+        val modelHitPositions: JsonArray? = null,
         @SerialName("wordHitPositions")
-        val wordHitPositions: JsonArray = JsonArray(emptyList())
+        val wordHitPositions: JsonArray? = null
     ) : CensorItem
 }
