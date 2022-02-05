@@ -5,7 +5,6 @@ import kotlinx.serialization.json.*
 
 @Serializable
 public sealed class CensorResult : CensorStatus {
-    public abstract val logId: Long
     public abstract val isHitMd5: Boolean
 
     @Serializable

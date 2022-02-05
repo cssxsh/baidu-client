@@ -42,7 +42,9 @@
 
 目前实现的功能有
 
-* AipContentCensor 智能内容审核
+* [AipContentCensor](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipContentCensor.kt) 智能内容审核
+* [AipTextToSpeech](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipTextToSpeech.kt) 在线语音合成
+* [AipTranslator](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipTranslator.kt) 机器翻译
 
 ## Gradle引用包
 

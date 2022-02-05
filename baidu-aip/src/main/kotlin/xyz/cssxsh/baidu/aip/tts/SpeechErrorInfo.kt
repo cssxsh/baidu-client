@@ -1,15 +1,16 @@
 package xyz.cssxsh.baidu.aip.tts
 
 import kotlinx.serialization.*
+import xyz.cssxsh.baidu.aip.*
 
 @Serializable
 public data class SpeechErrorInfo(
     @SerialName("err_msg")
-    val message: String,
+    override val errorMessage: String,
     @SerialName("err_no")
-    val no: Int,
+    override val errorCode: Long,
     @SerialName("idx")
     val idx: Int? = null,
     @SerialName("sn")
     val sn: String? = null
-)
+) : AipExceptionInfo
