@@ -15,5 +15,4 @@ rootProject.name = "baidu-client"
 
 include("baidu-oauth")
 include("baidu-netdisk")
-include("baidu-translate")
 include("baidu-aip")

@@ -12,10 +12,10 @@ mavenCentralPublish {
 
 dependencies {
     api(project(":baidu-oauth"))
-    implementation("io.ktor:ktor-client:1.6.5")
-    implementation("io.ktor:ktor-client-serialization:1.6.5")
-    implementation("io.ktor:ktor-client-encoding:1.6.5")
-    implementation("io.ktor:ktor-client-okhttp:1.6.5")
+    api("io.ktor:ktor-client:1.6.5")
+    api("io.ktor:ktor-client-serialization:1.6.5")
+    api("io.ktor:ktor-client-encoding:1.6.5")
+    api("io.ktor:ktor-client-okhttp:1.6.5")
     testImplementation(kotlin("test"))
 }
 
