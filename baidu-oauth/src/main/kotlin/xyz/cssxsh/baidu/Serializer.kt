@@ -23,7 +23,7 @@ internal val BaiduJson = Json {
 
 public object NumberToBooleanSerializer : KSerializer<Boolean> {
     override val descriptor: SerialDescriptor =
-        PrimitiveSerialDescriptor(Boolean::class.qualifiedName!!, PrimitiveKind.INT)
+        PrimitiveSerialDescriptor(this::class.qualifiedName!!, PrimitiveKind.INT)
 
     override fun serialize(encoder: Encoder, value: Boolean) {
         encoder.encodeInt(value.toInt())
