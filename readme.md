@@ -45,6 +45,7 @@
 * [AipContentCensor](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipContentCensor.kt) 智能内容审核
 * [AipTextToSpeech](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipTextToSpeech.kt) 在线语音合成
 * [AipTranslator](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipTranslator.kt) 机器翻译
+* [AipNaturalLanguageProcessing](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipNaturalLanguageProcessing.kt) 自然语言分析
 
 ## Gradle引用包
 
