@@ -25,8 +25,8 @@ public open class AipTextToSpeech(override val client: AipClient) : AipApplicati
         return client.useHttpClient { http ->
             http.post<HttpStatement>(API) {
                 body = FormDataContent(Parameters.build {
-                    append("tex", text)
-                    append("tok", accessToken.encodeURLQueryComponent(charset = charset("GBK")))
+                    append("tex", text.encodeURLQueryComponent(charset = charset("GBK")))
+                    append("tok", accessToken)
                     append("cuid", cuid)
                     append("ctp", "1")
                     append("lan", "zh")
