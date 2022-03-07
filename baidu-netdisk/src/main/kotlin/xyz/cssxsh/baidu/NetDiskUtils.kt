@@ -1,15 +1,10 @@
 package xyz.cssxsh.baidu
 
 import kotlinx.serialization.*
-import okio.ByteString.Companion.toByteString
 import xyz.cssxsh.baidu.disk.*
 import java.io.File
 import java.io.RandomAccessFile
 import java.security.MessageDigest
-
-public fun NetDiskClient.withAppDataFolder(path: String = ""): String {
-    return if (path.startsWith("/")) path else "${appDataFolder}/${path}"
-}
 
 internal data class BlockInfo(
     val offset: Long,

@@ -85,7 +85,7 @@ public open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskC
         lateinit var length: String
         lateinit var slice: String
         useHttpClient { client ->
-            client.get<HttpResponse>(downloadFileUrl(path = withAppDataFolder(path))) {
+            client.get<HttpResponse>(downloadFileUrl(path = path)) {
                 header(HttpHeaders.Range, "bytes=0-${SLICE_SIZE - 1}")
             }.apply {
                 content = requireNotNull(headers[HttpHeaders.ETag])

@@ -33,7 +33,7 @@ public suspend fun NetDiskClient.listFile(
     client.get(PAN_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "list")
-        parameter("dir", withAppDataFolder(dir))
+        parameter("dir", appDataFolder(dir))
         parameter("order", order?.value)
         parameter("desc", desc?.toInt())
         parameter("start", start)
@@ -61,7 +61,7 @@ public suspend fun NetDiskClient.listAllFile(
     client.get(PAN_MULTIMEDIA) {
         parameter("access_token", accessToken)
         parameter("method", "listall")
-        parameter("path", withAppDataFolder(path))
+        parameter("path", appDataFolder(path))
         parameter("order", order?.value)
         parameter("desc", desc?.toInt())
         parameter("start", start)
@@ -92,7 +92,7 @@ public suspend fun NetDiskClient.listDoc(
         parameter("num", num)
         parameter("order", order?.value)
         parameter("desc", desc?.toInt())
-        parameter("parent_path", withAppDataFolder(path))
+        parameter("parent_path", appDataFolder(path))
         parameter("recursion", recursion?.toInt())
         parameter("web", if (web == true) "web" else null)
     }
@@ -116,7 +116,7 @@ public suspend fun NetDiskClient.listVideo(
         parameter("num", num)
         parameter("order", order?.value)
         parameter("desc", desc?.toInt())
-        parameter("parent_path", withAppDataFolder(path))
+        parameter("parent_path", appDataFolder(path))
         parameter("recursion", recursion?.toInt())
     }
 }
@@ -139,7 +139,7 @@ public suspend fun NetDiskClient.listBt(
         parameter("num", num)
         parameter("order", order?.value)
         parameter("desc", desc?.toInt())
-        parameter("parent_path", withAppDataFolder(path))
+        parameter("parent_path", appDataFolder(path))
         parameter("recursion", recursion?.toInt())
     }
 }
@@ -161,7 +161,7 @@ public suspend fun NetDiskClient.listCategoryFile(
         parameter("access_token", accessToken)
         parameter("method", "categorylist")
         parameter("category", categories.joinToString(",") { it.ordinal.toString() })
-        parameter("parent_path", withAppDataFolder(path))
+        parameter("parent_path", appDataFolder(path))
         parameter("recursion", recursion?.toInt())
         parameter("ext", ext.joinToString(","))
         parameter("order", order)
@@ -208,7 +208,7 @@ public suspend fun NetDiskClient.listFileById(
         parameter("access_token", accessToken)
         parameter("method", "filemetas")
         parameter("fsids", ids)
-        parameter("path", withAppDataFolder(path))
+        parameter("path", appDataFolder(path))
         parameter("thumb", thumb?.toInt())
         parameter("dlink", link?.toInt())
         parameter("thumb", extra?.toInt())
@@ -254,7 +254,7 @@ public suspend fun NetDiskClient.preCreate(
         parameter("access_token", accessToken)
         parameter("method", "precreate")
         body = FormDataContent(Parameters.build {
-            appendParameter("path", withAppDataFolder(path))
+            appendParameter("path", appDataFolder(path))
             appendParameter("size", size)
             appendParameter("isdir", isDir.toInt())
             appendParameter("autoinit", "1")
@@ -290,7 +290,7 @@ public suspend fun NetDiskClient.createFile(
         parameter("access_token", accessToken)
         parameter("method", "create")
         body = FormDataContent(Parameters.build {
-            appendParameter("path", withAppDataFolder(path))
+            appendParameter("path", appDataFolder(path))
             appendParameter("size", size)
             appendParameter("isdir", isDir.toInt())
             appendParameter("rtype", rename?.ordinal)

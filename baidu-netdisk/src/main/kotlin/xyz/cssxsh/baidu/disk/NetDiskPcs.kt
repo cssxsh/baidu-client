@@ -20,7 +20,7 @@ public suspend fun NetDiskClient.superFile(
         parameter("access_token", accessToken)
         parameter("method", "upload")
         parameter("type", "tmpfile")
-        parameter("path", withAppDataFolder(path))
+        parameter("path", appDataFolder(path))
         parameter("uploadid", uploadId)
         parameter("partseq", index)
 
@@ -43,7 +43,7 @@ public suspend fun NetDiskClient.uploadSingleFile(
     client.post(PCS_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "upload")
-        parameter("path", withAppDataFolder(path))
+        parameter("path", appDataFolder(path))
 
         body = MultiPartFormDataContent(formData {
             append(key = "file", filename = "blob", size = size.toLong()) {
@@ -62,7 +62,7 @@ public suspend fun NetDiskClient.getMetaInfo(
     client.post(PCS_FILE) {
         parameter("access_token", accessToken)
         parameter("method", "meta")
-        parameter("path", withAppDataFolder(path))
+        parameter("path", appDataFolder(path))
     }
 }
 
@@ -75,6 +75,6 @@ public fun NetDiskClient.downloadFileUrl(
     parameters.apply {
         appendParameter("access_token", accessToken)
         appendParameter("method", "download")
-        appendParameter("path", path)
+        appendParameter("path", appDataFolder(path))
     }
 }.build()
