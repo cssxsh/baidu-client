@@ -81,19 +81,19 @@ public open class BaiduNetDiskClient(config: BaiduAuthConfig) : AbstractNetDiskC
      * 获取文件的Rapid信息
      */
     public suspend fun getRapidUploadInfo(path: String): RapidUploadInfo {
-        lateinit var content: String
-        lateinit var length: String
-        lateinit var slice: String
-        useHttpClient { client ->
-            client.get<HttpResponse>(downloadFileUrl(path = path)) {
+        return useHttpClient { client ->
+            client.get<HttpStatement>(downloadFileUrl(path = path)) {
                 header(HttpHeaders.Range, "bytes=0-${SLICE_SIZE - 1}")
-            }.apply {
-                content = requireNotNull(headers[HttpHeaders.ETag])
-                length = requireNotNull(headers[HttpHeaders.ContentRange]).substringAfterLast('/')
-            }.readBytes().let { bytes ->
-                slice = digestMd5(input = bytes)
+            }.execute { response ->
+                RapidUploadInfo(
+                    content = requireNotNull(response.headers[HttpHeaders.ETag]) { "Not Found ETag" },
+                    slice = digestMd5(input = response.readBytes()),
+                    length = requireNotNull(response.headers[HttpHeaders.ContentRange]) { "Not Found ContentRange" }
+                        .substringAfterLast('/')
+                        .toLong(),
+                    path = path
+                )
             }
         }
-        return RapidUploadInfo(content = content, slice = slice, length = length.toLong(), path = path)
     }
 }
