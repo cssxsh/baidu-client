@@ -18,12 +18,14 @@ internal const val DEFAULT_REDIRECT = "oob"
 
 internal const val ACCESS_EXPIRES: Long = 86400L
 
-private typealias AuthClient = BaiduUserAuthClient
+internal fun ParametersBuilder.appendParameter(key: String, value: Any?) {
+    value?.let { append(key, it.toString()) }
+}
 
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
  */
-internal fun AuthClient.getWebAuthorizeUrl(
+internal fun BaiduUserAuthClient.getWebAuthorizeUrl(
     type: AuthorizeType,
     state: String? = null,
     display: DisplayType = DisplayType.PAGE,
@@ -32,22 +34,24 @@ internal fun AuthClient.getWebAuthorizeUrl(
     login: LoginType? = null,
     qrcode: Boolean = true,
     extend: Map<String, Any?>? = null
-): Url = with(HttpRequestBuilder()) {
-    url(AUTHORIZE)
-    parameter("client_id", appKey)
-    parameter("response_type", type)
-    parameter("redirect_uri", redirect)
-    parameter("scope", scope.joinToString(","))
-    parameter("display", display)
-    parameter("state", state)
-    parameter("force_login", force?.toInt())
-    parameter("confirm_login", confirm?.toInt())
-    parameter("login_type", login)
-    parameter("qrcode", qrcode.toInt())
-    for ((name, value) in extend.orEmpty()) {
-        parameter(name, value)
+): Url = with(URLBuilder()) {
+    takeFrom(AUTHORIZE)
+    parameters.apply {
+        appendParameter("client_id", appKey)
+        appendParameter("response_type", type)
+        appendParameter("redirect_uri", redirect)
+        appendParameter("scope", scope.joinToString(","))
+        appendParameter("display", display)
+        appendParameter("state", state)
+        appendParameter("force_login", force?.toInt())
+        appendParameter("confirm_login", confirm?.toInt())
+        appendParameter("login_type", login)
+        appendParameter("qrcode", qrcode.toInt())
+        for ((name, value) in extend.orEmpty()) {
+            appendParameter(name, value)
+        }
     }
-    url.build()
+    build()
 }
 
 /**
@@ -76,25 +80,29 @@ internal fun Url.getAuthorizeCode(): String = parameters["code"].orEmpty()
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
  */
-internal suspend fun AuthClient.getAuthorizeToken(code: String): AuthorizeAccessToken = useHttpClient { client ->
-    client.post(TOKEN) {
-        parameter("grant_type", GrantType.AUTHORIZATION)
-        parameter("code", code)
-        parameter("client_id", appKey)
-        parameter("client_secret", secretKey)
-        parameter("redirect_uri", redirect)
+internal suspend fun BaiduUserAuthClient.getAuthorizeToken(code: String): AuthorizeAccessToken {
+    return useHttpClient { client ->
+        client.post(TOKEN) {
+            parameter("grant_type", GrantType.AUTHORIZATION)
+            parameter("code", code)
+            parameter("client_id", appKey)
+            parameter("client_secret", secretKey)
+            parameter("redirect_uri", redirect)
+        }
     }
 }
 
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/client)
  */
-internal suspend fun AuthClient.getClientCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
-    client.post(TOKEN) {
-        parameter("grant_type", GrantType.CLIENT_CREDENTIALS)
-        parameter("client_id", appKey)
-        parameter("client_secret", secretKey)
-        parameter("scope", scope.joinToString(","))
+internal suspend fun BaiduUserAuthClient.getClientCredentialsToken(): AuthorizeAccessToken {
+    return useHttpClient { client ->
+        client.post(TOKEN) {
+            parameter("grant_type", GrantType.CLIENT_CREDENTIALS)
+            parameter("client_id", appKey)
+            parameter("client_secret", secretKey)
+            parameter("scope", scope.joinToString(","))
+        }
     }
 }
 
@@ -102,23 +110,27 @@ internal suspend fun AuthClient.getClientCredentialsToken(): AuthorizeAccessToke
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/client)
  * @see [getClientCredentialsToken]
  */
-internal suspend fun AuthClient.getDeveloperCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
-    client.post(TOKEN) {
-        parameter("grant_type", GrantType.DEVELOPER_CREDENTIALS)
-        parameter("client_id", appKey)
-        parameter("client_secret", secretKey)
-        parameter("scope", scope.joinToString(","))
+internal suspend fun BaiduUserAuthClient.getDeveloperCredentialsToken(): AuthorizeAccessToken {
+    return useHttpClient { client ->
+        client.post(TOKEN) {
+            parameter("grant_type", GrantType.DEVELOPER_CREDENTIALS)
+            parameter("client_id", appKey)
+            parameter("client_secret", secretKey)
+            parameter("scope", scope.joinToString(","))
+        }
     }
 }
 
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
-internal suspend fun AuthClient.getDeviceCode(): AuthorizeDeviceCode = useHttpClient { client ->
-    client.post(DEVICE_CODE) {
-        parameter("client_id", appKey)
-        parameter("response_type", "device_code")
-        parameter("scope", scope.joinToString(","))
+internal suspend fun BaiduUserAuthClient.getDeviceCode(): AuthorizeDeviceCode {
+    return useHttpClient { client ->
+        client.post(DEVICE_CODE) {
+            parameter("client_id", appKey)
+            parameter("response_type", "device_code")
+            parameter("scope", scope.joinToString(","))
+        }
     }
 }
 
@@ -131,22 +143,24 @@ internal fun getDeviceAuthorizeUrl(
     force: Boolean? = null,
     redirect: String? = null,
     extend: Map<String, Any?>? = null
-): Url = with(HttpRequestBuilder()) {
-    url(AUTHORIZE)
-    parameter("code", code)
-    parameter("display", display)
-    parameter("force_login", force?.toInt())
-    parameter("redirect_uri", redirect)
-    for ((name, value) in extend.orEmpty()) {
-        parameter(name, value)
+): Url = with(URLBuilder()) {
+    takeFrom(AUTHORIZE)
+    parameters.apply {
+        appendParameter("code", code)
+        appendParameter("display", display)
+        appendParameter("force_login", force?.toInt())
+        appendParameter("redirect_uri", redirect)
+        for ((name, value) in extend.orEmpty()) {
+            appendParameter(name, value)
+        }
     }
-    url.build()
+    build()
 }
 
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
-internal suspend fun AuthClient.getDeviceToken(code: String): AuthorizeAccessToken = useHttpClient { client ->
+internal suspend fun BaiduUserAuthClient.getDeviceToken(code: String): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.DEVICE)
         parameter("code", code)
@@ -158,7 +172,7 @@ internal suspend fun AuthClient.getDeviceToken(code: String): AuthorizeAccessTok
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
-internal suspend fun AuthClient.getDeviceQrcode(code: AuthorizeDeviceCode): ByteArray = useHttpClient { client ->
+internal suspend fun BaiduUserAuthClient.getDeviceQrcode(code: AuthorizeDeviceCode): ByteArray = useHttpClient { client ->
     client.get(code.qrcodeUrl) {
         parameter("grant_type", GrantType.DEVICE)
         parameter("client_id", appKey)
@@ -169,7 +183,7 @@ internal suspend fun AuthClient.getDeviceQrcode(code: AuthorizeDeviceCode): Byte
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
-internal suspend fun AuthClient.getRefreshToken(): AuthorizeAccessToken = useHttpClient { client ->
+internal suspend fun BaiduUserAuthClient.getRefreshToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.REFRESH)
         parameter("refresh_token", refreshToken)
