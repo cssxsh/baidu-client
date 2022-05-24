@@ -1,8 +1,8 @@
 pluginManagement {
     plugins {
-        kotlin("jvm") version "1.6.0"
-        kotlin("plugin.serialization") version "1.6.0"
-        id("net.mamoe.maven-central-publish") version "0.7.0"
+        kotlin("jvm") version "1.6.21"
+        kotlin("plugin.serialization") version "1.6.21"
+        id("net.mamoe.maven-central-publish") version "0.7.1"
     }
     repositories {
         mavenLocal()
