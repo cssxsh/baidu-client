@@ -2,7 +2,6 @@ package xyz.cssxsh.baidu
 
 import io.ktor.client.*
 import xyz.cssxsh.baidu.oauth.*
-import java.time.*
 
 public interface BaiduAuthClient : BaiduAuthConfig, BaiduAuthToken {
 
@@ -12,7 +11,7 @@ public interface BaiduAuthClient : BaiduAuthConfig, BaiduAuthToken {
 
     public val scope: List<ScopeType>
 
-    public suspend fun saveToken(token: AuthorizeAccessToken, time: OffsetDateTime)
+    public suspend fun save(block: suspend () -> AuthorizeAccessToken): AuthorizeAccessToken
 
     public suspend fun token(): AuthorizeAccessToken
 

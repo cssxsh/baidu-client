@@ -1,7 +1,6 @@
 package xyz.cssxsh.baidu
 
 import xyz.cssxsh.baidu.oauth.*
-import java.time.*
 
 /**
  * * [AIP 文档](https://ai.baidu.com/ai-doc)
@@ -16,20 +15,10 @@ public interface AipClient : BaiduAuthClient {
     /**
      * 获取 Token
      */
-    override suspend fun token(): AuthorizeAccessToken {
-        val time = OffsetDateTime.now()
-        val token = getClientCredentialsToken()
-        saveToken(token = token, time = time)
-        return token
-    }
+    override suspend fun token(): AuthorizeAccessToken = save { getClientCredentialsToken() }
 
     /**
      * 刷新 Token
      */
-    override suspend fun refresh(): AuthorizeAccessToken {
-        val time = OffsetDateTime.now()
-        val token = getRefreshToken()
-        saveToken(token = token, time = time)
-        return token
-    }
+    override suspend fun refresh(): AuthorizeAccessToken = save { getRefreshToken() }
 }

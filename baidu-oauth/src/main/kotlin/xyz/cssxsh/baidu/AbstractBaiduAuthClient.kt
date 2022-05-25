@@ -16,7 +16,6 @@ import java.io.*
 import java.time.*
 
 public abstract class AbstractBaiduAuthClient : BaiduAuthClient, Closeable {
-    @Suppress("unused")
     protected open val cookiesStorage: CookiesStorage = AcceptAllCookiesStorage()
 
     protected open val timeout: Long get() = BaiduUserAuthClient.TIMEOUT
@@ -78,24 +77,20 @@ public abstract class AbstractBaiduAuthClient : BaiduAuthClient, Closeable {
     override var scope: List<ScopeType> = listOf(ScopeType.PUBLIC)
         protected set
 
-    @Suppress("unused")
     override var accessTokenValue: String = ""
         protected set
 
-    @Suppress("unused")
     override var refreshTokenValue: String = ""
         protected set
 
-    @Suppress("unused")
     override var expires: OffsetDateTime = OffsetDateTime.MIN
         protected set
 
-    @Suppress("unused")
-    protected val mutex: Mutex = Mutex()
+    override val mutex: Mutex = Mutex()
 
     override suspend fun accessToken(): String {
         return accessTokenValue.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() }
-            ?: throw NotTokenException("AccessToken", this)
+            ?: refresh().accessToken
     }
 
     override suspend fun refreshToken(): String {
@@ -103,14 +98,14 @@ public abstract class AbstractBaiduAuthClient : BaiduAuthClient, Closeable {
             ?: throw NotTokenException("RefreshToken", this)
     }
 
-    protected fun save(token: AuthorizeAccessToken, time: OffsetDateTime) {
+    protected fun save(token: AuthorizeAccessToken) {
         accessTokenValue = token.accessToken
         refreshTokenValue = token.refreshToken
-        expires = time.plusSeconds(token.expiresIn)
+        expires = expires
         scope = token.scope
     }
 
-    override suspend fun saveToken(token: AuthorizeAccessToken, time: OffsetDateTime): Unit = mutex.withLock {
-        save(token, time)
+    public override suspend fun save(block: suspend () -> AuthorizeAccessToken): AuthorizeAccessToken = mutex.withLock {
+        block().also { save(it) }
     }
 }
