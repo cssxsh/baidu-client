@@ -6,7 +6,11 @@ public interface BaiduAuthToken {
 
     public val expires: OffsetDateTime
 
-    public val accessToken: String
+    public val accessTokenValue: String
 
-    public val refreshToken: String
+    public suspend fun accessToken(): String
+
+    public val refreshTokenValue: String
+
+    public suspend fun refreshToken(): String
 }

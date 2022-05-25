@@ -79,10 +79,12 @@ public abstract class AbstractBaiduAuthClient : BaiduAuthClient, Closeable {
         protected set
 
     @Suppress("unused")
-    protected open var accessTokenValue: String = ""
+    override var accessTokenValue: String = ""
+        protected set
 
     @Suppress("unused")
-    protected open var refreshTokenValue: String = ""
+    override var refreshTokenValue: String = ""
+        protected set
 
     @Suppress("unused")
     override var expires: OffsetDateTime = OffsetDateTime.MIN
@@ -91,13 +93,15 @@ public abstract class AbstractBaiduAuthClient : BaiduAuthClient, Closeable {
     @Suppress("unused")
     protected val mutex: Mutex = Mutex()
 
-    override val accessToken: String
-        get() = accessTokenValue.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() }
+    override suspend fun accessToken(): String {
+        return accessTokenValue.takeIf { expires >= OffsetDateTime.now() && it.isNotBlank() }
             ?: throw NotTokenException("AccessToken", this)
+    }
 
-    override val refreshToken: String
-        get() = refreshTokenValue.takeIf { it.isNotBlank() }
+    override suspend fun refreshToken(): String {
+        return refreshTokenValue.takeIf { it.isNotBlank() }
             ?: throw NotTokenException("RefreshToken", this)
+    }
 
     protected fun save(token: AuthorizeAccessToken, time: OffsetDateTime) {
         accessTokenValue = token.accessToken

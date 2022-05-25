@@ -12,7 +12,7 @@ import xyz.cssxsh.baidu.*
  */
 public suspend fun NetDiskClient.getUserInfo(): NetDiskUserInfo = useHttpClient { client ->
     client.get(PAN_NAS) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "uinfo")
     }
 }
@@ -31,7 +31,7 @@ public suspend fun NetDiskClient.listFile(
     showEmpty: Int? = null,
 ): NetDiskList<NetDiskFileOrDir> = useHttpClient { client ->
     client.get(PAN_FILE) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "list")
         parameter("dir", appDataFolder(dir))
         parameter("order", order?.value)
@@ -59,7 +59,7 @@ public suspend fun NetDiskClient.listAllFile(
     web: Boolean? = null,
 ): NetDiskFileList = useHttpClient { client ->
     client.get(PAN_MULTIMEDIA) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "listall")
         parameter("path", appDataFolder(path))
         parameter("order", order?.value)
@@ -86,7 +86,7 @@ public suspend fun NetDiskClient.listDoc(
     web: Boolean? = null,
 ): NetDiskList<NetDiskDoc> = useHttpClient { client ->
     client.get(PAN_FILE) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "doclist")
         parameter("page", page)
         parameter("num", num)
@@ -110,7 +110,7 @@ public suspend fun NetDiskClient.listVideo(
     recursion: Boolean? = null,
 ): NetDiskList<NetDiskVideo> = useHttpClient { client ->
     client.get(PAN_FILE) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "videolist")
         parameter("page", page)
         parameter("num", num)
@@ -133,7 +133,7 @@ public suspend fun NetDiskClient.listBt(
     recursion: Boolean? = null,
 ): NetDiskList<NetDiskBt> = useHttpClient { client ->
     client.get(PAN_FILE) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "btlist")
         parameter("page", page)
         parameter("num", num)
@@ -158,7 +158,7 @@ public suspend fun NetDiskClient.listCategoryFile(
     desc: Boolean? = null,
 ): NetDiskFileList = useHttpClient { client ->
     client.get(PAN_MULTIMEDIA) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "categorylist")
         parameter("category", categories.joinToString(",") { it.ordinal.toString() })
         parameter("parent_path", appDataFolder(path))
@@ -183,7 +183,7 @@ public suspend fun NetDiskClient.searchFile(
     web: Boolean? = null,
 ): NetDiskList<NetDiskFileOrDir> = useHttpClient { client ->
     client.get(PAN_FILE) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "search")
         parameter("key", key)
         parameter("dir", dir)
@@ -205,7 +205,7 @@ public suspend fun NetDiskClient.listFileById(
     extra: Boolean? = null,
 ): NetDiskDetailList = useHttpClient { client ->
     client.get(PAN_MULTIMEDIA) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "filemetas")
         parameter("fsids", ids)
         parameter("path", appDataFolder(path))
@@ -224,7 +224,7 @@ public suspend fun NetDiskClient.operaFile(
     type: FileOnDupType? = null,
 ): NetDiskOpera = useHttpClient { client ->
     client.get(PAN_FILE) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "filemanager")
         parameter("opera", opera.name)
         body = FormDataContent(Parameters.build {
@@ -251,7 +251,7 @@ public suspend fun NetDiskClient.preCreate(
     uploadId: String? = null,
 ): NetDiskPreCreate = useHttpClient { client ->
     client.post(PAN_FILE) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "precreate")
         body = FormDataContent(Parameters.build {
             appendParameter("path", appDataFolder(path))
@@ -287,7 +287,7 @@ public suspend fun NetDiskClient.createFile(
     zipSign: Int? = null,
 ): NetDiskCreateFile = useHttpClient { client ->
     client.post(PAN_FILE) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "create")
         body = FormDataContent(Parameters.build {
             appendParameter("path", appDataFolder(path))

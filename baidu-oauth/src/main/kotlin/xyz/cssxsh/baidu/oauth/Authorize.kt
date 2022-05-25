@@ -186,7 +186,7 @@ internal suspend fun BaiduUserAuthClient.getDeviceQrcode(code: AuthorizeDeviceCo
 internal suspend fun BaiduUserAuthClient.getRefreshToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.REFRESH)
-        parameter("refresh_token", refreshToken)
+        parameter("refresh_token", refreshToken())
         parameter("client_id", appKey)
         parameter("client_secret", secretKey)
     }

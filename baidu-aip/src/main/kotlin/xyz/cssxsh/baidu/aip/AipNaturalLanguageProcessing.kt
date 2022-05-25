@@ -22,7 +22,7 @@ public class AipNaturalLanguageProcessing(override val client: AipClient) : AipA
         return client.useHttpClient { http ->
             http.post(LEXER) {
                 parameter("charset", "UTF-8")
-                parameter("access_token", accessToken)
+                parameter("access_token", accessToken())
 
                 body = mapOf("text" to text)
                 contentType(ContentType.Application.Json)
@@ -34,7 +34,7 @@ public class AipNaturalLanguageProcessing(override val client: AipClient) : AipA
         return client.useHttpClient { http ->
             http.post(WORD_EMB_SIM) {
                 parameter("charset", "UTF-8")
-                parameter("access_token", accessToken)
+                parameter("access_token", accessToken())
 
                 body = SimilarityResult.Words(first, second)
                 contentType(ContentType.Application.Json)
@@ -46,7 +46,7 @@ public class AipNaturalLanguageProcessing(override val client: AipClient) : AipA
         return client.useHttpClient { http ->
             http.post(DNN_LM_CN) {
                 parameter("charset", "UTF-8")
-                parameter("access_token", accessToken)
+                parameter("access_token", accessToken())
 
                 body = mapOf("text" to text)
                 contentType(ContentType.Application.Json)
@@ -58,7 +58,7 @@ public class AipNaturalLanguageProcessing(override val client: AipClient) : AipA
         return client.useHttpClient { http ->
             http.post(DEP_PARSER) {
                 parameter("charset", "UTF-8")
-                parameter("access_token", accessToken)
+                parameter("access_token", accessToken())
 
                 body = mapOf("text" to text)
                 contentType(ContentType.Application.Json)
@@ -70,7 +70,7 @@ public class AipNaturalLanguageProcessing(override val client: AipClient) : AipA
         return client.useHttpClient { http ->
             http.post(SIM_NET) {
                 parameter("charset", "UTF-8")
-                parameter("access_token", accessToken)
+                parameter("access_token", accessToken())
 
                 body = SimnetResult.Texts(first, second)
                 contentType(ContentType.Application.Json)

@@ -22,7 +22,7 @@ internal suspend fun AipClient.getClientCredentialsToken(): AuthorizeAccessToken
 internal suspend fun AipClient.getRefreshToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.REFRESH)
-        parameter("refresh_token", refreshToken)
+        parameter("refresh_token", refreshToken())
         parameter("client_id", appKey)
         parameter("client_secret", secretKey)
     }

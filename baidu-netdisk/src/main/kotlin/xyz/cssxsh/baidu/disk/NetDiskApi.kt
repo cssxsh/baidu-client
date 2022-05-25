@@ -19,7 +19,7 @@ public suspend fun NetDiskClient.getQuotaInfo(
     checkExpire: Boolean? = null,
 ): NetDiskQuotaInfo = useHttpClient { client ->
     client.get(API_QUOTA) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("checkfree", checkFree?.toInt())
         parameter("checkexpire", checkExpire?.toInt())
     }
@@ -34,7 +34,7 @@ public suspend fun NetDiskClient.getCategoryInfo(
     recursion: Boolean? = null,
 ): NetDiskCategoryList = useHttpClient { client ->
     client.get(API_CATEGORY_INFO) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("category", categories?.joinToString(",") { it.ordinal.toString() })
         parameter("parent_path", appDataFolder(path))
         parameter("recursion", recursion?.toInt())
@@ -55,7 +55,7 @@ public suspend fun NetDiskClient.getListInfo(
     showEmpty: Int? = null,
 ): NetDiskList<NetDiskFileOrDir> = useHttpClient { client ->
     client.get(API_LIST) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "list")
         parameter("dir", appDataFolder(dir))
         parameter("order", order?.value)
@@ -79,7 +79,7 @@ public suspend fun NetDiskClient.rapidUpload(
     rename: RenameType? = null
 ): NetDiskRapidInfo = useHttpClient { client ->
     client.post(API_RAPID_UPLOAD) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         body = FormDataContent(Parameters.build {
             appendParameter("rtype", rename?.ordinal)
             appendParameter("path", appDataFolder(path))
@@ -108,7 +108,7 @@ public suspend fun NetDiskClient.createFileWeb(
     zipSign: Int? = null,
 ): NetDiskCreateFile = useHttpClient { client ->
     client.post(API_CREATE) {
-        parameter("access_token", accessToken)
+        parameter("access_token", accessToken())
         parameter("method", "create")
         body = FormDataContent(Parameters.build {
             appendParameter("path", appDataFolder(path))
