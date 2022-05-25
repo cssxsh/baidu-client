@@ -14,6 +14,5 @@ public abstract class AbstractNetDiskClient : NetDiskClient, AbstractBaiduAuthCl
     override var scope: List<ScopeType> = listOf(ScopeType.BASIC, ScopeType.NET_DISK)
         protected set
 
-    override val appDataFolder: Path
-        get() = Path("/apps/$appName")
+    override val appDataFolder: Path get() = Path("/apps/$appName")
 }
