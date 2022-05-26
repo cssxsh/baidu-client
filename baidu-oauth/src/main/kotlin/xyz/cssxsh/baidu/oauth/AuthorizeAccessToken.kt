@@ -1,6 +1,7 @@
 package xyz.cssxsh.baidu.oauth
 
 import kotlinx.serialization.*
+import xyz.cssxsh.baidu.oauth.data.*
 import java.time.*
 
 @Serializable
@@ -12,8 +13,8 @@ public data class AuthorizeAccessToken(
     @SerialName("refresh_token")
     val refreshToken: String = "",
     @SerialName("scope")
-    @Serializable(with = ScopesSerializer::class)
-    val scope: List<ScopeType>,
+    @Serializable(with = ScopeType::class)
+    val scope: List<String>,
     @SerialName("session_key")
     val sessionKey: String,
     @SerialName("session_secret")

@@ -4,7 +4,7 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.utils.io.core.*
-import xyz.cssxsh.baidu.*
+import xyz.cssxsh.baidu.disk.data.*
 
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E5%88%86%E7%89%87%E4%B8%8A%E4%BC%A0)

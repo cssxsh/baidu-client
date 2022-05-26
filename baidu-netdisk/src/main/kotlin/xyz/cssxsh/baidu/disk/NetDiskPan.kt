@@ -5,7 +5,8 @@ import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.serialization.builtins.*
 import kotlinx.serialization.json.*
-import xyz.cssxsh.baidu.*
+import xyz.cssxsh.baidu.api.*
+import xyz.cssxsh.baidu.disk.data.*
 
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E7%94%A8%E6%88%B7%E4%BF%A1%E6%81%AF)

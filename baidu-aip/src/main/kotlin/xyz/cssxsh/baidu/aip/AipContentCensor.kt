@@ -4,7 +4,6 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import io.ktor.util.*
-import xyz.cssxsh.baidu.*
 import xyz.cssxsh.baidu.aip.censor.*
 
 /**
@@ -21,7 +20,7 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
     public suspend fun image(url: String, gif: Boolean = false): CensorResult.Image {
         return client.useHttpClient { http ->
             http.post(IMAGE_CENSOR) {
-                parameter("access_token", accessToken())
+                parameter("access_token", client.accessToken())
 
                 body = FormDataContent(Parameters.build {
                     append("imgUrl", url)
@@ -36,7 +35,7 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
         val base64 = bytes.encodeBase64()
         return client.useHttpClient { http ->
             http.post(IMAGE_CENSOR) {
-                parameter("access_token", accessToken())
+                parameter("access_token", client.accessToken())
 
                 body = FormDataContent(Parameters.build {
                     append("image", base64)
@@ -49,7 +48,7 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
     public suspend fun text(plain: String): CensorResult.Text {
         return client.useHttpClient { http ->
             http.post(TEXT_CENSOR) {
-                parameter("access_token", accessToken())
+                parameter("access_token", client.accessToken())
 
                 body = FormDataContent(Parameters.build {
                     append("text", plain)
@@ -66,7 +65,7 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
         check(urls.isNotEmpty()) { "Video urls is not empty." }
         return client.useHttpClient { http ->
             http.post(VIDEO_CENSOR) {
-                parameter("access_token", accessToken())
+                parameter("access_token", client.accessToken())
 
                 body = FormDataContent(Parameters.build {
                     append("name", name)
@@ -87,7 +86,7 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
     public suspend fun voice(url: String, format: String, rawText: Boolean, split: Boolean): CensorResult.Voice {
         return client.useHttpClient { http ->
             http.post(VOICE_CENSOR) {
-                parameter("access_token", accessToken())
+                parameter("access_token", client.accessToken())
 
                 body = FormDataContent(Parameters.build {
                     append("url", url)
@@ -104,7 +103,7 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
         val base64 = bytes.encodeBase64()
         return client.useHttpClient { http ->
             http.post(VOICE_CENSOR) {
-                parameter("access_token", accessToken())
+                parameter("access_token", client.accessToken())
 
                 body = FormDataContent(Parameters.build {
                     append("base64", base64)

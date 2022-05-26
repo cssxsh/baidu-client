@@ -5,7 +5,6 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.client.statement.*
 import io.ktor.http.*
-import xyz.cssxsh.baidu.*
 import xyz.cssxsh.baidu.aip.tts.*
 import java.util.*
 
@@ -26,7 +25,7 @@ public open class AipTextToSpeech(override val client: AipClient) : AipApplicati
             http.post<HttpStatement>(API) {
                 body = FormDataContent(Parameters.build {
                     append("tex", text.encodeURLQueryComponent(charset = charset("GBK")))
-                    append("tok", accessToken())
+                    append("tok", client.accessToken())
                     append("cuid", cuid)
                     append("ctp", "1")
                     append("lan", "zh")

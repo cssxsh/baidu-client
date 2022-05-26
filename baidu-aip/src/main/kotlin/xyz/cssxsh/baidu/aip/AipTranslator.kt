@@ -4,7 +4,6 @@ import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.serialization.json.*
-import xyz.cssxsh.baidu.*
 import xyz.cssxsh.baidu.aip.translate.*
 
 /**
@@ -20,7 +19,7 @@ public open class AipTranslator(override val client: AipClient) : AipApplication
     public suspend fun text(plain: String, to: String, from: String?, terms: List<String>? = null): TranslateResult.Text {
         return client.useHttpClient { http ->
             http.post(TEXT_TRANSLATION) {
-                parameter("access_token", accessToken())
+                parameter("access_token", client.accessToken())
 
                 body = buildJsonObject {
                     put("from", from ?: "auto")
@@ -36,7 +35,7 @@ public open class AipTranslator(override val client: AipClient) : AipApplication
     public suspend fun dict(plain: String, to: String, from: String?, terms: List<String>? = null): TranslateResult.Text {
         return client.useHttpClient { http ->
             http.post(TEXT_TRANSLATION_WITH_DICT) {
-                parameter("access_token", accessToken())
+                parameter("access_token", client.accessToken())
 
                 body = buildJsonObject {
                     put("from", from ?: "auto")
@@ -52,7 +51,7 @@ public open class AipTranslator(override val client: AipClient) : AipApplication
     public suspend fun picture(to: String, from: String, bytes: ByteArray): TranslateResult.Picture {
         return client.useHttpClient { http ->
             http.post(PICTURE_TRANSLATION) {
-                parameter("access_token", accessToken())
+                parameter("access_token", client.accessToken())
 
                 body = MultiPartFormDataContent(formData {
                     append(key = "to", value = to)

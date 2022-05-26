@@ -13,6 +13,7 @@ pluginManagement {
 
 rootProject.name = "baidu-client"
 
+include("baidu-api")
 include("baidu-oauth")
 include("baidu-netdisk")
 include("baidu-aip")

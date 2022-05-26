@@ -5,7 +5,8 @@ import io.ktor.client.request.forms.*
 import io.ktor.http.*
 import kotlinx.serialization.builtins.*
 import kotlinx.serialization.json.*
-import xyz.cssxsh.baidu.*
+import xyz.cssxsh.baidu.api.*
+import xyz.cssxsh.baidu.disk.data.*
 
 internal fun ParametersBuilder.appendParameter(key: String, value: Any?) {
     value?.let { append(key, it.toString()) }
