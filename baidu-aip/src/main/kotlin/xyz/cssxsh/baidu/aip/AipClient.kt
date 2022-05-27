@@ -9,7 +9,7 @@ import xyz.cssxsh.baidu.oauth.*
 public interface AipClient : BaiduAuthClient<BaiduAuthConfig> {
 
     public companion object {
-        public const val Timeout: Long = 30 * 1000L
+        public const val TIMEOUT: Long = 30 * 1000L
     }
 
     /**

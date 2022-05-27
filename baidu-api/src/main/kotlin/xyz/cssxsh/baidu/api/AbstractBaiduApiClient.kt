@@ -8,8 +8,8 @@ import io.ktor.client.features.cookies.*
 import io.ktor.client.features.json.*
 import io.ktor.client.features.json.serializer.*
 import io.ktor.http.*
+import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.*
-import java.io.IOException
 
 public abstract class AbstractBaiduApiClient<C> : BaiduApiClient<C> {
     protected open val cookiesStorage: CookiesStorage = AcceptAllCookiesStorage()

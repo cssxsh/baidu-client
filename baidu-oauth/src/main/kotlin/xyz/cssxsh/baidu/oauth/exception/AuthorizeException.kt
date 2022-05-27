@@ -6,7 +6,6 @@ import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.oauth.data.*
 
 
-
 /**
  * @see AuthorizeErrorType
  * @see AuthorizeAccessToken

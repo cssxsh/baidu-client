@@ -9,6 +9,6 @@ public interface NetDiskClient : BaiduUserAuthClient<BaiduAuthConfig> {
     public fun appDataFolder(path: String): Path = appDataFolder.resolve(path)
 
     public companion object {
-        public const val Timeout: Long = 30 * 1000L
+        public const val TIMEOUT: Long = 30 * 1000L
     }
 }

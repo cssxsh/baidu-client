@@ -7,7 +7,7 @@ import kotlin.io.path.*
 
 public abstract class AbstractNetDiskClient : NetDiskClient, AbstractBaiduAuthClient<BaiduAuthConfig>() {
 
-    override val timeout: Long get() = NetDiskClient.Timeout
+    override val timeout: Long get() = NetDiskClient.TIMEOUT
 
     override val userAgent: String get() = USER_AGENT
 
