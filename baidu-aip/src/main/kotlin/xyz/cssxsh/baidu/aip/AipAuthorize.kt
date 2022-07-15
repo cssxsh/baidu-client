@@ -1,5 +1,6 @@
 package xyz.cssxsh.baidu.aip
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.oauth.data.*
@@ -14,7 +15,7 @@ internal suspend fun BaiduAuthClient<*>.getClientCredentialsToken(): AuthorizeAc
         parameter("grant_type", GrantType.CLIENT_CREDENTIALS)
         parameter("client_id", appKey)
         parameter("client_secret", secretKey)
-    }
+    }.body()
 }
 
 /**
@@ -26,5 +27,5 @@ internal suspend fun BaiduAuthClient<*>.getRefreshToken(): AuthorizeAccessToken 
         parameter("refresh_token", refreshToken())
         parameter("client_id", appKey)
         parameter("client_secret", secretKey)
-    }
+    }.body()
 }

@@ -1,5 +1,6 @@
 package xyz.cssxsh.baidu.disk
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
@@ -16,20 +17,19 @@ public suspend fun NetDiskClient.superFile(
     data: ByteArray,
     size: Int,
 ): NetDiskSuperFile = useHttpClient { client ->
-    client.post(PCS_SUPER_FILE) {
+    client.submitFormWithBinaryData(formData {
+        append(key = "file", filename = "blob", size = size.toLong()) {
+            writeFully(src = data, offset = 0, length = size)
+        }
+    }) {
+        url(PCS_SUPER_FILE)
         parameter("access_token", accessToken())
         parameter("method", "upload")
         parameter("type", "tmpfile")
         parameter("path", appDataFolder(path))
         parameter("uploadid", uploadId)
         parameter("partseq", index)
-
-        body = MultiPartFormDataContent(formData {
-            append(key = "file", filename = "blob", size = size.toLong()) {
-                writeFully(src = data, offset = 0, length = size)
-            }
-        })
-    }
+    }.body()
 }
 
 /**
@@ -40,17 +40,16 @@ public suspend fun NetDiskClient.uploadSingleFile(
     bytes: ByteArray,
     size: Int = bytes.size,
 ): NetDiskSingleFile = useHttpClient { client ->
-    client.post(PCS_FILE) {
+    client.submitFormWithBinaryData(formData {
+        append(key = "file", filename = "blob", size = size.toLong()) {
+            writeFully(src = bytes, offset = 0, length = size)
+        }
+    }) {
+        url(PCS_FILE)
         parameter("access_token", accessToken())
         parameter("method", "upload")
         parameter("path", appDataFolder(path))
-
-        body = MultiPartFormDataContent(formData {
-            append(key = "file", filename = "blob", size = size.toLong()) {
-                writeFully(src = bytes, offset = 0, length = size)
-            }
-        })
-    }
+    }.body()
 }
 
 /**
@@ -63,7 +62,7 @@ public suspend fun NetDiskClient.getMetaInfo(
         parameter("access_token", accessToken())
         parameter("method", "meta")
         parameter("path", appDataFolder(path))
-    }
+    }.body()
 }
 
 /**

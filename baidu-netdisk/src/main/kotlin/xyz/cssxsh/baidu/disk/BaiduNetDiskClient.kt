@@ -81,7 +81,7 @@ public open class BaiduNetDiskClient(override val config: BaiduAuthConfig) : Abs
      */
     public suspend fun getRapidUploadInfo(path: String): RapidUploadInfo {
         return useHttpClient { client ->
-            client.get<HttpStatement>(downloadFileUrl(path = path)) {
+            client.prepareGet(downloadFileUrl(path = path)) {
                 header(HttpHeaders.Range, "bytes=0-${SLICE_SIZE - 1}")
             }.execute { response ->
                 RapidUploadInfo(

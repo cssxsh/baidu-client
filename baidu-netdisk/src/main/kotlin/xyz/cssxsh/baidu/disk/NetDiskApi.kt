@@ -1,5 +1,6 @@
 package xyz.cssxsh.baidu.disk
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
@@ -23,7 +24,7 @@ public suspend fun NetDiskClient.getQuotaInfo(
         parameter("access_token", accessToken())
         parameter("checkfree", checkFree?.toInt())
         parameter("checkexpire", checkExpire?.toInt())
-    }
+    }.body()
 }
 
 /**
@@ -39,7 +40,7 @@ public suspend fun NetDiskClient.getCategoryInfo(
         parameter("category", categories?.joinToString(",") { it.ordinal.toString() })
         parameter("parent_path", appDataFolder(path))
         parameter("recursion", recursion?.toInt())
-    }
+    }.body()
 }
 
 /**
@@ -66,7 +67,7 @@ public suspend fun NetDiskClient.getListInfo(
         parameter("web", web?.toInt())
         parameter("folder", folder)
         parameter("showempty", showEmpty)
-    }
+    }.body()
 }
 
 /**
@@ -79,16 +80,16 @@ public suspend fun NetDiskClient.rapidUpload(
     path: String,
     rename: RenameType? = null
 ): NetDiskRapidInfo = useHttpClient { client ->
-    client.post(API_RAPID_UPLOAD) {
+    client.submitForm(Parameters.build {
+        appendParameter("rtype", rename?.ordinal)
+        appendParameter("path", appDataFolder(path))
+        appendParameter("content-md5", content)
+        appendParameter("slice-md5", slice)
+        appendParameter("content-length", length)
+    }) {
+        url(API_RAPID_UPLOAD)
         parameter("access_token", accessToken())
-        body = FormDataContent(Parameters.build {
-            appendParameter("rtype", rename?.ordinal)
-            appendParameter("path", appDataFolder(path))
-            appendParameter("content-md5", content)
-            appendParameter("slice-md5", slice)
-            appendParameter("content-length", length)
-        })
-    }
+    }.body()
 }
 
 /**
@@ -108,23 +109,23 @@ public suspend fun NetDiskClient.createFileWeb(
     zipQuality: Int? = null,
     zipSign: Int? = null,
 ): NetDiskCreateFile = useHttpClient { client ->
-    client.post(API_CREATE) {
+    client.submitForm(Parameters.build {
+        appendParameter("path", appDataFolder(path))
+        appendParameter("size", size)
+        appendParameter("isdir", isDir.toInt())
+        appendParameter("rtype", rename?.ordinal)
+        appendParameter("uploadid", uploadId)
+        appendParameter("autoinit", "1")
+        appendParameter("block_list", blocks?.let { Json.encodeToString(ListSerializer(String.serializer()), it) })
+        appendParameter("is_revision", isRevision?.toInt())
+        appendParameter("exif_info", exifInfo)
+        appendParameter("local_ctime", createdTime)
+        appendParameter("local_mtime", modifiedTime)
+        appendParameter("zip_quality", zipQuality)
+        appendParameter("zip_sign", zipSign)
+    }) {
+        url(API_CREATE)
         parameter("access_token", accessToken())
         parameter("method", "create")
-        body = FormDataContent(Parameters.build {
-            appendParameter("path", appDataFolder(path))
-            appendParameter("size", size)
-            appendParameter("isdir", isDir.toInt())
-            appendParameter("rtype", rename?.ordinal)
-            appendParameter("uploadid", uploadId)
-            appendParameter("autoinit", "1")
-            appendParameter("block_list", blocks?.let { Json.encodeToString(ListSerializer(String.serializer()), it) })
-            appendParameter("is_revision", isRevision?.toInt())
-            appendParameter("exif_info", exifInfo)
-            appendParameter("local_ctime", createdTime)
-            appendParameter("local_mtime", modifiedTime)
-            appendParameter("zip_quality", zipQuality)
-            appendParameter("zip_sign", zipSign)
-        })
-    }
+    }.body()
 }

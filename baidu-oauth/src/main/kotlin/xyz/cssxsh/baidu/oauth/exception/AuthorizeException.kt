@@ -1,7 +1,7 @@
 package xyz.cssxsh.baidu.oauth.exception
 
 import io.ktor.client.call.*
-import io.ktor.client.features.*
+import io.ktor.client.plugins.*
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.oauth.data.*
 
@@ -20,5 +20,5 @@ public class AuthorizeException(public val data: AuthorizeError, cause: Throwabl
  * @see AuthorizeAccessToken
  */
 public suspend fun AuthorizeException(cause: ClientRequestException): AuthorizeException {
-    return AuthorizeException(cause.response.receive(), cause)
+    return AuthorizeException(cause.response.body(), cause)
 }

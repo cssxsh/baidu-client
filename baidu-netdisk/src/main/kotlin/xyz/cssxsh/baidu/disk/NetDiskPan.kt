@@ -1,5 +1,6 @@
 package xyz.cssxsh.baidu.disk
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
@@ -15,7 +16,7 @@ public suspend fun NetDiskClient.getUserInfo(): NetDiskUserInfo = useHttpClient 
     client.get(PAN_NAS) {
         parameter("access_token", accessToken())
         parameter("method", "uinfo")
-    }
+    }.body()
 }
 
 /**
@@ -42,7 +43,7 @@ public suspend fun NetDiskClient.listFile(
         parameter("web", if (web == true) "web" else null)
         parameter("folder", folder)
         parameter("showempty", showEmpty)
-    }
+    }.body()
 }
 
 /**
@@ -71,7 +72,7 @@ public suspend fun NetDiskClient.listAllFile(
         parameter("ctime", ctime)
         parameter("mtime", mtime)
         parameter("web", web?.toInt())
-    }
+    }.body()
 }
 
 /**
@@ -96,7 +97,7 @@ public suspend fun NetDiskClient.listDoc(
         parameter("parent_path", appDataFolder(path))
         parameter("recursion", recursion?.toInt())
         parameter("web", if (web == true) "web" else null)
-    }
+    }.body()
 }
 
 /**
@@ -119,7 +120,7 @@ public suspend fun NetDiskClient.listVideo(
         parameter("desc", desc?.toInt())
         parameter("parent_path", appDataFolder(path))
         parameter("recursion", recursion?.toInt())
-    }
+    }.body()
 }
 
 /**
@@ -142,7 +143,7 @@ public suspend fun NetDiskClient.listBt(
         parameter("desc", desc?.toInt())
         parameter("parent_path", appDataFolder(path))
         parameter("recursion", recursion?.toInt())
-    }
+    }.body()
 }
 
 /**
@@ -169,7 +170,7 @@ public suspend fun NetDiskClient.listCategoryFile(
         parameter("desc", desc?.toInt())
         parameter("start", start)
         parameter("limit", limit)
-    }
+    }.body()
 }
 
 /**
@@ -192,7 +193,7 @@ public suspend fun NetDiskClient.searchFile(
         parameter("page", page)
         parameter("num", num)
         parameter("web", web?.not())
-    }
+    }.body()
 }
 
 /**
@@ -213,7 +214,7 @@ public suspend fun NetDiskClient.listFileById(
         parameter("thumb", thumb?.toInt())
         parameter("dlink", link?.toInt())
         parameter("thumb", extra?.toInt())
-    }
+    }.body()
 }
 
 /**
@@ -224,16 +225,16 @@ public suspend fun NetDiskClient.operaFile(
     opera: FileOpera,
     type: FileOnDupType? = null,
 ): NetDiskOpera = useHttpClient { client ->
-    client.get(PAN_FILE) {
+    client.submitForm(Parameters.build {
+        appendParameter("async", async.ordinal)
+        appendParameter("filelist", Json.encodeToString(FileOpera.serializer(), opera))
+        appendParameter("ondup", type)
+    }) {
+        url(PAN_FILE)
         parameter("access_token", accessToken())
         parameter("method", "filemanager")
         parameter("opera", opera.name)
-        body = FormDataContent(Parameters.build {
-            appendParameter("async", async.ordinal)
-            appendParameter("filelist", Json.encodeToString(FileOpera.serializer(), opera))
-            appendParameter("ondup", type)
-        })
-    }
+    }.body()
 }
 
 /**
@@ -251,23 +252,23 @@ public suspend fun NetDiskClient.preCreate(
     rename: RenameType? = null,
     uploadId: String? = null,
 ): NetDiskPreCreate = useHttpClient { client ->
-    client.post(PAN_FILE) {
+    client.submitForm(Parameters.build {
+        appendParameter("path", appDataFolder(path))
+        appendParameter("size", size)
+        appendParameter("isdir", isDir.toInt())
+        appendParameter("autoinit", "1")
+        appendParameter("block_list", Json.encodeToString(ListSerializer(String.serializer()), blocks))
+        appendParameter("content-md5", content)
+        appendParameter("slice-md5", slice)
+        appendParameter("local_ctime", createdTime)
+        appendParameter("local_mtime", modifiedTime)
+        appendParameter("rtype", rename?.ordinal)
+        appendParameter("uploadid", uploadId)
+    }) {
+        url(PAN_FILE)
         parameter("access_token", accessToken())
         parameter("method", "precreate")
-        body = FormDataContent(Parameters.build {
-            appendParameter("path", appDataFolder(path))
-            appendParameter("size", size)
-            appendParameter("isdir", isDir.toInt())
-            appendParameter("autoinit", "1")
-            appendParameter("block_list", Json.encodeToString(ListSerializer(String.serializer()), blocks))
-            appendParameter("content-md5", content)
-            appendParameter("slice-md5", slice)
-            appendParameter("local_ctime", createdTime)
-            appendParameter("local_mtime", modifiedTime)
-            appendParameter("rtype", rename?.ordinal)
-            appendParameter("uploadid", uploadId)
-        })
-    }
+    }.body()
 }
 
 /**
@@ -287,23 +288,23 @@ public suspend fun NetDiskClient.createFile(
     zipQuality: Int? = null,
     zipSign: Int? = null,
 ): NetDiskCreateFile = useHttpClient { client ->
-    client.post(PAN_FILE) {
+    client.submitForm(Parameters.build {
+        appendParameter("path", appDataFolder(path))
+        appendParameter("size", size)
+        appendParameter("isdir", isDir.toInt())
+        appendParameter("rtype", rename?.ordinal)
+        appendParameter("uploadid", uploadId)
+        appendParameter("autoinit", "1")
+        appendParameter("block_list", blocks?.let { Json.encodeToString(ListSerializer(String.serializer()), it) })
+        appendParameter("is_revision", isRevision?.toInt())
+        appendParameter("exif_info", exifInfo)
+        appendParameter("local_ctime", createdTime)
+        appendParameter("local_mtime", modifiedTime)
+        appendParameter("zip_quality", zipQuality)
+        appendParameter("zip_sign", zipSign)
+    }) {
+        url(PAN_FILE)
         parameter("access_token", accessToken())
         parameter("method", "create")
-        body = FormDataContent(Parameters.build {
-            appendParameter("path", appDataFolder(path))
-            appendParameter("size", size)
-            appendParameter("isdir", isDir.toInt())
-            appendParameter("rtype", rename?.ordinal)
-            appendParameter("uploadid", uploadId)
-            appendParameter("autoinit", "1")
-            appendParameter("block_list", blocks?.let { Json.encodeToString(ListSerializer(String.serializer()), it) })
-            appendParameter("is_revision", isRevision?.toInt())
-            appendParameter("exif_info", exifInfo)
-            appendParameter("local_ctime", createdTime)
-            appendParameter("local_mtime", modifiedTime)
-            appendParameter("zip_quality", zipQuality)
-            appendParameter("zip_sign", zipSign)
-        })
-    }
+    }.body()
 }

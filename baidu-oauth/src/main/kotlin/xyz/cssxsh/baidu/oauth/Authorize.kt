@@ -1,5 +1,6 @@
 package xyz.cssxsh.baidu.oauth
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import xyz.cssxsh.baidu.api.*
@@ -89,7 +90,7 @@ internal suspend fun BaiduUserAuthClient<*>.getAuthorizeToken(code: String): Aut
             parameter("client_id", appKey)
             parameter("client_secret", secretKey)
             parameter("redirect_uri", redirect)
-        }
+        }.body()
     }
 }
 
@@ -103,7 +104,7 @@ internal suspend fun BaiduUserAuthClient<*>.getClientCredentialsToken(): Authori
             parameter("client_id", appKey)
             parameter("client_secret", secretKey)
             parameter("scope", scope.joinToString(","))
-        }
+        }.body()
     }
 }
 
@@ -118,7 +119,7 @@ internal suspend fun BaiduUserAuthClient<*>.getDeveloperCredentialsToken(): Auth
             parameter("client_id", appKey)
             parameter("client_secret", secretKey)
             parameter("scope", scope.joinToString(","))
-        }
+        }.body()
     }
 }
 
@@ -131,7 +132,7 @@ internal suspend fun BaiduUserAuthClient<*>.getDeviceCode(): AuthorizeDeviceCode
             parameter("client_id", appKey)
             parameter("response_type", "device_code")
             parameter("scope", scope.joinToString(","))
-        }
+        }.body()
     }
 }
 
@@ -168,7 +169,7 @@ internal suspend fun BaiduUserAuthClient<*>.getDeviceToken(code: String): Author
             parameter("code", code)
             parameter("client_id", appKey)
             parameter("client_secret", secretKey)
-        }
+        }.body()
     }
 }
 
@@ -181,7 +182,7 @@ internal suspend fun BaiduUserAuthClient<*>.getDeviceQrcode(code: AuthorizeDevic
             parameter("grant_type", GrantType.DEVICE)
             parameter("client_id", appKey)
             parameter("client_secret", secretKey)
-        }
+        }.body()
     }
 }
 
@@ -195,6 +196,6 @@ internal suspend fun BaiduUserAuthClient<*>.getRefreshToken(): AuthorizeAccessTo
             parameter("refresh_token", refreshToken())
             parameter("client_id", appKey)
             parameter("client_secret", secretKey)
-        }
+        }.body()
     }
 }

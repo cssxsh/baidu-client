@@ -11,10 +11,11 @@ mavenCentralPublish {
 }
 
 dependencies {
-    api("io.ktor:ktor-client:1.6.7")
-    api("io.ktor:ktor-client-serialization:1.6.7")
-    api("io.ktor:ktor-client-encoding:1.6.7")
-    api("io.ktor:ktor-client-okhttp:1.6.7")
+    api("io.ktor:ktor-client-okhttp:2.0.3")
+    api("io.ktor:ktor-client-encoding:2.0.3")
+    api("io.ktor:ktor-client-content-negotiation:2.0.3")
+    api("io.ktor:ktor-serialization-kotlinx-json:2.0.3")
+    api("com.squareup.okhttp3:okhttp:4.10.0")
     testImplementation(kotlin("test"))
 }
 

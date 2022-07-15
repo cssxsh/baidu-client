@@ -1,5 +1,6 @@
 package xyz.cssxsh.baidu.aip
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.client.request.forms.*
 import io.ktor.http.*
@@ -21,14 +22,14 @@ public open class AipTranslator(override val client: AipClient) : AipApplication
             http.post(TEXT_TRANSLATION) {
                 parameter("access_token", client.accessToken())
 
-                body = buildJsonObject {
+                setBody(buildJsonObject {
                     put("from", from ?: "auto")
                     put("to", to)
                     put("query", plain)
                     put("termIds", terms?.joinToString(separator = ","))
-                }
+                })
                 contentType(ContentType.Application.Json.withCharset(Charsets.UTF_8))
-            }
+            }.body()
         }
     }
 
@@ -37,29 +38,27 @@ public open class AipTranslator(override val client: AipClient) : AipApplication
             http.post(TEXT_TRANSLATION_WITH_DICT) {
                 parameter("access_token", client.accessToken())
 
-                body = buildJsonObject {
+                setBody(buildJsonObject {
                     put("from", from ?: "auto")
                     put("to", to)
                     put("query", plain)
                     put("termIds", terms?.joinToString(separator = ","))
-                }
+                })
                 contentType(ContentType.Application.Json.withCharset(Charsets.UTF_8))
-            }
+            }.body()
         }
     }
 
     public suspend fun picture(to: String, from: String, bytes: ByteArray): TranslateResult.Picture {
         return client.useHttpClient { http ->
-            http.post(PICTURE_TRANSLATION) {
+            http.submitFormWithBinaryData(PICTURE_TRANSLATION, formData {
+                append(key = "to", value = to)
+                append(key = "from", value = from)
+                append(key = "v", value = 3)
+                append(key = "file", value = bytes)
+            }) {
                 parameter("access_token", client.accessToken())
-
-                body = MultiPartFormDataContent(formData {
-                    append(key = "to", value = to)
-                    append(key = "from", value = from)
-                    append(key = "v", value = 3)
-                    append(key = "file", value = bytes)
-                })
-            }
+            }.body()
         }
     }
 }

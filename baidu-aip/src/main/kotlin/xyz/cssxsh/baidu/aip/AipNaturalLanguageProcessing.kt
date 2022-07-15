@@ -1,5 +1,6 @@
 package xyz.cssxsh.baidu.aip
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
 import xyz.cssxsh.baidu.aip.nlp.*
@@ -23,9 +24,9 @@ public class AipNaturalLanguageProcessing(override val client: AipClient) : AipA
                 parameter("charset", "UTF-8")
                 parameter("access_token", client.accessToken())
 
-                body = mapOf("text" to text)
+                setBody(mapOf("text" to text))
                 contentType(ContentType.Application.Json)
-            }
+            }.body()
         }
     }
 
@@ -35,9 +36,9 @@ public class AipNaturalLanguageProcessing(override val client: AipClient) : AipA
                 parameter("charset", "UTF-8")
                 parameter("access_token", client.accessToken())
 
-                body = SimilarityResult.Words(first, second)
+                setBody(SimilarityResult.Words(first, second))
                 contentType(ContentType.Application.Json)
-            }
+            }.body()
         }
     }
 
@@ -47,9 +48,9 @@ public class AipNaturalLanguageProcessing(override val client: AipClient) : AipA
                 parameter("charset", "UTF-8")
                 parameter("access_token", client.accessToken())
 
-                body = mapOf("text" to text)
+                setBody(mapOf("text" to text))
                 contentType(ContentType.Application.Json)
-            }
+            }.body()
         }
     }
 
@@ -59,9 +60,9 @@ public class AipNaturalLanguageProcessing(override val client: AipClient) : AipA
                 parameter("charset", "UTF-8")
                 parameter("access_token", client.accessToken())
 
-                body = mapOf("text" to text)
+                setBody(mapOf("text" to text))
                 contentType(ContentType.Application.Json)
-            }
+            }.body()
         }
     }
 
@@ -71,9 +72,9 @@ public class AipNaturalLanguageProcessing(override val client: AipClient) : AipA
                 parameter("charset", "UTF-8")
                 parameter("access_token", client.accessToken())
 
-                body = SimnetResult.Texts(first, second)
+                setBody(SimnetResult.Texts(first, second))
                 contentType(ContentType.Application.Json)
-            }
+            }.body()
         }
     }
 }

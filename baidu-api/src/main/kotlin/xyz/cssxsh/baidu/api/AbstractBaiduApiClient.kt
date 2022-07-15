@@ -2,12 +2,12 @@ package xyz.cssxsh.baidu.api
 
 import io.ktor.client.*
 import io.ktor.client.engine.okhttp.*
-import io.ktor.client.features.*
-import io.ktor.client.features.compression.*
-import io.ktor.client.features.cookies.*
-import io.ktor.client.features.json.*
-import io.ktor.client.features.json.serializer.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.compression.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.cookies.*
 import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.*
 
@@ -18,14 +18,15 @@ public abstract class AbstractBaiduApiClient<C> : BaiduApiClient<C> {
 
     protected open val userAgent: String = "curl/7.61.0"
 
-    protected open val callExceptionHandler: CallExceptionHandler = {}
+    protected open val callExceptionHandler: CallRequestExceptionHandler = { _, _ -> }
 
     protected open val apiIgnore: suspend (Throwable) -> Boolean = { it is IOException }
 
     protected open val client: HttpClient = HttpClient(OkHttp) {
-        Json {
-            serializer = KotlinxSerializer(BaiduJson)
-            accept(ContentType.Text.Html)
+        expectSuccess = true
+        install(ContentNegotiation) {
+            json(json = BaiduJson, contentType = ContentType.Application.Json)
+            json(json = BaiduJson, contentType = ContentType.Text.Html)
         }
         ContentEncoding()
         install(UserAgent) {
@@ -43,7 +44,7 @@ public abstract class AbstractBaiduApiClient<C> : BaiduApiClient<C> {
             requestTimeoutMillis = null
         }
         HttpResponseValidator {
-            handleResponseException(callExceptionHandler)
+            handleResponseExceptionWithRequest(callExceptionHandler)
         }
     }
 
