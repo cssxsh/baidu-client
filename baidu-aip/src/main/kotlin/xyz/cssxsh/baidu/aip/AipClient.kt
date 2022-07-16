@@ -20,5 +20,5 @@ public interface AipClient : BaiduAuthClient<BaiduAuthConfig> {
     /**
      * 刷新 Token
      */
-    override suspend fun refresh(): AuthorizeAccessToken = save { getRefreshToken() }
+    override suspend fun refresh(): AuthorizeAccessToken = token()
 }
