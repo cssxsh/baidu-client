@@ -1,6 +1,7 @@
 package xyz.cssxsh.baidu.oauth
 
 import io.ktor.client.plugins.*
+import io.ktor.client.request.*
 import kotlinx.coroutines.sync.*
 import xyz.cssxsh.baidu.api.*
 import xyz.cssxsh.baidu.oauth.data.*
@@ -11,12 +12,12 @@ public abstract class AbstractBaiduAuthClient<C : BaiduAuthConfig> : AbstractBai
 
     protected override val timeout: Long get() = BaiduUserAuthClient.TIMEOUT
 
-    protected override val callExceptionHandler: CallRequestExceptionHandler = handler@{ cause, _ ->
+    override suspend fun callRequestExceptionHandle(cause: Throwable, request: HttpRequest) {
         if (cause is ClientRequestException) {
             throw try {
                 AuthorizeException(cause)
             } catch (cause: Throwable) {
-                return@handler
+                return
             }
         }
     }

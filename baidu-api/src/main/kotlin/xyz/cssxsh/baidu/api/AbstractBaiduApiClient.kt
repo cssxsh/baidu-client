@@ -6,6 +6,7 @@ import io.ktor.client.plugins.*
 import io.ktor.client.plugins.compression.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.cookies.*
+import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.utils.io.errors.*
@@ -18,7 +19,9 @@ public abstract class AbstractBaiduApiClient<C> : BaiduApiClient<C> {
 
     protected open val userAgent: String = "curl/7.61.0"
 
-    protected open val callExceptionHandler: CallRequestExceptionHandler = { _, _ -> }
+    protected open suspend fun callRequestExceptionHandle(cause: Throwable, request: HttpRequest) {
+        // ignore
+    }
 
     protected open val apiIgnore: suspend (Throwable) -> Boolean = { it is IOException }
 
@@ -44,7 +47,7 @@ public abstract class AbstractBaiduApiClient<C> : BaiduApiClient<C> {
             requestTimeoutMillis = null
         }
         HttpResponseValidator {
-            handleResponseExceptionWithRequest(callExceptionHandler)
+            handleResponseExceptionWithRequest(::callRequestExceptionHandle)
         }
     }
 
