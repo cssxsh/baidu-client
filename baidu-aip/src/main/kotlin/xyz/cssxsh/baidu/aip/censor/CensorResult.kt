@@ -8,6 +8,7 @@ public sealed class CensorResult : CensorStatus {
     public abstract val isHitMd5: Boolean
 
     @Serializable
+    @SerialName("Image")
     public data class Image(
         @SerialName("log_id")
         override val logId: Long = 0,
@@ -57,6 +58,7 @@ public sealed class CensorResult : CensorStatus {
     }
 
     @Serializable
+    @SerialName("Text")
     public data class Text(
         @SerialName("log_id")
         override val logId: Long = 0,
@@ -98,6 +100,7 @@ public sealed class CensorResult : CensorStatus {
     }
 
     @Serializable
+    @SerialName("Video")
     public data class Video(
         @SerialName("log_id")
         override val logId: Long = 0,
@@ -139,6 +142,7 @@ public sealed class CensorResult : CensorStatus {
     }
 
     @Serializable
+    @SerialName("Voice")
     public data class Voice(
         @SerialName("log_id")
         override val logId: Long = 0,
