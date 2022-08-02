@@ -1,13 +1,15 @@
 plugins {
     kotlin("jvm")
     kotlin("plugin.serialization")
-    id("net.mamoe.maven-central-publish")
+    id("me.him188.maven-central-publish")
 }
 
 mavenCentralPublish {
     useCentralS01()
     singleDevGithubProject("cssxsh", "baidu-client", "cssxsh")
     licenseFromGitHubProject("AGPL-3.0", "master")
+    workingDir = System.getenv("PUBLICATION_TEMP")?.let { file(it).resolve(projectName) }
+        ?: project.buildDir.resolve("publishing-tmp")
 }
 
 dependencies {
@@ -24,15 +26,15 @@ kotlin {
     target.compilations {
         all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "11"
             }
         }
     }
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_1_8
-    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_11
+    targetCompatibility = JavaVersion.VERSION_11
 }
 
 tasks {
