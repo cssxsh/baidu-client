@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.oauth
 import kotlinx.coroutines.sync.*
 import xyz.cssxsh.baidu.api.*
 
-public interface BaiduAuthClient<C: BaiduAuthConfig> : BaiduApiClient<C> {
+public interface BaiduAuthClient<C : BaiduAuthConfig> : BaiduApiClient<C> {
 
     public val mutex: Mutex
 

@@ -129,7 +129,7 @@ public sealed class CensorResult : CensorStatus {
             @SerialName("conclusion")
             override val conclusion: String = "",
             @SerialName("conclusionType")
-            override val conclusionType: ConclusionType  = ConclusionType.NONE,
+            override val conclusionType: ConclusionType = ConclusionType.NONE,
             @SerialName("data")
             val `data`: List<Image.Record> = emptyList(),
             @SerialName("frameThumbnailUrl")
@@ -173,7 +173,7 @@ public sealed class CensorResult : CensorStatus {
             @SerialName("conclusion")
             override val conclusion: String = "",
             @SerialName("conclusionType")
-            override val conclusionType: ConclusionType  = ConclusionType.NONE,
+            override val conclusionType: ConclusionType = ConclusionType.NONE,
             @SerialName("text")
             val text: String,
             @SerialName("auditData")

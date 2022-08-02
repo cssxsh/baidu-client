@@ -15,7 +15,7 @@ public data class DependencyResult(
     val items: List<Item> = emptyList(),
     @SerialName("text")
     val text: String = ""
-): AipExceptionInfo {
+) : AipExceptionInfo {
     @Serializable
     public data class Item(
         @SerialName("deprel")

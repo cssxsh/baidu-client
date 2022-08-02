@@ -16,7 +16,7 @@ public data class LexerResult(
     val items: List<Item> = emptyList(),
     @SerialName("text")
     val text: String = ""
-): AipExceptionInfo {
+) : AipExceptionInfo {
     @Serializable
     public data class Item(
         @SerialName("basic_words")

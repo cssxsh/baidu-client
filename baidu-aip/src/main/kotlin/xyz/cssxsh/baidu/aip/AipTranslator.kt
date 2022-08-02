@@ -17,7 +17,12 @@ public open class AipTranslator(override val client: AipClient) : AipApplication
         internal const val PICTURE_TRANSLATION = "https://aip.baidubce.com/file/2.0/mt/pictrans/v1"
     }
 
-    public suspend fun text(plain: String, to: String, from: String?, terms: List<String>? = null): TranslateResult.Text {
+    public suspend fun text(
+        plain: String,
+        to: String,
+        from: String?,
+        terms: List<String>? = null
+    ): TranslateResult.Text {
         return client.useHttpClient { http ->
             http.post(TEXT_TRANSLATION) {
                 parameter("access_token", client.accessToken())
@@ -33,7 +38,12 @@ public open class AipTranslator(override val client: AipClient) : AipApplication
         }
     }
 
-    public suspend fun dict(plain: String, to: String, from: String?, terms: List<String>? = null): TranslateResult.Text {
+    public suspend fun dict(
+        plain: String,
+        to: String,
+        from: String?,
+        terms: List<String>? = null
+    ): TranslateResult.Text {
         return client.useHttpClient { http ->
             http.post(TEXT_TRANSLATION_WITH_DICT) {
                 parameter("access_token", client.accessToken())

@@ -15,7 +15,7 @@ public data class SimilarityResult(
     val score: Double = 0.0,
     @SerialName("words")
     val words: Words = Words("", "")
-): AipExceptionInfo {
+) : AipExceptionInfo {
     @Serializable
     public data class Words(
         @SerialName("word_1")

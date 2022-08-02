@@ -5,7 +5,7 @@ import kotlinx.coroutines.*
 import xyz.cssxsh.baidu.oauth.data.*
 import xyz.cssxsh.baidu.oauth.exception.*
 
-public interface BaiduUserAuthClient<C: BaiduAuthConfig> : BaiduAuthClient<C> {
+public interface BaiduUserAuthClient<C : BaiduAuthConfig> : BaiduAuthClient<C> {
     public companion object {
         public const val TIMEOUT: Long = 10 * 60 * 1000L
     }
@@ -59,6 +59,7 @@ public interface BaiduUserAuthClient<C: BaiduAuthConfig> : BaiduAuthClient<C> {
                         AuthorizeErrorType.AUTHORIZATION_PENDING, AuthorizeErrorType.SLOW_DOWN -> {
                             delay(code.interval * 1000L)
                         }
+
                         else -> throw cause
                     }
                 }

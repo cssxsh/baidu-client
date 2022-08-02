@@ -15,7 +15,7 @@ public data class SimnetResult(
     val score: Double = 0.0,
     @SerialName("texts")
     val texts: Texts = Texts("", "")
-): AipExceptionInfo {
+) : AipExceptionInfo {
     @Serializable
     public data class Texts(
         @SerialName("text_1")

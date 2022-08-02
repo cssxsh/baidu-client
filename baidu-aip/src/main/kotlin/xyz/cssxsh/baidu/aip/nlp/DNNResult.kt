@@ -17,7 +17,7 @@ public data class DNNResult(
     val ppl: Double = 0.0,
     @SerialName("text")
     val text: String = ""
-): AipExceptionInfo {
+) : AipExceptionInfo {
     @Serializable
     public data class Item(
         @SerialName("prob")

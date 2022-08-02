@@ -10,7 +10,8 @@ import xyz.cssxsh.baidu.oauth.data.*
  * @see AuthorizeErrorType
  * @see AuthorizeAccessToken
  */
-public class AuthorizeException(public val data: AuthorizeError, cause: Throwable) : IllegalStateException(data.description, cause) {
+public class AuthorizeException(public val data: AuthorizeError, cause: Throwable) :
+    IllegalStateException(data.description, cause) {
 
     public val type: AuthorizeErrorType get() = data.error
 }
