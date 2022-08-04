@@ -1,7 +1,7 @@
 package xyz.cssxsh.baidu.disk
 
+import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.*
 import io.ktor.http.*
 import xyz.cssxsh.baidu.disk.data.*
 import xyz.cssxsh.baidu.oauth.*
@@ -86,7 +86,7 @@ public open class BaiduNetDiskClient(override val config: BaiduAuthConfig) : Abs
             }.execute { response ->
                 RapidUploadInfo(
                     content = requireNotNull(response.headers[HttpHeaders.ETag]) { "Not Found ETag" },
-                    slice = digestMd5(input = response.readBytes()),
+                    slice = digestMd5(input = response.body()),
                     length = requireNotNull(response.headers[HttpHeaders.ContentRange]) { "Not Found ContentRange" }
                         .substringAfterLast('/')
                         .toLong(),
