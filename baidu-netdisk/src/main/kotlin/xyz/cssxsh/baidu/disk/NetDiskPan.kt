@@ -239,12 +239,13 @@ public suspend fun NetDiskClient.operaFile(
 
 /**
  * [document](https://pan.baidu.com/union/document/basic#%E9%A2%84%E4%B8%8A%E4%BC%A0)
+ * @see LAZY_BLOCKS 不想计算 blocks 可以用这个，相当于标记所有块都上传，然后由服务器计算md5。
  */
 public suspend fun NetDiskClient.preCreate(
     path: String,
     size: Long,
     isDir: Boolean,
-    blocks: List<String>,
+    blocks: List<String> = LAZY_BLOCKS,
     content: String? = null,
     slice: String? = null,
     createdTime: Long? = null,
