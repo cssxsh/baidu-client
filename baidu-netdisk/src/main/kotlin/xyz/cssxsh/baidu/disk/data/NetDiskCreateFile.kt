@@ -6,7 +6,7 @@ import xyz.cssxsh.baidu.api.*
 @Serializable
 public data class NetDiskCreateFile(
     @SerialName("category")
-    override val category: CategoryType,
+    override val category: CategoryType = CategoryType.NONE,
     @SerialName("ctime")
     override val created: Long = 0,
     @SerialName("errno")
