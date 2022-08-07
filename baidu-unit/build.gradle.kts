@@ -6,8 +6,8 @@ plugins {
 
 mavenCentralPublish {
     useCentralS01()
-    singleDevGithubProject("cssxsh", "baidu-client", "cssxsh")
-    licenseFromGitHubProject("AGPL-3.0", "master")
+    singleDevGithubProject("cssxsh", "baidu-client")
+    licenseFromGitHubProject("AGPL-3.0")
     workingDir = System.getenv("PUBLICATION_TEMP")?.let { file(it).resolve(projectName) }
         ?: project.buildDir.resolve("publishing-tmp")
 }
