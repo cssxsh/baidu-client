@@ -5,6 +5,7 @@
 * oauth ![baidu-oauth](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-oauth)
 * aip ![baidu-aip](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-aip)
 * netdisk ![baidu-netdisk](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-netdisk)
+* unit ![baidu-netdisk](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-unit)
 
 ## Baidu User Oauth
 
@@ -47,6 +48,11 @@
 * [AipTranslator](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipTranslator.kt) 机器翻译
 * [AipNaturalLanguageProcessing](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipNaturalLanguageProcessing.kt) 自然语言分析
 
+## Baidu Unit
+
+[Unit 文档](https://ai.baidu.com/ai-doc/UNIT/Lkipmh0tz)  
+[Unit 控制台](https://ai.baidu.com/unit/v2)  
+
 ## Gradle引用包
 
 ```
@@ -60,3 +66,5 @@ dependencies {
     implementation("xyz.cssxsh.baidu:baidu-aip:${version}")
 }
 ```
+
+注意 本SDK 设置的 `JvmTarget` 为 `JavaVersion.VERSION_11`
