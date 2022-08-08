@@ -1,4 +1,4 @@
-package xyz.cssxsh.baidu.aip
+package xyz.cssxsh.baidu.aip.tts
 
 import kotlinx.serialization.*
 

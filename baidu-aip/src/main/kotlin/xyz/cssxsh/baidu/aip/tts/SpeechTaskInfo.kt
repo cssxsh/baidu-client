@@ -1,7 +1,6 @@
 package xyz.cssxsh.baidu.aip.tts
 
 import kotlinx.serialization.*
-import xyz.cssxsh.baidu.aip.SpeechTaskStatus
 
 @Serializable
 public data class SpeechTaskInfo(
