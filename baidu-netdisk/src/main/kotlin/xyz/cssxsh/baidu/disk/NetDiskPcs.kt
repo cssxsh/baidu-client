@@ -18,7 +18,7 @@ public suspend fun NetDiskClient.superFile(
     size: Int,
 ): NetDiskSuperFile = useHttpClient { client ->
     client.submitFormWithBinaryData(formData {
-        append(key = "file", filename = "blob", size = size.toLong()) {
+        append(key = "file".quote(), filename = "blob".quote(), size = size.toLong()) {
             writeFully(src = data, offset = 0, length = size)
         }
     }) {
@@ -41,7 +41,7 @@ public suspend fun NetDiskClient.uploadSingleFile(
     size: Int = bytes.size,
 ): NetDiskSingleFile = useHttpClient { client ->
     client.submitFormWithBinaryData(formData {
-        append(key = "file", filename = "blob", size = size.toLong()) {
+        append(key = "file".quote(), filename = "blob".quote(), size = size.toLong()) {
             writeFully(src = bytes, offset = 0, length = size)
         }
     }) {
