@@ -9,6 +9,7 @@ import kotlinx.serialization.json.*
  * @param origin 应答来自哪个技能（skill_id）或机器人（service_id），注意有些应答可能是机器人给出的（不来自任何一个技能）。
  * @param actions 动作列表
  * @param schema 解析的schema，解析意图、词槽结果都从这里面获取
+ * @param raw 原始query
  * @param sentiment query的情感分析结果
  * @param slu SLU解析
  * @param history 历史词槽结果
@@ -24,7 +25,7 @@ public data class ResponseItem(
     @SerialName("actions")
     val actions: List<Action> = emptyList(),
     @SerialName("schema")
-    val schema: Schema,
+    val schema: Schema? = null,
     @SerialName("raw_query")
     val raw: String,
     @SerialName("sentiment_analysis")

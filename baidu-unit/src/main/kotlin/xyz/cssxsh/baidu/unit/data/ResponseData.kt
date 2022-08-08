@@ -26,7 +26,7 @@ public data class ResponseData(
     @SerialName("session_id")
     val sessionId: String = "",
     @SerialName("context")
-    var context: Context? = null,
+    val context: Context? = null,
     @SerialName("timestamp")
     @Serializable(LocalDateTimeSerializer::class)
     val timestamp: LocalDateTime = LocalDateTime.MIN,
