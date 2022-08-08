@@ -34,9 +34,24 @@ jobs:
 
       - name: Test AipContentCensor
         run: ./gradlew baidu-aip:test --tests "xyz.cssxsh.baidu.aip.AipContentCensorTest" --scan --info
+        env:
+          BAIDU_CENSOR_APP_ID: ${{ secrets.BAIDU_CENSOR_APP_ID }}
+          BAIDU_CENSOR_APP_KEY: ${{ secrets.BAIDU_CENSOR_APP_KEY }}
+          BAIDU_CENSOR_APP_NAME: ${{ secrets.BAIDU_CENSOR_APP_NAME }}
+          BAIDU_CENSOR_SECRET_KEY: ${{ secrets.BAIDU_CENSOR_SECRET_KEY }}
 
       - name: Test AipTextToSpeech
         run: ./gradlew baidu-aip:test --tests "xyz.cssxsh.baidu.aip.AipTextToSpeechTest" --scan --info
+        env:
+          BAIDU_TTS_APP_ID: ${{ secrets.BAIDU_TTS_APP_ID }}
+          BAIDU_TTS_APP_KEY: ${{ secrets.BAIDU_TTS_APP_KEY }}
+          BAIDU_TTS_APP_NAME: ${{ secrets.BAIDU_TTS_APP_NAME }}
+          BAIDU_TTS_SECRET_KEY: ${{ secrets.BAIDU_TTS_SECRET_KEY }}
 
       - name: Test BaiduUnitClient
         run: ./gradlew baidu-unit:test --tests "xyz.cssxsh.baidu.unit.BaiduUnitClientTest" --scan --info
+        env:
+          BAIDU_UNIT_APP_ID: ${{ secrets.BAIDU_UNIT_APP_ID }}
+          BAIDU_UNIT_APP_KEY: ${{ secrets.BAIDU_UNIT_APP_KEY }}
+          BAIDU_UNIT_APP_NAME: ${{ secrets.BAIDU_UNIT_APP_NAME }}
+          BAIDU_UNIT_SECRET_KEY: ${{ secrets.BAIDU_UNIT_SECRET_KEY }}
