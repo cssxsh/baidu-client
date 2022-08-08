@@ -2,6 +2,8 @@
 
 > 百度API的Kotlin Jvm SDK
 
+[![Test](https://github.com/cssxsh/baidu-client/actions/workflows/Test.yml/badge.svg)](https://github.com/cssxsh/baidu-client/actions/workflows/Test.yml)
+
 * oauth ![baidu-oauth](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-oauth)
 * aip ![baidu-aip](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-aip)
 * netdisk ![baidu-netdisk](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-netdisk)
@@ -61,9 +63,9 @@ repositories {
 }
 
 dependencies {
-    implementation("xyz.cssxsh.baidu:baidu-oauth:${version}")
     implementation("xyz.cssxsh.baidu:baidu-netdisk:${version}")
     implementation("xyz.cssxsh.baidu:baidu-aip:${version}")
+    implementation("xyz.cssxsh.baidu:baidu-unit:${version}")
 }
 ```
 
