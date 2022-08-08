@@ -1,10 +1,8 @@
 package xyz.cssxsh.baidu.aip
 
 import kotlinx.coroutines.*
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.decodeFromStream
+import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 import org.junit.jupiter.api.*
 import xyz.cssxsh.baidu.aip.tts.*
 import xyz.cssxsh.baidu.oauth.*
@@ -20,6 +18,7 @@ internal class AipTextToSpeechTest : BaiduApiClientTest() {
 
     private val tts = AipTextToSpeech(client = client)
 
+    @OptIn(ExperimentalSerializationApi::class)
     private val demo: List<List<DemoExample>> by lazy {
         this::class.java.getResourceAsStream("demo.json")!!.use {
             Json.decodeFromStream(it)
@@ -47,8 +46,27 @@ internal class AipTextToSpeechTest : BaiduApiClientTest() {
                         person = example.person
                     }
                 } catch (exception: SpeechException) {
-                    println("${example.name} 不支持， ${exception.message}")
+                    println("${example.person} - ${example.name} 不支持， ${exception.message}")
                     continue
+                }
+            }
+        }
+    }
+
+    @Test
+    fun long(): Unit = runBlocking {
+        for (group in demo) {
+            for (example in group) {
+                delay(1_000)
+                launch {
+                    try {
+                        val paragraph = example.defaultText.split("，", "。").toTypedArray()
+                        tts.handle(paragraph = paragraph) {
+                            person = example.person
+                        }
+                    } catch (exception: SpeechTaskException) {
+                        println("${example.person} - ${example.name} 不支持， ${exception.message}")
+                    }
                 }
             }
         }
