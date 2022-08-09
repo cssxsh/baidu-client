@@ -10,7 +10,7 @@ import java.util.*
 import kotlin.coroutines.*
 
 /**
- * [ai-doc](https://ai.baidu.com/ai-doc/SPEECH/Gk38y8lzk)
+ * [ai-doc](https://ai.baidu.com/ai-doc/SPEECH/yk38y8h3j)
  */
 public open class AipTextToSpeech(override val client: AipClient) : AipApplication {
     public companion object {
@@ -28,7 +28,10 @@ public open class AipTextToSpeech(override val client: AipClient) : AipApplicati
     public open val timeout: Long = 600_000
 
     /**
-     * 短文本在线合成
+     * [短文本在线合成](https://ai.baidu.com/ai-doc/SPEECH/Qk38y8lrl)
+     * @param text 合成的文本, 不超过60个汉字或者字母数字, 如需合成更长文本，推荐使用 长文本在线合成
+     * @param option 合成参数
+     * @see default
      */
     public suspend fun handle(text: String, option: SpeechOption = default.copy()): ByteArray {
         return client.useHttpClient { http ->
@@ -55,17 +58,23 @@ public open class AipTextToSpeech(override val client: AipClient) : AipApplicati
     }
 
     /**
-     * 短文本在线合成
+     * [短文本在线合成](https://ai.baidu.com/ai-doc/SPEECH/Qk38y8lrl)
+     * @param text 合成的文本, 不超过60个汉字或者字母数字
+     * @param block 调整合成参数
+     * @see default
      */
     public suspend fun handle(text: String, block: SpeechOption.() -> Unit): ByteArray {
         return handle(text = text, option = default.copy().apply(block))
     }
 
     /**
-     * 长文本在线合成
+     * [长文本在线合成](https://ai.baidu.com/ai-doc/SPEECH/gku5b9ejv)
+     * @param paragraph 段落
+     * @param option 合成参数
+     * @see default
      */
     public suspend fun handle(vararg paragraph: String, option: SpeechOption = default.copy()): ByteArray {
-        val task = task(body = SpeechCreateBody(
+        val task = task(request = SpeechCreateRequest(
             text = paragraph.asList(),
             voice = option.person,
             speed = option.speed,
@@ -84,7 +93,7 @@ public open class AipTextToSpeech(override val client: AipClient) : AipApplicati
         val limit = System.currentTimeMillis() + timeout
 
         while (coroutineContext.isActive) {
-            val result = query(ids = listOf(id))
+            val result = query(id)
             val tasks = result.tasks ?: throw SpeechTaskException(info = result)
             val info = tasks.find { it.id == id } ?: throw SpeechTaskException(info = result)
                 .initCause(NoSuchElementException("Speech Task $id"))
@@ -107,37 +116,47 @@ public open class AipTextToSpeech(override val client: AipClient) : AipApplicati
 
 
     /**
-     * 长文本在线合成
+     * [长文本在线合成](https://ai.baidu.com/ai-doc/SPEECH/gku5b9ejv)
+     * @param paragraph 段落
+     * @param block 调整合成参数
+     * @see default
+     * @see task
+     * @see query
      */
     public suspend fun handle(vararg paragraph: String, block: SpeechOption.() -> Unit): ByteArray {
         return handle(paragraph = paragraph, option = default.copy().apply(block))
     }
 
     /**
-     * 长文本在线合成 - 创建任务
-     * @param body 参数
+     * [长文本在线合成 - 创建任务](https://ai.baidu.com/ai-doc/SPEECH/1ku59x8ey)
+     * @param request 参数
+     * @see query
+     * @see handle
      */
-    public suspend fun task(body: SpeechCreateBody): SpeechTask {
+    public suspend fun task(request: SpeechCreateRequest): SpeechTask {
         return client.useHttpClient { http ->
             http.preparePost(LONG_TTS_CREATE) {
                 parameter("access_token", client.accessToken())
 
                 contentType(ContentType.Application.Json)
-                setBody(body = body)
+                setBody(body = request)
             }.body()
         }
     }
 
     /**
-     * 长文本在线合成 - 查询任务
+     * [长文本在线合成 -查询任务结果](https://ai.baidu.com/ai-doc/SPEECH/Sku5ajfyo)
+     * @param ids 任务id 推荐一次查询多个任务id，单次最多可查询200个
+     * @see task
+     * @see handle
      */
-    public suspend fun query(ids: List<String>): SpeechTaskResult {
+    public suspend fun query(vararg ids: String): SpeechTaskResult {
         return client.useHttpClient { http ->
             http.preparePost(LONG_TTS_QUERY) {
                 parameter("access_token", client.accessToken())
 
                 contentType(ContentType.Application.Json)
-                setBody(body = SpeechQueryBody(taskIds = ids))
+                setBody(body = SpeechQueryRequest(taskIds = ids.asList()))
             }.body()
         }
     }

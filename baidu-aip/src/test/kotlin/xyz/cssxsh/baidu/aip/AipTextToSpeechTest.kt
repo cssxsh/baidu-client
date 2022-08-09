@@ -6,6 +6,7 @@ import kotlinx.serialization.json.*
 import org.junit.jupiter.api.*
 import xyz.cssxsh.baidu.aip.tts.*
 import xyz.cssxsh.baidu.oauth.*
+import java.io.File
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 internal class AipTextToSpeechTest : BaiduApiClientTest() {
@@ -55,20 +56,24 @@ internal class AipTextToSpeechTest : BaiduApiClientTest() {
 
     @Test
     fun long(): Unit = runBlocking {
-        for (group in demo) {
-            for (example in group) {
-                delay(1_000)
-                launch {
-                    try {
-                        val paragraph = example.defaultText.split("，", "。").toTypedArray()
-                        tts.handle(paragraph = paragraph) {
-                            person = example.person
-                        }
-                    } catch (exception: SpeechTaskException) {
-                        println("${example.person} - ${example.name} 不支持， ${exception.message}")
-                    }
-                }
+        val example = demo[1].first { it.person == SpeechPerson.Boutique.EmotionalMale }
+        try {
+            val paragraph = example.defaultText.split("，", "。").toTypedArray()
+            tts.handle(paragraph = paragraph) {
+                person = example.person
             }
+        } catch (exception: SpeechTaskException) {
+            println("${example.person} - ${example.name} 不支持， ${exception.message}")
         }
+    }
+
+    @Test
+    fun english(): Unit = runBlocking {
+        val text = "The old dog barks backwards without getting up.\nI can remember when he was a pup."
+        val bytes = tts.handle(text = text) {
+            person = SpeechPerson.Boutique.EmotionalMale
+            format = SpeechFormat.WAV
+        }
+        File("./build/english.wav").writeBytes(bytes)
     }
 }

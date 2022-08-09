@@ -3,6 +3,10 @@ package xyz.cssxsh.baidu.aip.tts
 import kotlinx.serialization.*
 import xyz.cssxsh.baidu.aip.*
 
+/**
+ * 任务下载信息
+ * @param speechUrl 音频下载链接，任务完成后储存72小时
+ */
 @Serializable
 public data class SpeechTaskDownload(
     @SerialName("err_msg")
