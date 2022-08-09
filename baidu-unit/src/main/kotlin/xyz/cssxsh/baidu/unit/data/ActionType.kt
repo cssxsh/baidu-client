@@ -1,6 +1,6 @@
 package xyz.cssxsh.baidu.unit.data
 
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 
 @Serializable
 @Suppress("EnumEntryName")

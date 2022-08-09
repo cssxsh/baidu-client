@@ -1,5 +1,7 @@
 package xyz.cssxsh.baidu.api
 
+import io.ktor.util.encodeBase64
+import io.ktor.util.decodeBase64Bytes
 import kotlinx.serialization.*
 import kotlinx.serialization.descriptors.*
 import kotlinx.serialization.encoding.*
@@ -18,6 +20,19 @@ public val BaiduJson: Json = Json {
     ignoreUnknownKeys = System.getProperty(IGNORE_UNKNOWN_KEYS, "true").toBoolean()
     serializersModule = SerializersModule {
         contextual(OffsetDateTimeSerializer)
+    }
+}
+
+public object ByteArrayToBase64Serializer : KSerializer<ByteArray> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor(this::class.qualifiedName!!, PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: ByteArray) {
+        encoder.encodeString(value.encodeBase64())
+    }
+
+    override fun deserialize(decoder: Decoder): ByteArray {
+        return decoder.decodeString().decodeBase64Bytes()
     }
 }
 
@@ -47,6 +62,20 @@ public object OffsetDateTimeSerializer : KSerializer<OffsetDateTime> {
 
     override fun deserialize(decoder: Decoder): OffsetDateTime {
         return OffsetDateTime.parse(decoder.decodeString(), format)
+    }
+}
+
+public object TimestampSerializer : KSerializer<OffsetDateTime> {
+
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor(OffsetDateTime::class.qualifiedName!!, PrimitiveKind.LONG)
+
+    override fun serialize(encoder: Encoder, value: OffsetDateTime) {
+        encoder.encodeLong(value.toEpochSecond())
+    }
+
+    override fun deserialize(decoder: Decoder): OffsetDateTime {
+        return OffsetDateTime.ofInstant(Instant.ofEpochSecond(decoder.decodeLong()), ZoneId.systemDefault())
     }
 }
 

@@ -13,7 +13,7 @@ internal object LocalDateTimeSerializer : KSerializer<LocalDateTime> {
         .append(DateTimeFormatter.ISO_LOCAL_DATE)
         .appendLiteral(' ')
         .append(DateTimeFormatter.ISO_LOCAL_TIME)
-        .toFormatter();
+        .toFormatter()
 
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor(LocalDateTime::class.qualifiedName!!, PrimitiveKind.STRING)

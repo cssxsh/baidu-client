@@ -14,7 +14,7 @@ import java.time.LocalDateTime
  * @param responses 本轮应答列表。由于请求接口支持请求多个技能，因此这里可能有多个应答。应答列表是有序的，其第一个元素是最为推荐采用的一个应答。
  */
 @Serializable
-public data class ResponseData(
+public data class QueryData(
     @SerialName("version")
     val version: String = "3.0",
     @SerialName("service_id")
@@ -33,5 +33,5 @@ public data class ResponseData(
     @SerialName("ref_id")
     val refId: String,
     @SerialName("responses")
-    val responses: List<ResponseItem> = emptyList(),
+    val responses: List<QueryItem> = emptyList(),
 )

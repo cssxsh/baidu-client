@@ -15,7 +15,7 @@ import kotlinx.serialization.json.*
  * @param history 历史词槽结果
  */
 @Serializable
-public data class ResponseItem(
+public data class QueryItem(
     @SerialName("status")
     val status: Int = 0,
     @SerialName("msg")

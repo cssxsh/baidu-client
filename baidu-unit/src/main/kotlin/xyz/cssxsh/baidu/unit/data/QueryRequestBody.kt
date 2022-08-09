@@ -14,24 +14,23 @@ import java.time.LocalDateTime
  * @param request 本轮请求体。
  */
 @Serializable
-public data class RequestBody(
+public data class QueryRequestBody(
     @Required
     @SerialName("version")
-    var version: String = "3.0",
+    val version: String = "3.0",
     @SerialName("service_id")
-    var serviceId: String = "",
+    val serviceId: String = "",
     @SerialName("skill_ids")
-    var skillIds: List<String> = emptyList(),
+    val skillIds: List<String> = emptyList(),
     @SerialName("log_id")
-    var logId: String,
+    val logId: String,
     @SerialName("session_id")
-    var sessionId: String,
+    val sessionId: String,
     @SerialName("context")
-    var context: Context? = null,
+    val context: Context? = null,
     @SerialName("request")
-    var request: Request,
+    val request: Request,
 ) {
-
 
     /**
      * @param terminalId 与技能对话的终端用户id（如果客户端是用户未登录状态情况下对话的，也需要尽量通过其他标识（比如设备id）来唯一区分用户），
@@ -45,17 +44,17 @@ public data class RequestBody(
     @Serializable
     public data class Request(
         @SerialName("terminal_id")
-        var terminalId: String,
+        val terminalId: String,
         @SerialName("query")
-        var query: String,
+        val query: String,
         @SerialName("query_info")
-        var info: QueryInfo? = null,
+        val info: QueryInfo? = null,
         @SerialName("client_options")
-        var options: List<ClientOption>? = null,
+        val options: List<ClientOption>? = null,
         @SerialName("updates")
-        var updates: List<Update>? = null,
+        val updates: List<Update>? = null,
         @SerialName("hyper")
-        var hyper: HyperParams? = null,
+        val hyper: HyperParams? = null,
     )
 
     /**
@@ -66,11 +65,11 @@ public data class RequestBody(
     @Serializable
     public data class QueryInfo(
         @SerialName("type")
-        var type: String, // TODO enum
+        val type: QueryType,
         @SerialName("source")
-        var source: String, // TODO enum
+        val source: QuerySource,
         @SerialName("asr_candidates")
-        var candidates: List<Candidate>? = null,
+        val candidates: List<Candidate>? = null,
     )
 
     /**
@@ -80,9 +79,9 @@ public data class RequestBody(
     @Serializable
     public data class Candidate(
         @SerialName("text")
-        var text: String,
+        val text: String,
         @SerialName("confidence")
-        var confidence: Double,
+        val confidence: Double,
     )
 
     /**
@@ -92,23 +91,23 @@ public data class RequestBody(
     @Serializable
     public data class ClientOption(
         @SerialName("text")
-        var attributes: Map<String, String>,
+        val attributes: Map<String, String>,
         @SerialName("slot_updates")
-        var slotUpdates: Map<String, String>,
+        val slotUpdates: Map<String, String>,
     )
 
     /**
      * @param type 干预方式，支持「DEFINE」和「MODIFY」两种方式。
      * 其中「DEFINE」表明抛弃系统解析结果，转而由updates字段来定义；
-     * MODIFY」表明在已解析的结果上进行修改
+     * 「MODIFY」表明在已解析的结果上进行修改
      * @param operations 干预操作集。
      */
     @Serializable
     public data class Update(
         @SerialName("type")
-        var type: String,
+        val type: String,
         @SerialName("ops")
-        var operations: JsonArray,
+        val operations: JsonArray,
     )
 
     /**
@@ -123,19 +122,19 @@ public data class RequestBody(
     @Serializable
     public data class HyperParams(
         @SerialName("slu_tags")
-        var sluTags: List<String>? = null,
+        val sluTags: List<String>? = null,
         @SerialName("dynamic_slots")
-        var dynamicSlots: List<String>? = null,
+        val dynamicSlots: List<String>? = null,
         @SerialName("local_time")
         @Serializable(LocalDateTimeSerializer::class)
-        var localTime: LocalDateTime? = null,
+        val localTime: LocalDateTime? = null,
         @SerialName("chat_req_cnt")
-        var chatReqCnt: Boolean? = null,
+        val chatReqCnt: Boolean? = null,
         @SerialName("chat_default_bot_profile")
-        var chatDefaultBotProfile: Boolean? = null,
+        val chatDefaultBotProfile: Boolean? = null,
         @SerialName("chat_service_strict")
-        var chatServiceStrict: Boolean? = null,
+        val chatServiceStrict: Boolean? = null,
         @SerialName("chat_custom_bot_profile")
-        var chatCustomBotProfile: Boolean? = null,
+        val chatCustomBotProfile: Boolean? = null,
     )
 }
