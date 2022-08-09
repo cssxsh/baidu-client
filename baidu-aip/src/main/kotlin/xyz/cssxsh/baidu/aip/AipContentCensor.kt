@@ -18,6 +18,11 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
         internal const val VOICE_CENSOR = "https://aip.baidubce.com/rest/2.0/solution/v1/voice_censor/v2/user_defined"
     }
 
+    /**
+     * [内容审核平台-图像](https://ai.baidu.com/ai-doc/ANTIPORN/jk42xep4e)
+     * @param url 图像URL地址
+     * @param gif GIF动态图片
+     */
     public suspend fun image(url: String, gif: Boolean = false): CensorResult.Image {
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
@@ -30,6 +35,11 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
         }
     }
 
+    /**
+     * [内容审核平台-图像](https://ai.baidu.com/ai-doc/ANTIPORN/jk42xep4e)
+     * @param bytes 图像文件数据
+     * @param gif GIF动态图片
+     */
     public suspend fun image(bytes: ByteArray, gif: Boolean = false): CensorResult.Image {
         val base64 = bytes.encodeBase64()
         return client.useHttpClient { http ->
@@ -43,6 +53,10 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
         }
     }
 
+    /**
+     * [内容审核平台-文本](https://ai.baidu.com/ai-doc/ANTIPORN/Rk3h6xb3i)
+     * @param plain 待审核文本字符串
+     */
     public suspend fun text(plain: String): CensorResult.Text {
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
@@ -54,11 +68,23 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
         }
     }
 
-    public suspend fun video(name: String, url: String): CensorResult.Video {
-        return video(name, listOf(url), null)
+    /**
+     * [内容审核平台-短视频](https://ai.baidu.com/ai-doc/ANTIPORN/ak8iav4m6)
+     * @param name 视频名称
+     * @param url 视频主URL地址
+     * @param id 视频在用户平台的唯一ID
+     */
+    public suspend fun video(name: String, url: String, id: String): CensorResult.Video {
+        return video(name, listOf(url), VideoExtension(id = id))
     }
 
-    public suspend fun video(name: String, urls: List<String>, extension: VideoExtension? = null): CensorResult.Video {
+    /**
+     * [内容审核平台-短视频](https://ai.baidu.com/ai-doc/ANTIPORN/ak8iav4m6)
+     * @param name 视频名称
+     * @param urls 视频主URL地址及备用URL地址
+     * @param extension 视频信息
+     */
+    public suspend fun video(name: String, urls: List<String>, extension: VideoExtension): CensorResult.Video {
         check(urls.isNotEmpty()) { "Video urls is not empty." }
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
@@ -70,8 +96,8 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
                         append("videoUrl${index + 1}", item)
                     }
                 }
-                append("extId", extension?.id ?: urls.first())
-                append("extInfo", extension?.info.toString())
+                append("extId", extension.id)
+                append("extInfo", extension.info.toString())
             }) {
                 url(VIDEO_CENSOR)
                 parameter("access_token", client.accessToken())
@@ -79,13 +105,22 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
         }
     }
 
-    public suspend fun voice(url: String, format: String, rawText: Boolean, split: Boolean): CensorResult.Voice {
+    /**
+     * [内容审核平台-短音频同步审核](https://ai.baidu.com/ai-doc/ANTIPORN/hk928u7bz)
+     * @param url 音频文件的url地址
+     * @param format 音频文件的格式，pcm、wav、amr、m4a，推荐pcm格式
+     * @param extension 音频信息
+     */
+    public suspend fun voice(url: String, format: String, extension: VoiceExtension): CensorResult.Voice {
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
                 append("url", url)
                 append("fmt", format)
-                append("rawText", "$rawText")
-                append("split", "$split")
+                append("rate", extension.rate.toString())
+                append("rawText", extension.rawText.toString())
+                append("split", extension.split.toString())
+                if (extension.account != null) append("account", extension.account)
+                if (extension.audioId != null) append("audioId", extension.audioId)
             }) {
                 url(VOICE_CENSOR)
                 parameter("access_token", client.accessToken())
@@ -93,14 +128,23 @@ public open class AipContentCensor(override val client: AipClient) : AipApplicat
         }
     }
 
-    public suspend fun voice(bytes: ByteArray, format: String, rawText: Boolean, split: Boolean): CensorResult.Voice {
+    /**
+     * [内容审核平台-短音频同步审核](https://ai.baidu.com/ai-doc/ANTIPORN/hk928u7bz)
+     * @param bytes 音频文件数据
+     * @param format 音频文件的格式，pcm、wav、amr、m4a，推荐pcm格式
+     * @param extension 音频信息
+     */
+    public suspend fun voice(bytes: ByteArray, format: String, extension: VoiceExtension): CensorResult.Voice {
         val base64 = bytes.encodeBase64()
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
                 append("base64", base64)
                 append("fmt", format)
-                append("rawText", "$rawText")
-                append("split", "$split")
+                append("rate", extension.rate.toString())
+                append("rawText", extension.rawText.toString())
+                append("split", extension.split.toString())
+                if (extension.account != null) append("account", extension.account)
+                if (extension.audioId != null) append("audioId", extension.audioId)
             }) {
                 url(VOICE_CENSOR)
                 parameter("access_token", client.accessToken())
