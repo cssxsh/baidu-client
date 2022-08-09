@@ -51,10 +51,10 @@ jobs:
       - name: Test AipTranslator
         run: ./gradlew baidu-aip:test --tests "xyz.cssxsh.baidu.aip.AipTranslatorTest" --scan --info
         env:
-          BAIDU_MT_APP_ID: ${{ secrets.BAIDU_TTS_APP_ID }}
-          BAIDU_MT_APP_KEY: ${{ secrets.BAIDU_TTS_APP_KEY }}
-          BAIDU_MT_APP_NAME: ${{ secrets.BAIDU_TTS_APP_NAME }}
-          BAIDU_MT_SECRET_KEY: ${{ secrets.BAIDU_TTS_SECRET_KEY }}
+          BAIDU_MT_APP_ID: ${{ secrets.BAIDU_MT_APP_ID }}
+          BAIDU_MT_APP_KEY: ${{ secrets.BAIDU_MT_APP_KEY }}
+          BAIDU_MT_APP_NAME: ${{ secrets.BAIDU_MT_APP_NAME }}
+          BAIDU_MT_SECRET_KEY: ${{ secrets.BAIDU_MT_SECRET_KEY }}
 
       - name: Test BaiduUnitClient
         run: ./gradlew baidu-unit:test --tests "xyz.cssxsh.baidu.unit.BaiduUnitClientTest" --scan --info
