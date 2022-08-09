@@ -17,6 +17,7 @@ import kotlinx.serialization.*
 public data class SpeechCreateRequest(
     @SerialName("format")
     val format: String = "mp3-16k",
+    @Required
     @SerialName("lang")
     val lang: String = "zh",
     @SerialName("pitch")

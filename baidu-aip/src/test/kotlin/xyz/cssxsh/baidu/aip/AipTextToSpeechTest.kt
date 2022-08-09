@@ -57,13 +57,9 @@ internal class AipTextToSpeechTest : BaiduApiClientTest() {
     @Test
     fun long(): Unit = runBlocking {
         val example = demo[1].first { it.person == SpeechPerson.Boutique.EmotionalMale }
-        try {
-            val paragraph = example.defaultText.split("，", "。").toTypedArray()
-            tts.handle(paragraph = paragraph) {
-                person = example.person
-            }
-        } catch (exception: SpeechTaskException) {
-            println("${example.person} - ${example.name} 不支持， ${exception.message}")
+        val paragraph = example.defaultText.split("，", "。").toTypedArray()
+        tts.handle(paragraph = paragraph) {
+            person = example.person
         }
     }
 
