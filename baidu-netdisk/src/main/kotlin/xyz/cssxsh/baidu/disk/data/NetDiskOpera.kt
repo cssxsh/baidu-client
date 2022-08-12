@@ -2,22 +2,37 @@ package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
 
+/**
+ * 文件操作结果
+ * @param taskId 任务ID
+ * @param info 操作结果
+ */
 @Serializable
 public data class NetDiskOpera(
-    @SerialName("errno")
-    val errno: Int,
     @SerialName("info")
     val info: List<Item>,
-    @SerialName("request_id")
-    val requestId: RequestIdType,
     @SerialName("taskid")
-    val taskId: Long? = null
-) {
+    override val taskId: Long = 0,
+    @SerialName("errmsg")
+    override val errorMessage: String = "",
+    @SerialName("errno")
+    override val errorNo: Int = 0,
+    @SerialName("request_id")
+    override val requestId: String
+) : NetDiskErrorInfo, NetDiskTaskInfo {
+
+    /**
+     * @param path 文件路径
+     */
     @Serializable
     public data class Item(
-        @SerialName("errno")
-        val errno: Int,
         @SerialName("path")
-        val path: String
-    )
+        val path: String,
+        @SerialName("errmsg")
+        override val errorMessage: String = "",
+        @SerialName("errno")
+        override val errorNo: Int = 0,
+        @SerialName("request_id")
+        override val requestId: String = ""
+    ) : NetDiskErrorInfo
 }

@@ -1,15 +1,13 @@
 package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
-import xyz.cssxsh.baidu.api.*
 
 @Serializable
-public data class NetDiskCategoryList(
-    @SerialName("info")
-    val info: List<NetDiskFile> = emptyList(),
-    @SerialName("has_more")
-    @Serializable(with = NumberToBooleanSerializer::class)
-    val hasMore: Boolean = false,
+public data class NetDiskQuery(
+    @SerialName("list")
+    val list: List<NetDiskFileMeta>,
+    @SerialName("names")
+    val names: Map<String, String>,
     @SerialName("errmsg")
     override val errorMessage: String = "",
     @SerialName("errno")
