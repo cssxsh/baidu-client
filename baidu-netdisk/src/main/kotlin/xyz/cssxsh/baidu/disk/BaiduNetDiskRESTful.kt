@@ -20,6 +20,8 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
         internal const val FILE: String = "https://pan.baidu.com/rest/2.0/xpan/file"
         internal const val MULTIMEDIA: String = "https://pan.baidu.com/rest/2.0/xpan/multimedia"
         internal const val SHARE: String = "https://pan.baidu.com/rest/2.0/xpan/share"
+        internal const val CLOUD_DOWNLOAD = "https://pan.baidu.com/rest/2.0/services/cloud_dl"
+        internal const val DEVICE = "https://pan.baidu.com/rest/2.0/xpan/device"
     }
 
     /**
@@ -103,7 +105,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 parameter("path", client.appDataFolder(path = option.path))
                 parameter("start", start)
                 parameter("limit", 1_000)
-                parameter("order", option.order.value)
+                parameter("order", option.order)
                 parameter("desc", option.desc.toInt())
                 parameter("recursion", option.recursion.toInt())
                 parameter("ctime", option.created?.toEpochSecond())
@@ -117,19 +119,19 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
 
     /**
      * [获取分类列表文件](https://pan.baidu.com/union/doc/Sksg0sb40)
-     * @param categories 文件类型
+     * @param types 文件类型
      * @param start 起始 index, 从 0 开始
      * @param option 排序和时间过滤
      * @see NetDiskFileList.cursor
      */
-    public suspend fun category(vararg categories: CategoryType, start: Int, option: NetDiskOption): NetDiskFileList {
-        check(categories.isNotEmpty()) { "categories is empty" }
+    public suspend fun category(vararg types: CategoryType, start: Int, option: NetDiskOption): NetDiskFileList {
+        check(types.isNotEmpty()) { "categories is empty" }
         return client.useHttpClient { http ->
             http.get {
                 url(MULTIMEDIA)
                 parameter("method", "categorylist")
                 parameter("access_token", client.accessToken())
-                parameter("category", categories.joinToString(",") { it.ordinal.toString() })
+                parameter("category", types.joinToString(",") { it.ordinal.toString() })
                 parameter("parent_path", client.appDataFolder(path = option.path))
                 parameter("start", start)
                 parameter("limit", 1_000)
@@ -182,7 +184,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 parameter("parent_path", client.appDataFolder(path = option.path))
                 parameter("page", page)
                 parameter("num", 1_000)
-                parameter("order", option.order.value)
+                parameter("order", option.order)
                 parameter("desc", option.desc.toInt())
                 parameter("recursion", option.recursion.toInt())
                 parameter("web", "1")
@@ -205,7 +207,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 parameter("parent_path", client.appDataFolder(path = option.path))
                 parameter("page", page)
                 parameter("num", 1_000)
-                parameter("order", option.order.value)
+                parameter("order", option.order)
                 parameter("desc", option.desc.toInt())
                 parameter("recursion", option.recursion.toInt())
                 parameter("web", "1")
@@ -228,7 +230,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 parameter("parent_path", client.appDataFolder(path = option.path))
                 parameter("page", page)
                 parameter("num", 1_000)
-                parameter("order", option.order.value)
+                parameter("order", option.order)
                 parameter("desc", option.desc.toInt())
                 parameter("recursion", option.recursion.toInt())
                 parameter("web", "1")
@@ -251,7 +253,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 parameter("parent_path", client.appDataFolder(path = option.path))
                 parameter("page", page)
                 parameter("num", 1_000)
-                parameter("order", option.order.value)
+                parameter("order", option.order)
                 parameter("desc", option.desc.toInt())
                 parameter("recursion", option.recursion.toInt())
                 parameter("web", "1")
@@ -274,7 +276,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 parameter("parent_path", client.appDataFolder(path = option.path))
                 parameter("page", page)
                 parameter("num", 1_000)
-                parameter("order", option.order.value)
+                parameter("order", option.order)
                 parameter("desc", option.desc.toInt())
                 parameter("recursion", option.recursion.toInt())
                 parameter("web", "1")
@@ -491,7 +493,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
 
     /**
      * [分享提取码验证](https://pan.baidu.com/union/doc/Yksmyl2v0)
-     * @param surl 创建附件接口返回的 short url 最后一个斜杠之后的字符串, 或者 surl 参数
+     * @param surl surl 参数，或者 short url 的 /s/1 之后的字符串
      * @param password 访问密码
      */
     public suspend fun verify(surl: String, password: String): NetDiskShareInfo {
@@ -502,7 +504,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 appendParameter("redirect", "0")
             }) {
                 url(SHARE)
-                header(HttpHeaders.Referrer, "pan.baidu.com")
+                header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
                 parameter("method", "verify")
                 parameter("access_token", client.accessToken())
                 parameter("surl", surl)
@@ -512,7 +514,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
 
     /**
      * [获取分享文件信息](https://pan.baidu.com/union/doc/3ksmyma1y)
-     * @param surl 创建附件接口返回的 short url 最后一个斜杠之后的字符串, 或者 surl 参数
+     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串 （不包含开头的1）
      * @param key 在 [verify] 中得到的 key
      * @param fid 文件夹 id，为 0 时将显示 root 目录
      * @param page 页码 从 1 开始，一页数目 1000
@@ -521,13 +523,13 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
         return client.useHttpClient { http ->
             http.get {
                 url(SHARE)
-                header(HttpHeaders.Referrer, "pan.baidu.com")
+                header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
                 parameter("method", "list")
                 parameter("access_token", client.accessToken())
                 parameter("shorturl", surl)
                 parameter("sekey", key)
                 parameter("page", page)
-                parameter("num", 1000)
+                parameter("num", 1_000)
                 parameter("web", "1")
                 parameter("root", "1")
                 parameter("fid", fid)
@@ -550,13 +552,159 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 appendParameter("ondup", ondup)
             }) {
                 url(SHARE)
-                header(HttpHeaders.Referrer, "pan.baidu.com")
+                header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
                 parameter("method", "transfer")
                 parameter("access_token", client.accessToken())
                 parameter("shareid", info.shareId)
                 parameter("from", info.from)
                 parameter("sekey", info.key)
                 parameter("web", "1")
+            }.body()
+        }
+    }
+
+    /**
+     * 离线下载列表
+     * @param start 转存信息
+     */
+    public suspend fun clouds(start: Long, token: String): JsonObject {
+        return client.useHttpClient { http ->
+            http.get {
+                url(CLOUD_DOWNLOAD)
+                header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
+                parameter("method", "list_task")
+                parameter("app_id", appId)
+                parameter("access_token", client.accessToken())
+                parameter("start", start)
+                parameter("limit", 1_000)
+                parameter("clienttype", "0")
+                parameter("web", "1")
+                parameter("need_task_info", "1")
+                parameter("status", "255")
+                parameter("bdstoken", token)
+            }.body()
+        }
+    }
+
+    /**
+     * 离线下载列表
+     * @param tasks 任务ID
+     */
+    public suspend fun cloud(vararg tasks: Long, token: String): JsonObject {
+        return client.useHttpClient { http ->
+            http.get {
+                url(CLOUD_DOWNLOAD)
+                header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
+                parameter("method", "query_task")
+                parameter("app_id", appId)
+                parameter("access_token", client.accessToken())
+                parameter("task_ids", tasks.joinToString(","))
+                parameter("op_type", "1")
+                parameter("web", "1")
+                parameter("bdstoken", token)
+            }.body()
+        }
+    }
+
+    /**
+     * [设备注册](https://pan.baidu.com/union/doc/wksg0saat)
+     * @param type 设备类型
+     * @param addr 设备地址
+     */
+    public suspend fun register(type: Long, addr: String): JsonObject {
+        return client.useHttpClient { http ->
+            http.get {
+                url(DEVICE)
+                parameter("method", "register")
+                parameter("access_token", client.accessToken())
+                parameter("device_type", type)
+                parameter("device_addr", addr)
+            }.body()
+        }
+    }
+
+    /**
+     * [设备绑定](https://pan.baidu.com/union/doc/Sksg0sagk)
+     * @param id 设备ID
+     * @param name 	设备名称
+     */
+    public suspend fun bind(id: String, name: String): NetDiskError {
+        return client.useHttpClient { http ->
+            http.get {
+                url(DEVICE)
+                parameter("method", "bind")
+                parameter("access_token", client.accessToken())
+                parameter("device_id", id)
+                parameter("device_name", name)
+            }.body()
+        }
+    }
+
+    /**
+     * [设备解绑](https://pan.baidu.com/union/doc/gksg0sakk)
+     * @param id 设备ID
+     */
+    public suspend fun unbind(id: String): NetDiskError {
+        return client.useHttpClient { http ->
+            http.get {
+                url(DEVICE)
+                parameter("method", "unbind")
+                parameter("access_token", client.accessToken())
+                parameter("device_id", id)
+            }.body()
+        }
+    }
+
+    /**
+     * [检查设备绑定关系](https://pan.baidu.com/union/doc/7ksg0sa7x)
+     * @param id 设备ID
+     */
+    public suspend fun check(id: String): NetDiskDeviceCheck {
+        return client.useHttpClient { http ->
+            http.get {
+                url(DEVICE)
+                parameter("method", "checkbind")
+                parameter("access_token", client.accessToken())
+                parameter("device_id", id)
+            }.body()
+        }
+    }
+
+    /**
+     * [检查设备绑定关系](https://pan.baidu.com/union/doc/7ksg0sa7x)
+     * @param categories 设备分类
+     * @param cursor diff起点
+     */
+    public suspend fun diff(vararg categories: Int, cursor: String): NetDiskDeviceDiffList {
+        return client.useHttpClient { http ->
+            http.submitForm(Parameters.build {
+                appendParameter("param", buildJsonObject {
+                    put("cursor", cursor)
+                    putJsonArray("category_list") {
+                        categories.forEach { category ->
+                            add(category)
+                        }
+                    }
+                })
+            }) {
+                url(DEVICE)
+                parameter("method", "diff")
+                parameter("access_token", client.accessToken())
+            }.body()
+        }
+    }
+
+    /**
+     * [设备列表](https://pan.baidu.com/union/doc/Pksg0sa4w)
+     * @param categories 设备分类
+     */
+    public suspend fun devices(vararg categories: Int): NetDiskDeviceList {
+        return client.useHttpClient { http ->
+            http.get {
+                url(DEVICE)
+                parameter("method", "list")
+                parameter("access_token", client.accessToken())
+                parameter("category", categories.joinToString(","))
             }.body()
         }
     }
