@@ -83,8 +83,9 @@ jobs:
         run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.netdisk.BaiduNetDiskRESTfulTest" --scan --info
         env:
           BAIDU_NETDISK_APP_ID: ${{ secrets.BAIDU_NETDISK_APP_ID }}
-          BAIDU_NETDISK_APP_KEY: ${{ secrets.BAIDU_NETDISK_APP_KEY }}
           BAIDU_NETDISK_APP_NAME: ${{ secrets.BAIDU_NETDISK_APP_NAME }}
+          BAIDU_NETDISK_APP_KEY: ${{ secrets.BAIDU_NETDISK_APP_KEY }}
+          BAIDU_NETDISK_SECRET_KEY: ${{ secrets.BAIDU_NETDISK_SECRET_KEY }}
           BAIDU_NETDISK_SHARE_SECRET: ${{ secrets.BAIDU_NETDISK_SHARE_SECRET }}
           BAIDU_NETDISK_SHARE_THIRD_ID: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
 
@@ -92,8 +93,9 @@ jobs:
         run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.netdisk.BaiduNetDiskWebTest" --scan --info
         env:
           BAIDU_NETDISK_APP_ID: ${{ secrets.BAIDU_NETDISK_APP_ID }}
-          BAIDU_NETDISK_APP_KEY: ${{ secrets.BAIDU_NETDISK_APP_KEY }}
           BAIDU_NETDISK_APP_NAME: ${{ secrets.BAIDU_NETDISK_APP_NAME }}
+          BAIDU_NETDISK_APP_KEY: ${{ secrets.BAIDU_NETDISK_APP_KEY }}
+          BAIDU_NETDISK_SECRET_KEY: ${{ secrets.BAIDU_NETDISK_SECRET_KEY }}
           BAIDU_NETDISK_SHARE_SECRET: ${{ secrets.BAIDU_NETDISK_SHARE_SECRET }}
           BAIDU_NETDISK_SHARE_THIRD_ID: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
 
@@ -101,7 +103,8 @@ jobs:
         run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.netdisk.BaiduPersonalCloudStorageTest" --scan --info
         env:
           BAIDU_NETDISK_APP_ID: ${{ secrets.BAIDU_NETDISK_APP_ID }}
-          BAIDU_NETDISK_APP_KEY: ${{ secrets.BAIDU_NETDISK_APP_KEY }}
           BAIDU_NETDISK_APP_NAME: ${{ secrets.BAIDU_NETDISK_APP_NAME }}
+          BAIDU_NETDISK_APP_KEY: ${{ secrets.BAIDU_NETDISK_APP_KEY }}
+          BAIDU_NETDISK_SECRET_KEY: ${{ secrets.BAIDU_NETDISK_SECRET_KEY }}
           BAIDU_NETDISK_SHARE_SECRET: ${{ secrets.BAIDU_NETDISK_SHARE_SECRET }}
           BAIDU_NETDISK_SHARE_THIRD_ID: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
