@@ -88,6 +88,8 @@ jobs:
           BAIDU_NETDISK_SECRET_KEY: ${{ secrets.BAIDU_NETDISK_SECRET_KEY }}
           BAIDU_NETDISK_SHARE_SECRET: ${{ secrets.BAIDU_NETDISK_SHARE_SECRET }}
           BAIDU_NETDISK_SHARE_THIRD_ID: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
+          BAIDU_NETDISK_ACCESS_TOKEN: ${{ secrets.BAIDU_NETDISK_ACCESS_TOKEN }}
+          BAIDU_NETDISK_REFRESH_TOKEN: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
 
       - name: Test BaiduNetDiskWebTest
         run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.disk.BaiduNetDiskWebTest" --scan --info
@@ -98,6 +100,8 @@ jobs:
           BAIDU_NETDISK_SECRET_KEY: ${{ secrets.BAIDU_NETDISK_SECRET_KEY }}
           BAIDU_NETDISK_SHARE_SECRET: ${{ secrets.BAIDU_NETDISK_SHARE_SECRET }}
           BAIDU_NETDISK_SHARE_THIRD_ID: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
+          BAIDU_NETDISK_ACCESS_TOKEN: ${{ secrets.BAIDU_NETDISK_ACCESS_TOKEN }}
+          BAIDU_NETDISK_REFRESH_TOKEN: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
 
       - name: Test BaiduPersonalCloudStorageTest
         run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.disk.BaiduPersonalCloudStorageTest" --scan --info
@@ -108,3 +112,5 @@ jobs:
           BAIDU_NETDISK_SECRET_KEY: ${{ secrets.BAIDU_NETDISK_SECRET_KEY }}
           BAIDU_NETDISK_SHARE_SECRET: ${{ secrets.BAIDU_NETDISK_SHARE_SECRET }}
           BAIDU_NETDISK_SHARE_THIRD_ID: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
+          BAIDU_NETDISK_ACCESS_TOKEN: ${{ secrets.BAIDU_NETDISK_ACCESS_TOKEN }}
+          BAIDU_NETDISK_REFRESH_TOKEN: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
