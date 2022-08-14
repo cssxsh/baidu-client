@@ -80,7 +80,7 @@ jobs:
         run: ./gradlew assemble --scan
 
       - name: Test BaiduNetDiskRESTfulTest
-        run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.netdisk.BaiduNetDiskRESTfulTest" --scan --info
+        run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.disk.BaiduNetDiskRESTfulTest" --scan --info
         env:
           BAIDU_NETDISK_APP_ID: ${{ secrets.BAIDU_NETDISK_APP_ID }}
           BAIDU_NETDISK_APP_NAME: ${{ secrets.BAIDU_NETDISK_APP_NAME }}
@@ -90,7 +90,7 @@ jobs:
           BAIDU_NETDISK_SHARE_THIRD_ID: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
 
       - name: Test BaiduNetDiskWebTest
-        run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.netdisk.BaiduNetDiskWebTest" --scan --info
+        run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.disk.BaiduNetDiskWebTest" --scan --info
         env:
           BAIDU_NETDISK_APP_ID: ${{ secrets.BAIDU_NETDISK_APP_ID }}
           BAIDU_NETDISK_APP_NAME: ${{ secrets.BAIDU_NETDISK_APP_NAME }}
@@ -100,7 +100,7 @@ jobs:
           BAIDU_NETDISK_SHARE_THIRD_ID: ${{ secrets.BAIDU_NETDISK_SHARE_THIRD_ID }}
 
       - name: Test BaiduPersonalCloudStorageTest
-        run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.netdisk.BaiduPersonalCloudStorageTest" --scan --info
+        run: ./gradlew baidu-netdisk:test --tests "xyz.cssxsh.baidu.disk.BaiduPersonalCloudStorageTest" --scan --info
         env:
           BAIDU_NETDISK_APP_ID: ${{ secrets.BAIDU_NETDISK_APP_ID }}
           BAIDU_NETDISK_APP_NAME: ${{ secrets.BAIDU_NETDISK_APP_NAME }}
