@@ -4,8 +4,11 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 import java.time.*
 
+/**
+ * @param deleted 删除时间
+ */
 @Serializable
-public data class NetDiskFile(
+public data class NetDiskRecycleFile(
     @SerialName("category")
     override val category: CategoryType = CategoryType.NONE,
     @SerialName("fs_id")
@@ -34,22 +37,15 @@ public data class NetDiskFile(
     @SerialName("server_mtime")
     @Serializable(TimestampSerializer::class)
     override val modified: OffsetDateTime = OffsetDateTime.MIN,
-    @SerialName("server_atime")
+    @SerialName("leftTime")
     @Serializable(TimestampSerializer::class)
-    val accessed: OffsetDateTime = OffsetDateTime.MIN,
+    val deleted: OffsetDateTime = OffsetDateTime.MIN,
     @SerialName("local_ctime")
     @Serializable(TimestampSerializer::class)
     val localCreated: OffsetDateTime = OffsetDateTime.MIN,
     @Serializable(TimestampSerializer::class)
     @SerialName("local_mtime")
     val localModified: OffsetDateTime = OffsetDateTime.MIN,
-    @SerialName("thumbs")
-    val thumbs: Map<String, String>? = null,
-    @SerialName("dir_empty")
-    @Serializable(NumberToBooleanSerializer::class)
-    val empty: Boolean = true,
-    @SerialName("lodocpreview")
-    val loDocPreview: String? = null,
-    @SerialName("docpreview")
-    val docpreview: String? = null,
+    @SerialName("delete_type")
+    val deleteType: Int
 ) : NetDiskFileInfo

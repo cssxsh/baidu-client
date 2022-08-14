@@ -13,7 +13,7 @@ public data class NetDiskFileList(
     @SerialName("cursor")
     val cursor: Int = 0,
     @SerialName("has_more")
-    @Serializable(with = NumberToBooleanSerializer::class)
+    @Serializable(NumberToBooleanSerializer::class)
     val hasMore: Boolean = false,
     @SerialName("list")
     val list: List<NetDiskFile> = emptyList(),

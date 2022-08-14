@@ -1,7 +1,6 @@
 package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
-import kotlinx.serialization.json.*
 import xyz.cssxsh.baidu.api.*
 
 public enum class OrderType(public val value: String) {
@@ -20,10 +19,10 @@ public enum class RenameType {
 }
 
 @Serializable(with = VipType.Serializer::class)
-public enum class VipType(public val updateLimit: Long, public val superLimit: Int) {
-    ORDINARY(4L shl 30, 4 shl 20),
-    MEMBER(10L shl 30, 16 shl 20),
-    SUPER_MEMBER(20L shl 30, 32 shl 20);
+public enum class VipType(public val updateLimit: Long, public val superLimit: Int, public val transferLimit: Int) {
+    ORDINARY(4L shl 30, 4 shl 20, 500),
+    MEMBER(10L shl 30, 16 shl 20, 3000),
+    SUPER_MEMBER(20L shl 30, 32 shl 20, 5000);
 
     public companion object Serializer : KSerializer<VipType> by OrdinalSerializer()
 }
@@ -37,78 +36,51 @@ public enum class AsyncType {
     public companion object Serializer : KSerializer<AsyncType> by OrdinalSerializer()
 }
 
-/**
- * [document](https://pan.baidu.com/union/document/basic#%E8%8E%B7%E5%8F%96%E6%96%87%E4%BB%B6%E5%88%97%E8%A1%A8)
- */
 @Serializable(with = CategoryType.Serializer::class)
 public enum class CategoryType {
     NONE,
     VIDEO,
     AUDIO,
-    PICTURES,
-    DOCUMENTS,
-    APPLICATIONS,
+    IMAGE,
+    DOCUMENT,
+    APPLICATION,
     OTHERS,
-    SEEDS;
+    BITTORRENT;
 
     public companion object Serializer : KSerializer<CategoryType> by OrdinalSerializer()
 }
 
-@Serializable(with = CreateReturnType.Serializer::class)
-public enum class CreateReturnType {
-    TEMP_,
+@Serializable(with = PrepareReturnType.Serializer::class)
+public enum class PrepareReturnType {
+    NONE,
     NOT_EXIST,
     EXIST;
 
-    public companion object Serializer : KSerializer<CreateReturnType> by OrdinalSerializer()
+    public companion object Serializer : KSerializer<PrepareReturnType> by OrdinalSerializer()
 }
 
-@Serializable(with = FileOnDupType.Serializer::class)
-public enum class FileOnDupType {
-    FAIL,
-    NEWCOPY,
-    OVERWRITE,
-    SKIP;
+/**
+ * 文件冲突策略
+ * @property FAIL 直接返回失败
+ * @property NEW_COPY 重命名文件
+ * @property OVERWRITE 覆盖
+ * @property SKIP 跳过
+ */
+public enum class OnDupType(public val value: String) {
+    FAIL(value = "fail"),
+    NEW_COPY(value = "newcopy"),
+    OVERWRITE(value = "overwrite"),
+    SKIP(value = "skip");
 
-    override fun toString(): String = name.lowercase()
-
-    public companion object Serializer : KSerializer<FileOnDupType> by LowerCaseSerializer()
+    override fun toString(): String = value
 }
 
-@Serializable
-public sealed class FileOpera(public val name: String) {
+@Serializable(with = TaskStatus.Serializer::class)
+public enum class TaskStatus {
+    PENDING,
+    RUNNING,
+    SUCCESS,
+    FAILURE;
 
-    @Serializable
-    public data class Item(
-        @SerialName("path")
-        val path: String,
-        @SerialName("dest")
-        val dest: String,
-        @SerialName("newname")
-        val new: String = "",
-        @SerialName("ondup")
-        val type: FileOnDupType = FileOnDupType.SKIP
-    )
-
-    public data class Copy(
-        @SerialName("list")
-        val list: List<Item>
-    ) : FileOpera(name = "copy")
-
-    public data class Move(
-        @SerialName("list")
-        val list: List<Item>
-    ) : FileOpera(name = "mover")
-
-    public data class Rename(
-        @SerialName("list")
-        val list: List<Item>
-    ) : FileOpera(name = "rename")
-
-    public data class Delete(
-        @SerialName("list")
-        val list: List<String>
-    ) : FileOpera(name = "delete")
+    public companion object Serializer : KSerializer<TaskStatus> by LowerCaseSerializer()
 }
-
-public typealias RequestIdType = JsonPrimitive

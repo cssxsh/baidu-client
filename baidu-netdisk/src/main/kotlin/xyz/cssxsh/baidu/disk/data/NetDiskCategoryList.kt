@@ -8,7 +8,7 @@ public data class NetDiskCategoryList(
     @SerialName("info")
     val info: List<NetDiskFile> = emptyList(),
     @SerialName("has_more")
-    @Serializable(with = NumberToBooleanSerializer::class)
+    @Serializable(NumberToBooleanSerializer::class)
     val hasMore: Boolean = false,
     @SerialName("errmsg")
     override val errorMessage: String = "",

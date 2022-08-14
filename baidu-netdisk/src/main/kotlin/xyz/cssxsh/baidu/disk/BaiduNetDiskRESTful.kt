@@ -39,25 +39,24 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
 
     /**
      * [获取文件列表](https://pan.baidu.com/union/doc/nksg0sat9)
-     * @param dir 起始目录, `/` 网盘根目录, 为空时是 APP 数据目录
-     * @param order 排序字段
-     * @param desc 是否为降序
-     * @param page 页码 从 1 开始，一页数目 1000
-     * @see NetDiskClient.appDataFolder
+     * @param start 起始 index, 从 0 开始
+     * @param option 排序方式和起始路径
+     * @see BaiduNetDiskConfig.appDataFolder
      */
-    public suspend fun list(dir: String, order: OrderType, desc: Boolean, page: Int): NetDiskFileList {
+    public suspend fun list(start: Int, option: NetDiskOption): NetDiskFileList {
         return client.useHttpClient { http ->
             http.get {
                 url(FILE)
                 parameter("method", "list")
                 parameter("access_token", client.accessToken())
-                parameter("dir", client.appDataFolder(path = dir))
-                parameter("order", order.value)
-                parameter("desc", desc.toInt())
-                parameter("start", (page - 1) * 1_000)
-                parameter("limit", 1_000)
-                parameter("web", "1")
                 parameter("folder", "0")
+                parameter("dir", appDataFolder(path = option.path))
+                parameter("start", start)
+                parameter("limit", 1_000)
+                parameter("order", option.order)
+                parameter("desc", option.desc.toInt())
+                parameter("recursion", option.recursion.toInt())
+                parameter("web", "1")
                 parameter("showempty", "1")
             }.body()
         }
@@ -65,25 +64,24 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
 
     /**
      * [获取文件列表-文件夹](https://pan.baidu.com/union/doc/nksg0sat9)
-     * @param dir 起始目录, `/` 网盘根目录, 为空时是 APP 数据目录
-     * @param order 排序字段
-     * @param desc 是否为降序
-     * @param page 页码 从 1 开始，一页数目 1000
-     * @see NetDiskClient.appDataFolder
+     * @param start 起始 index, 从 0 开始
+     * @param option 排序方式和起始路径
+     * @see BaiduNetDiskConfig.appDataFolder
      */
-    public suspend fun folder(dir: String, order: OrderType, desc: Boolean, page: Int): NetDiskFileList {
+    public suspend fun folder(start: Int, option: NetDiskOption): NetDiskFileList {
         return client.useHttpClient { http ->
             http.get {
                 url(FILE)
                 parameter("method", "list")
                 parameter("access_token", client.accessToken())
-                parameter("dir", client.appDataFolder(path = dir))
-                parameter("order", order.value)
-                parameter("desc", desc.toInt())
-                parameter("start", (page - 1) * 1_000)
-                parameter("limit", 1_000)
-                parameter("web", "1")
                 parameter("folder", "1")
+                parameter("dir", appDataFolder(path = option.path))
+                parameter("start", start)
+                parameter("limit", 1_000)
+                parameter("order", option.order)
+                parameter("desc", option.desc.toInt())
+                parameter("recursion", option.recursion.toInt())
+                parameter("web", "1")
                 parameter("showempty", "1")
             }.body()
         }
@@ -93,7 +91,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
      * [递归获取文件列表](https://pan.baidu.com/union/doc/Zksg0sb73)
      * @param start 起始 index, 从 0 开始
      * @param option 排序方式和起始路径
-     * @see NetDiskClient.appDataFolder
+     * @see BaiduNetDiskConfig.appDataFolder
      * @see NetDiskFileList.cursor
      */
     public suspend fun all(start: Int, option: NetDiskOption): NetDiskFileList {
@@ -102,7 +100,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 url(MULTIMEDIA)
                 parameter("method", "listall")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = option.path))
+                parameter("path", appDataFolder(path = option.path))
                 parameter("start", start)
                 parameter("limit", 1_000)
                 parameter("order", option.order)
@@ -132,7 +130,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 parameter("method", "categorylist")
                 parameter("access_token", client.accessToken())
                 parameter("category", types.joinToString(",") { it.ordinal.toString() })
-                parameter("parent_path", client.appDataFolder(path = option.path))
+                parameter("parent_path", appDataFolder(path = option.path))
                 parameter("start", start)
                 parameter("limit", 1_000)
                 parameter("order", option.order)
@@ -173,7 +171,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
      * [获取视频列表](https://pan.baidu.com/union/doc/Sksg0saw0)
      * @param page 页码 从 1 开始，一页数目 1000
      * @param option 排序方式和起始路径
-     * @see NetDiskClient.appDataFolder
+     * @see BaiduNetDiskConfig.appDataFolder
      */
     public suspend fun video(page: Int, option: NetDiskOption): NetDiskCategoryList {
         return client.useHttpClient { http ->
@@ -181,7 +179,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 url(FILE)
                 parameter("method", "videolist")
                 parameter("access_token", client.accessToken())
-                parameter("parent_path", client.appDataFolder(path = option.path))
+                parameter("parent_path", appDataFolder(path = option.path))
                 parameter("page", page)
                 parameter("num", 1_000)
                 parameter("order", option.order)
@@ -196,7 +194,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
      * 获取音频列表
      * @param page 页码 从 1 开始，一页数目 1000
      * @param option 排序方式和起始路径
-     * @see NetDiskClient.appDataFolder
+     * @see BaiduNetDiskConfig.appDataFolder
      */
     public suspend fun audio(page: Int, option: NetDiskOption): NetDiskCategoryList {
         return client.useHttpClient { http ->
@@ -204,7 +202,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 url(FILE)
                 parameter("method", "audiolist")
                 parameter("access_token", client.accessToken())
-                parameter("parent_path", client.appDataFolder(path = option.path))
+                parameter("parent_path", appDataFolder(path = option.path))
                 parameter("page", page)
                 parameter("num", 1_000)
                 parameter("order", option.order)
@@ -219,7 +217,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
      * [获取图片列表](https://pan.baidu.com/union/doc/bksg0sayv)
      * @param page 页码 从 1 开始，一页数目 1000
      * @param option 排序方式和起始路径
-     * @see NetDiskClient.appDataFolder
+     * @see BaiduNetDiskConfig.appDataFolder
      */
     public suspend fun image(page: Int, option: NetDiskOption): NetDiskCategoryList {
         return client.useHttpClient { http ->
@@ -227,7 +225,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 url(FILE)
                 parameter("method", "imagelist")
                 parameter("access_token", client.accessToken())
-                parameter("parent_path", client.appDataFolder(path = option.path))
+                parameter("parent_path", appDataFolder(path = option.path))
                 parameter("page", page)
                 parameter("num", 1_000)
                 parameter("order", option.order)
@@ -242,7 +240,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
      * [获取文档列表](https://pan.baidu.com/union/doc/Eksg0saqp)
      * @param page 页码 从 1 开始，一页数目 1000
      * @param option 排序方式和起始路径
-     * @see NetDiskClient.appDataFolder
+     * @see BaiduNetDiskConfig.appDataFolder
      */
     public suspend fun document(page: Int, option: NetDiskOption): NetDiskCategoryList {
         return client.useHttpClient { http ->
@@ -250,7 +248,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 url(FILE)
                 parameter("method", "doclist")
                 parameter("access_token", client.accessToken())
-                parameter("parent_path", client.appDataFolder(path = option.path))
+                parameter("parent_path", appDataFolder(path = option.path))
                 parameter("page", page)
                 parameter("num", 1_000)
                 parameter("order", option.order)
@@ -265,7 +263,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
      * [获取bt列表](https://pan.baidu.com/union/doc/xksg0sb1d)
      * @param page 页码 从 1 开始，一页数目 1000
      * @param option 排序方式和起始路径
-     * @see NetDiskClient.appDataFolder
+     * @see BaiduNetDiskConfig.appDataFolder
      */
     public suspend fun bittorrent(page: Int, option: NetDiskOption): NetDiskCategoryList {
         return client.useHttpClient { http ->
@@ -273,7 +271,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 url(FILE)
                 parameter("method", "btlist")
                 parameter("access_token", client.accessToken())
-                parameter("parent_path", client.appDataFolder(path = option.path))
+                parameter("parent_path", appDataFolder(path = option.path))
                 parameter("page", page)
                 parameter("num", 1_000)
                 parameter("order", option.order)
@@ -290,7 +288,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
      * @param dir 起始目录, `/` 网盘根目录, 为空时是 APP 数据目录
      * @param recursion 是否递归
      * @param page 页码 从 1 开始，一页数目 1000
-     * @see NetDiskClient.appDataFolder
+     * @see BaiduNetDiskConfig.appDataFolder
      */
     public suspend fun search(key: String, dir: String, recursion: Boolean, page: Int): NetDiskFileList {
         return client.useHttpClient { http ->
@@ -299,7 +297,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 parameter("method", "search")
                 parameter("access_token", client.accessToken())
                 parameter("key", key)
-                parameter("dir", client.appDataFolder(path = dir))
+                parameter("dir", appDataFolder(path = dir))
                 parameter("recursion", recursion.toInt())
                 parameter("page", page)
                 parameter("num", 1_000)
@@ -311,7 +309,8 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     /**
      * [管理文件-复制](https://pan.baidu.com/union/doc/mksg0s9l4)
      * @param operations 文件操作
-     * @see NetDiskClient.appDataFolder
+     * @param ondup 文件冲突策略
+     * @see BaiduNetDiskConfig.appDataFolder
      */
     public suspend fun copy(vararg operations: OperaFileInfo, ondup: OnDupType): NetDiskOpera {
         return client.useHttpClient { http ->
@@ -319,16 +318,16 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 appendParameter("async", AsyncType.SYNC.ordinal)
                 appendParameter("filelist", BaiduJson.encodeToString(operations.map { operation ->
                     operation.copy(
-                        path = client.appDataFolder(path = operation.path),
-                        dest = client.appDataFolder(path = operation.dest)
+                        path = appDataFolder(path = operation.path),
+                        dest = appDataFolder(path = operation.dest)
                     )
                 }))
                 appendParameter("ondup", ondup)
             }) {
                 url(FILE)
                 parameter("method", "filemanager")
-                parameter("access_token", client.accessToken())
                 parameter("opera", "copy")
+                parameter("access_token", client.accessToken())
             }.body()
         }
     }
@@ -336,7 +335,8 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     /**
      * [管理文件-移动](https://pan.baidu.com/union/doc/mksg0s9l4)
      * @param operations 文件操作
-     * @see NetDiskClient.appDataFolder
+     * @param ondup 文件冲突策略
+     * @see BaiduNetDiskConfig.appDataFolder
      */
     public suspend fun move(vararg operations: OperaFileInfo, ondup: OnDupType): NetDiskOpera {
         return client.useHttpClient { http ->
@@ -344,16 +344,16 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 appendParameter("async", AsyncType.SYNC.ordinal)
                 appendParameter("filelist", BaiduJson.encodeToString(operations.map { operation ->
                     operation.copy(
-                        path = client.appDataFolder(path = operation.path),
-                        dest = client.appDataFolder(path = operation.dest)
+                        path = appDataFolder(path = operation.path),
+                        dest = appDataFolder(path = operation.dest)
                     )
                 }))
                 appendParameter("ondup", ondup)
             }) {
                 url(FILE)
                 parameter("method", "filemanager")
-                parameter("access_token", client.accessToken())
                 parameter("opera", "move")
+                parameter("access_token", client.accessToken())
             }.body()
         }
     }
@@ -361,7 +361,8 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     /**
      * [管理文件-重命名](https://pan.baidu.com/union/doc/mksg0s9l4)
      * @param operations 文件操作
-     * @see NetDiskClient.appDataFolder
+     * @param ondup 文件冲突策略
+     * @see BaiduNetDiskConfig.appDataFolder
      */
     public suspend fun rename(vararg operations: OperaFileInfo, ondup: OnDupType): NetDiskOpera {
         return client.useHttpClient { http ->
@@ -369,16 +370,16 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 appendParameter("async", AsyncType.SYNC.ordinal)
                 appendParameter("filelist", BaiduJson.encodeToString(operations.map { operation ->
                     operation.copy(
-                        path = client.appDataFolder(path = operation.path),
-                        dest = client.appDataFolder(path = operation.dest)
+                        path = appDataFolder(path = operation.path),
+                        dest = appDataFolder(path = operation.dest)
                     )
                 }))
                 appendParameter("ondup", ondup)
             }) {
                 url(FILE)
                 parameter("method", "filemanager")
-                parameter("access_token", client.accessToken())
                 parameter("opera", "rename")
+                parameter("access_token", client.accessToken())
             }.body()
         }
     }
@@ -386,21 +387,21 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     /**
      * [管理文件-删除](https://pan.baidu.com/union/doc/mksg0s9l4)
      * @param operations 文件操作
-     * @see NetDiskClient.appDataFolder
+     * @see BaiduNetDiskConfig.appDataFolder
      */
     public suspend fun delete(vararg operations: OperaFileInfo): NetDiskOpera {
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
                 appendParameter("async", AsyncType.SYNC.ordinal)
                 appendParameter("filelist", BaiduJson.encodeToString(operations.map { operation ->
-                    operation.copy(path = client.appDataFolder(path = operation.path))
+                    operation.copy(path = appDataFolder(path = operation.path))
                 }))
                 appendParameter("ondup", OnDupType.FAIL)
             }) {
                 url(FILE)
                 parameter("method", "filemanager")
-                parameter("access_token", client.accessToken())
                 parameter("opera", "delete")
+                parameter("access_token", client.accessToken())
             }.body()
         }
     }
@@ -417,7 +418,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     public suspend fun prepare(upload: RapidUploadInfo, blocks: List<String>, ondup: OnDupType): NetDiskPrepareInfo {
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
-                appendParameter("path", client.appDataFolder(path = upload.path))
+                appendParameter("path", appDataFolder(path = upload.path))
                 appendParameter("size", upload.length)
                 appendParameter("isdir", "0")
                 appendParameter("autoinit", "1")
@@ -446,7 +447,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     public suspend fun create(merge: MergeFileInfo, ondup: OnDupType): NetDiskCreateFile {
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
-                appendParameter("path", client.appDataFolder(path = merge.path))
+                appendParameter("path", appDataFolder(path = merge.path))
                 appendParameter("size", merge.size)
                 appendParameter("isdir", "0")
                 appendParameter("rtype", ondup.ordinal)
@@ -476,7 +477,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     public suspend fun mkdir(path: String, ondup: OnDupType): NetDiskCreateFile {
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
-                appendParameter("path", client.appDataFolder(path = path))
+                appendParameter("path", appDataFolder(path = path))
                 appendParameter("size", 0)
                 appendParameter("isdir", "1")
                 appendParameter("rtype", ondup.ordinal)
@@ -542,12 +543,13 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
      * @param info 转存信息
      * @param path 文件存放目录
      * @param ondup 遇到重复文件的处理策略
+     * @see BaiduNetDiskWeb.task
      */
     public suspend fun transfer(info: TransferFileInfo, path: String, ondup: OnDupType): NetDiskTransfer {
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
                 appendParameter("async", AsyncType.SYNC.ordinal)
-                appendParameter("path", client.appDataFolder(path = path))
+                appendParameter("path", appDataFolder(path = path))
                 appendParameter("fsidlist", info.files)
                 appendParameter("ondup", ondup)
             }) {
@@ -626,7 +628,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     /**
      * [设备绑定](https://pan.baidu.com/union/doc/Sksg0sagk)
      * @param id 设备ID
-     * @param name 	设备名称
+     * @param name    设备名称
      */
     public suspend fun bind(id: String, name: String): NetDiskError {
         return client.useHttpClient { http ->

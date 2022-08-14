@@ -2,15 +2,13 @@ package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
 
-/**
- * 快速文件上传结果
- * @param file 成功时不为空
- */
 @Serializable
-public data class NetDiskRapidInfo(
-    @SerialName("info")
-    val file: NetDiskFileRecord? = null,
-    @SerialName("errmsg")
+public data class NetDiskRecycleList(
+    @SerialName("list")
+    val list: List<NetDiskRecycleFile> = emptyList(),
+    @SerialName("timestamp")
+    val timestamp: Long = 0,
+    @SerialName("show_msg")
     override val errorMessage: String = "",
     @SerialName("errno")
     override val errorNo: Int = 0,

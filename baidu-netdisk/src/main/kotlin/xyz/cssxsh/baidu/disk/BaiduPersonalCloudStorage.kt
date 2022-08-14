@@ -48,7 +48,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                 }
                 parameter("method", "upload")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = path))
+                parameter("path", appDataFolder(path = path))
                 parameter("ondup", ondup)
             }.body()
         }
@@ -59,7 +59,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
             http.post(FILE) {
                 parameter("method", "rapidupload")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = upload.path))
+                parameter("path", appDataFolder(path = upload.path))
                 parameter("content-length", upload.length)
                 parameter("content-md5", upload.content)
                 parameter("slice-md5", upload.slice)
@@ -80,7 +80,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                 parameter("method", "upload")
                 parameter("type", "tmpfile")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = path))
+                parameter("path", appDataFolder(path = path))
             }.body()
         }
     }
@@ -96,7 +96,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                 parameter("method", "upload")
                 parameter("type", "tmpfile")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = path))
+                parameter("path", appDataFolder(path = path))
                 parameter("uploadid", id)
                 parameter("partseq", index)
                 parameter("web", "1")
@@ -120,7 +120,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
             }) {
                 parameter("method", "createsuperfile")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = path))
+                parameter("path", appDataFolder(path = path))
                 parameter("ondup", ondup)
             }.body()
         }
@@ -134,7 +134,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                 }
                 parameter("method", "download")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = path))
+                parameter("path", appDataFolder(path = path))
 
                 block()
             }
@@ -156,7 +156,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
             http.get(FILE) {
                 parameter("method", "mkdir")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = path))
+                parameter("path", appDataFolder(path = path))
             }.body()
         }
     }
@@ -166,7 +166,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
             http.get(FILE) {
                 parameter("method", "meta")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = path))
+                parameter("path", appDataFolder(path = path))
             }.body()
         }
     }
@@ -180,7 +180,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                         putJsonArray("list") {
                             list.forEach { path ->
                                 addJsonObject {
-                                    put("path", client.appDataFolder(path = path))
+                                    put("path", appDataFolder(path = path))
                                 }
                             }
                         }
@@ -198,7 +198,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
             http.get(FILE) {
                 parameter("method", "list")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = path))
+                parameter("path", appDataFolder(path = path))
                 parameter("by", order)
                 parameter("order", if (desc) "desc" else "asc")
                 parameter("limit", limit?.run { "${first}-${last + 1}" })
@@ -211,8 +211,8 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
             http.post(FILE) {
                 parameter("method", "move")
                 parameter("access_token", client.accessToken())
-                parameter("from", client.appDataFolder(path = from))
-                parameter("to", client.appDataFolder(path = to))
+                parameter("from", appDataFolder(path = from))
+                parameter("to", appDataFolder(path = to))
             }.body()
         }
     }
@@ -226,8 +226,8 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                         putJsonArray("list") {
                             list.forEach { (from, to) ->
                                 addJsonObject {
-                                    put("from", client.appDataFolder(path = from))
-                                    put("to", client.appDataFolder(path = to))
+                                    put("from", appDataFolder(path = from))
+                                    put("to", appDataFolder(path = to))
                                 }
                             }
                         }
@@ -245,8 +245,8 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
             http.post(FILE) {
                 parameter("method", "copy")
                 parameter("access_token", client.accessToken())
-                parameter("from", client.appDataFolder(path = from))
-                parameter("to", client.appDataFolder(path = to))
+                parameter("from", appDataFolder(path = from))
+                parameter("to", appDataFolder(path = to))
             }.body()
         }
     }
@@ -260,8 +260,8 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                         putJsonArray("list") {
                             list.forEach { (from, to) ->
                                 addJsonObject {
-                                    put("from", client.appDataFolder(path = from))
-                                    put("to", client.appDataFolder(path = to))
+                                    put("from", appDataFolder(path = from))
+                                    put("to", appDataFolder(path = to))
                                 }
                             }
                         }
@@ -279,7 +279,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
             http.post(FILE) {
                 parameter("method", "delete")
                 parameter("access_token", client.accessToken())
-                parameter("path", client.appDataFolder(path = path))
+                parameter("path", appDataFolder(path = path))
             }.body()
         }
     }
@@ -293,7 +293,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                         putJsonArray("list") {
                             list.forEach { path ->
                                 addJsonObject {
-                                    put("path", client.appDataFolder(path = path))
+                                    put("path", appDataFolder(path = path))
                                 }
                             }
                         }

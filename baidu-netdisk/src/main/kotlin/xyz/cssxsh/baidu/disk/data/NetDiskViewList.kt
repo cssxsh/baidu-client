@@ -1,9 +1,8 @@
 package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
-import xyz.cssxsh.baidu.api.NumberToBooleanSerializer
-import xyz.cssxsh.baidu.api.TimestampSerializer
-import java.time.OffsetDateTime
+import xyz.cssxsh.baidu.api.*
+import java.time.*
 
 /**
  * 分享文件浏览信息
@@ -11,10 +10,10 @@ import java.time.OffsetDateTime
  * @param uk 分享者ID
  * @param list 文件列表
  * @param time 分享时间
- * @param appealStatus 申诉状态
+ * @param status 申诉状态
  * @param title 标题
  * @param fromId 该链接生成平台
- * @param expired 过期时间, 单位 天, 0 永不过期
+ * @param expired 过期类型，0 永不过期，1 一天后过期，7 七天后过期，30 三十天过期
  */
 @Serializable
 public data class NetDiskViewList(
@@ -28,7 +27,7 @@ public data class NetDiskViewList(
     @Serializable(TimestampSerializer::class)
     val time: OffsetDateTime = OffsetDateTime.MIN,
     @SerialName("appeal_status")
-    val appealStatus: Int,
+    val status: Int,
     @SerialName("title")
     val title: String = "",
     @SerialName("cfrom_id")

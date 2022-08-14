@@ -1,91 +1,39 @@
 package xyz.cssxsh.baidu.disk
 
-import kotlinx.serialization.*
-import java.io.File
-import java.io.RandomAccessFile
-import java.security.MessageDigest
+import io.ktor.http.*
+import io.ktor.utils.io.core.*
+import java.util.*
 
-internal data class BlockInfo(
-    val offset: Long,
-    val length: Int,
-    val md5: String,
-    var exist: Boolean,
-)
+/**
+ * 256KB
+ */
+public const val SLICE_SIZE: Int = 256 shl 10
 
-internal fun digestMd5(input: ByteArray, size: Int = input.size): String {
-    return MessageDigest.getInstance("md5").also {
-        it.update(input, 0, size)
-    }.digest().joinToString("") {
-        """%02x""".format(it.toInt() and 0xFF)
-    }
+public val LAZY_BLOCKS: List<String> = listOf("5910a591dd8fc18c32a8f3df4fdc1761", "a5fc157d78e6ad1c7e114b056c92821e")
+
+internal fun ParametersBuilder.appendParameter(key: String, value: Any?) {
+    value?.let { append(key, it.toString()) }
 }
 
-internal fun File.getBlockList(buffer: ByteArray, size: Int = buffer.size): List<BlockInfo> {
-    return (0 until length() step size.toLong()).map { offset ->
-        val length = minOf(size, (length() - offset).toInt())
-        readBlock(buffer = buffer, offset = offset, length = length)
-        BlockInfo(
-            offset = offset,
-            length = length,
-            md5 = digestMd5(buffer, length),
-            exist = true
-        )
-    }
+public typealias BodyBuilder = BytePacketBuilder.() -> Unit
+
+internal fun ByteArray.toHexString(): String {
+    return fold(Formatter()) { formatter, byte -> formatter.format("%02x", byte) }
+        .toString()
 }
 
-internal fun File.readBlock(buffer: ByteArray, offset: Long = 0, length: Int = buffer.size) {
-    RandomAccessFile(this, "r").use {
-        it.seek(offset)
-        it.read(buffer, 0, length)
-    }
-}
+internal fun String.encryptMD5(): String {
+    val md5 = this
+    return buildString {
+        append(md5.subSequence(8, 16))
+        append(md5.subSequence(0, 8))
+        append(md5.subSequence(24, 32))
+        append(md5.subSequence(16, 24))
 
-internal fun File.digestContentMd5(blockSize: Int = 4 shl 20): String {
-    return MessageDigest.getInstance("md5").also {
-        forEachBlock(blockSize) { buffer, read ->
-            it.update(buffer, 0, read)
+        repeat(32) { index ->
+            setCharAt(index, (get(index).digitToInt(16) xor (15 and index)).digitToChar(16))
         }
-    }.digest().joinToString("") {
-        """%02x""".format(it.toInt() and 0xFF)
+        setCharAt(9, (get(9).digitToInt(16) + 'g'.code).toChar())
     }
-}
-
-internal fun File.digestSliceMd5(): String {
-    val temp = ByteArray(if (SLICE_SIZE < length()) length().toInt() else SLICE_SIZE)
-    readBlock(buffer = temp)
-    return digestMd5(input = temp)
-}
-
-@Serializable
-public data class RapidUploadInfo(
-    @SerialName("content")
-    val content: String,
-    @SerialName("slice")
-    val slice: String,
-    @SerialName("length")
-    val length: Long,
-    @SerialName("path")
-    val path: String,
-) {
-    public companion object {
-        @JvmStatic
-        public fun parse(code: String): RapidUploadInfo {
-            return code.split('#').let { (content, slice, length, path) ->
-                RapidUploadInfo(content = content, slice = slice, length = length.toLong(), path = path)
-            }
-        }
-
-        @JvmStatic
-        public fun calculate(file: File): RapidUploadInfo {
-            return RapidUploadInfo(
-                content = file.digestContentMd5(),
-                slice = file.digestSliceMd5(),
-                length = file.length(),
-                path = file.name
-            )
-        }
-    }
-
-    public fun format(): String = "$content#$slice#$length#$path"
 }
 
