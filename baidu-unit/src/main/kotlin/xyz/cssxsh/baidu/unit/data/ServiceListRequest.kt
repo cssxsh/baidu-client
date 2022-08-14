@@ -1,7 +1,6 @@
 package xyz.cssxsh.baidu.unit.data
 
-import kotlinx.serialization.SerialName
-import kotlinx.serialization.Serializable
+import kotlinx.serialization.*
 
 /**
  * 机器⼈列表请求

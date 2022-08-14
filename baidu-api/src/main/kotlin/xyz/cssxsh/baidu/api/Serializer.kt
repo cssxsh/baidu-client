@@ -88,7 +88,8 @@ public class OrdinalSerializer<E : Enum<E>>(kClass: KClass<E>, private val value
     }
 
     override fun deserialize(decoder: Decoder): E {
-        return requireNotNull(values.getOrNull(decoder.decodeInt())) { "${decoder.decodeInt()} not in ${values.asList()}" }
+        val index = decoder.decodeInt().coerceAtLeast(0)
+        return requireNotNull(values.getOrNull(index)) { "$index not in ${values.asList()}" }
     }
 }
 
@@ -107,7 +108,7 @@ public class LowerCaseSerializer<E : Enum<E>>(kClass: KClass<E>, private val val
 
     override fun deserialize(decoder: Decoder): E {
         val text = decoder.decodeString().uppercase()
-        return requireNotNull(values.first { it.name == text }) { "$text not in ${values.asList()}" }
+        return requireNotNull(values.find { it.name == text }) { "$text not in ${values.asList()}" }
     }
 }
 

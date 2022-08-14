@@ -53,7 +53,7 @@
 ## Baidu Unit
 
 [Unit 文档](https://ai.baidu.com/ai-doc/UNIT/Lkipmh0tz)  
-[Unit 控制台](https://ai.baidu.com/unit/v2)  
+[Unit 控制台](https://ai.baidu.com/unit/v2)
 
 ## Gradle引用包
 

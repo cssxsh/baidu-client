@@ -2,7 +2,7 @@ package xyz.cssxsh.baidu.aip.translate
 
 import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
-import java.time.OffsetDateTime
+import java.time.*
 
 /**
  * @param id 任务ID

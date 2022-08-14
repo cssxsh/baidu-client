@@ -74,21 +74,23 @@ public open class AipTextToSpeech(override val client: AipClient) : AipApplicati
      * @see default
      */
     public suspend fun handle(vararg paragraph: String, option: SpeechOption = default.copy()): ByteArray {
-        val task = task(request = SpeechCreateRequest(
-            text = paragraph.asList(),
-            voice = option.person,
-            speed = option.speed,
-            pitch = option.pitch,
-            volume = option.volume,
-            format = when (option.format) {
-                SpeechFormat.MP3 -> "mp3-48k"
-                SpeechFormat.WAV -> "wav"
-                SpeechFormat.PCM_8K -> "pcm-8k"
-                SpeechFormat.PCM_16K -> "pcm-16k"
-                else -> "mp3-16k"
-            },
-            lang = "zh"
-        ))
+        val task = task(
+            request = SpeechCreateRequest(
+                text = paragraph.asList(),
+                voice = option.person,
+                speed = option.speed,
+                pitch = option.pitch,
+                volume = option.volume,
+                format = when (option.format) {
+                    SpeechFormat.MP3 -> "mp3-48k"
+                    SpeechFormat.WAV -> "wav"
+                    SpeechFormat.PCM_8K -> "pcm-8k"
+                    SpeechFormat.PCM_16K -> "pcm-16k"
+                    else -> "mp3-16k"
+                },
+                lang = "zh"
+            )
+        )
         val id = task.taskId ?: throw SpeechTaskException(info = task)
         val limit = System.currentTimeMillis() + timeout
 

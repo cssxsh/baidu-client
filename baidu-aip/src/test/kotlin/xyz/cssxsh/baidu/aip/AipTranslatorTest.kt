@@ -2,7 +2,6 @@ package xyz.cssxsh.baidu.aip
 
 import io.ktor.client.call.*
 import io.ktor.client.request.*
-import io.ktor.http.*
 import io.ktor.util.*
 import io.ktor.utils.io.core.*
 import kotlinx.coroutines.*
