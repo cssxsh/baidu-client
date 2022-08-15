@@ -514,13 +514,12 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     }
 
     /**
-     * [获取分享文件信息](https://pan.baidu.com/union/doc/3ksmyma1y)
+     * [获取分享文件信息-根目录](https://pan.baidu.com/union/doc/3ksmyma1y)
      * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串 （不包含开头的1）
      * @param key 在 [verify] 中得到的 key
-     * @param fid 文件夹 id，为 0 时将显示 root 目录
      * @param page 页码 从 1 开始，一页数目 1000
      */
-    public suspend fun view(surl: String, key: String, fid: Long, page: Int): NetDiskViewList {
+    public suspend fun view(surl: String, key: String, page: Int): NetDiskViewList {
         return client.useHttpClient { http ->
             http.get {
                 url(SHARE)
@@ -533,7 +532,34 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 parameter("num", 1_000)
                 parameter("web", "1")
                 parameter("root", "1")
-                parameter("fid", fid)
+            }.body()
+        }
+    }
+
+    /**
+     * [获取分享文件信息-子文件夹](https://pan.baidu.com/union/doc/3ksmyma1y)
+     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串 （不包含开头的1）
+     * @param key 在 [verify] 中得到的 key
+     * @param page 页码 从 1 开始，一页数目 1000
+     * @param option 排序方式和起始路径
+     */
+    public suspend fun view(surl: String, key: String, page: Int, option: NetDiskOption): NetDiskFileList {
+        return client.useHttpClient { http ->
+            http.get {
+                url(SHARE)
+                header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
+                parameter("method", "list")
+                parameter("access_token", client.accessToken())
+                parameter("shorturl", surl)
+                parameter("sekey", key)
+                parameter("page", page)
+                parameter("num", 1_000)
+                parameter("web", "1")
+                parameter("dir", option.path)
+                parameter("order", option.order)
+                parameter("desc", option.desc.toInt())
+                parameter("recursion", option.recursion.toInt())
+                parameter("showempty", "1")
             }.body()
         }
     }
