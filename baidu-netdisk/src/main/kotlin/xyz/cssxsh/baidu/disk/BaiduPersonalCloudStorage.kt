@@ -21,7 +21,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         internal const val SUPER_FILE: String = "https://pcs.baidu.com/rest/2.0/pcs/superfile2"
     }
 
-    internal var upload: PCSServer = PCSServer(
+    internal var host: PCSServer = PCSServer(
         clientIp = "0.0.0.0",
         expire = 0,
         host = "pcs.baidu.com",
@@ -44,7 +44,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                 append(key = "file".quote(), filename = "blob".quote(), size = size, bodyBuilder = input)
             }) {
                 url {
-                    host = upload.server.randomOrNull() ?: upload.host
+                    host = this@BaiduPersonalCloudStorage.host.server.randomOrNull() ?: this@BaiduPersonalCloudStorage.host.host
                 }
                 parameter("method", "upload")
                 parameter("access_token", client.accessToken())
@@ -75,7 +75,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                 append(key = "file".quote(), filename = "blob".quote(), size = size.toLong(), bodyBuilder = input)
             }) {
                 url {
-                    host = upload.server.randomOrNull() ?: upload.host
+                    host = this@BaiduPersonalCloudStorage.host.server.randomOrNull() ?: this@BaiduPersonalCloudStorage.host.host
                 }
                 parameter("method", "upload")
                 parameter("type", "tmpfile")
@@ -91,7 +91,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                 append(key = "file".quote(), filename = "blob".quote(), size = size.toLong(), bodyBuilder = input)
             }) {
                 url {
-                    host = upload.server.randomOrNull() ?: upload.host
+                    host = this@BaiduPersonalCloudStorage.host.server.randomOrNull() ?: this@BaiduPersonalCloudStorage.host.host
                 }
                 parameter("method", "upload")
                 parameter("type", "tmpfile")
@@ -130,7 +130,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         return client.useHttpClient { http ->
             http.prepareGet(FILE) {
                 url {
-                    host = upload.server.randomOrNull() ?: upload.host
+                    host = this@BaiduPersonalCloudStorage.host.server.randomOrNull() ?: this@BaiduPersonalCloudStorage.host.host
                 }
                 parameter("method", "download")
                 parameter("access_token", client.accessToken())
@@ -361,7 +361,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
-    public suspend fun shred(): PCSError {
+    public suspend fun clear(): PCSError {
         return client.useHttpClient { http ->
             http.post(FILE) {
                 parameter("method", "delete")

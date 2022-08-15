@@ -8,7 +8,7 @@ import java.time.*
  * 分享详情
  * @param uk 分享者ID
  * @param shareId 分享ID
- * @param expired 过期类型，0 永不过期，1 一天后过期，7 七天后过期，30 三十天过期
+ * @param period 过期类型，0 永不过期，1 一天后过期，7 七天后过期，30 三十天过期
  * @param params 网页链接参数
  * @param dir 目录
  * @param fid 文件ID
@@ -26,7 +26,7 @@ public data class NetDiskShortLink(
     @SerialName("dir")
     val dir: String,
     @SerialName("expired_type")
-    val expired: Int,
+    val period: Int,
     @SerialName("fcount")
     val count: Int,
     @SerialName("fid")

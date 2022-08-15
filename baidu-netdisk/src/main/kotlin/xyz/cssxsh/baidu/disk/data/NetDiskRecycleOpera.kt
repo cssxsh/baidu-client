@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.disk.data
 import kotlinx.serialization.*
 
 @Serializable
-public data class NetDiskRecycleRestore(
+public data class NetDiskRecycleOpera(
     @SerialName("faillist")
     val failed: List<Long> = emptyList(),
     @SerialName("taskid")

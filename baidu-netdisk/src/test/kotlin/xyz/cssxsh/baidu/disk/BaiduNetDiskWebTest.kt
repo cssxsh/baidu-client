@@ -29,13 +29,13 @@ internal class BaiduNetDiskWebTest : BaiduNetDiskClientTest() {
 
         Assertions.assertTrue(client.web.list(page = 1, option = option).list.isNotEmpty())
 
-        Assertions.assertTrue(client.web.category(type = CategoryType.VIDEO, page = 1, option = option).info.isNotEmpty())
-        Assertions.assertTrue(client.web.category(type = CategoryType.AUDIO, page = 1, option = option).info.isNotEmpty())
-        Assertions.assertTrue(client.web.category(type = CategoryType.IMAGE, page = 1, option = option).info.isNotEmpty())
-        Assertions.assertTrue(client.web.category(type = CategoryType.DOCUMENT, page = 1, option = option).info.isNotEmpty())
-        Assertions.assertTrue(client.web.category(type = CategoryType.APPLICATION, page = 1, option = option).info.isNotEmpty())
-        Assertions.assertTrue(client.web.category(type = CategoryType.OTHERS, page = 1, option = option).info.isNotEmpty())
-        Assertions.assertTrue(client.web.category(type = CategoryType.BITTORRENT, page = 1, option = option).info.isNotEmpty())
+        Assertions.assertTrue(client.web.category(type = CategoryType.VIDEO, page = 1, option = option).list.isNotEmpty())
+        Assertions.assertTrue(client.web.category(type = CategoryType.AUDIO, page = 1, option = option).list.isNotEmpty())
+        Assertions.assertTrue(client.web.category(type = CategoryType.IMAGE, page = 1, option = option).list.isNotEmpty())
+        Assertions.assertTrue(client.web.category(type = CategoryType.DOCUMENT, page = 1, option = option).list.isNotEmpty())
+        Assertions.assertTrue(client.web.category(type = CategoryType.APPLICATION, page = 1, option = option).list.isNotEmpty())
+        Assertions.assertTrue(client.web.category(type = CategoryType.OTHERS, page = 1, option = option).list.isNotEmpty())
+        Assertions.assertTrue(client.web.category(type = CategoryType.BITTORRENT, page = 1, option = option).list.isNotEmpty())
 
         Assertions.assertTrue(client.web.search(key = "7z", page = 1, option = option).list.isNotEmpty())
 
@@ -131,11 +131,18 @@ internal class BaiduNetDiskWebTest : BaiduNetDiskClientTest() {
         }
     }
 
-    @Disabled
     @Test
     fun share(): Unit = runBlocking {
         val record = client.web.record(page = 1)
         Assertions.assertTrue(record.list.isNotEmpty())
+
+        val surl = "7Pu7r3WfRmYc-38jyajyWw"
+        val verify = client.rest.verify(surl = surl, password = "ltel")
+        println(verify)
+        Assertions.assertEquals(0, verify.errorNo)
+        val view = client.web.view(surl = surl, key = verify.key)
+        println(view)
+        Assertions.assertEquals(0, view.errorNo)
     }
 
     @Test

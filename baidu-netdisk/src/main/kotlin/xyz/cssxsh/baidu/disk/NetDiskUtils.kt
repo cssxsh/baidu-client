@@ -2,6 +2,7 @@ package xyz.cssxsh.baidu.disk
 
 import io.ktor.http.*
 import io.ktor.utils.io.core.*
+import java.security.MessageDigest
 import java.util.*
 
 /**
@@ -20,6 +21,11 @@ public typealias BodyBuilder = BytePacketBuilder.() -> Unit
 internal fun ByteArray.toHexString(): String {
     return fold(Formatter()) { formatter, byte -> formatter.format("%02x", byte) }
         .toString()
+}
+
+internal fun ByteArray.md5(): ByteArray {
+    val digest = MessageDigest.getInstance("md5")
+    return digest.digest(this)
 }
 
 internal fun String.encryptMD5(): String {

@@ -493,8 +493,50 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     }
 
     /**
+     * [创建分享链接](https://pan.baidu.com/union/doc/8ksmyjrir)
+     * @param password 密码
+     * @param option 分享选项
+     * @param files 要分享文件的ID
+     */
+    public suspend fun share(password: String, option: ShareOption, vararg files: Long): NetDiskShare {
+        return client.useHttpClient { http ->
+            http.submitForm(Parameters.build {
+                appendParameter("fid_list", files.asList())
+                appendParameter("schannel", option.channel)
+                appendParameter("pwd", password)
+                appendParameter("period", option.period)
+                appendParameter("third_type", shareThirdId)
+//                appendParameter("eflag_disable", "0")
+                appendParameter("csign", "${shareThirdId}.${files.asList()}.${option.channel}.${shareSecret}")
+            }) {
+                url(SHARE)
+                header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
+                parameter("method", "set")
+                parameter("access_token", client.accessToken())
+            }.body()
+        }
+    }
+
+    /**
+     * 查询当前账户分享记录
+     * @param page 页码 从 1 开始，一页数目 1000
+     */
+    public suspend fun record(page: Int): NetDiskShareList {
+        return client.useHttpClient { http ->
+            http.get {
+                url(SHARE)
+                header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
+                parameter("method", "record")
+                parameter("page", page)
+                parameter("num", 1_000)
+                parameter("access_token", client.accessToken())
+            }.body()
+        }
+    }
+
+    /**
      * [分享提取码验证](https://pan.baidu.com/union/doc/Yksmyl2v0)
-     * @param surl surl 参数，或者 short url 的 /s/1 之后的字符串
+     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串
      * @param password 访问密码
      */
     public suspend fun verify(surl: String, password: String): NetDiskShareInfo {
@@ -508,28 +550,25 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
                 parameter("method", "verify")
                 parameter("access_token", client.accessToken())
-                parameter("surl", surl)
+                parameter("surl", surl.removePrefix("1"))
             }.body()
         }
     }
 
     /**
      * [获取分享文件信息-根目录](https://pan.baidu.com/union/doc/3ksmyma1y)
-     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串 （不包含开头的1）
+     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串
      * @param key 在 [verify] 中得到的 key
-     * @param page 页码 从 1 开始，一页数目 1000
      */
-    public suspend fun view(surl: String, key: String, page: Int): NetDiskViewList {
+    public suspend fun view(surl: String, key: String): NetDiskViewList {
         return client.useHttpClient { http ->
             http.get {
                 url(SHARE)
                 header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
                 parameter("method", "list")
                 parameter("access_token", client.accessToken())
-                parameter("shorturl", surl)
+                parameter("shorturl", surl.removePrefix("1"))
                 parameter("sekey", key)
-                parameter("page", page)
-                parameter("num", 1_000)
                 parameter("web", "1")
                 parameter("root", "1")
             }.body()
@@ -538,7 +577,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
 
     /**
      * [获取分享文件信息-子文件夹](https://pan.baidu.com/union/doc/3ksmyma1y)
-     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串 （不包含开头的1）
+     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串
      * @param key 在 [verify] 中得到的 key
      * @param page 页码 从 1 开始，一页数目 1000
      * @param option 排序方式和起始路径
@@ -550,7 +589,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
                 parameter("method", "list")
                 parameter("access_token", client.accessToken())
-                parameter("shorturl", surl)
+                parameter("shorturl", surl.removePrefix("1"))
                 parameter("sekey", key)
                 parameter("page", page)
                 parameter("num", 1_000)

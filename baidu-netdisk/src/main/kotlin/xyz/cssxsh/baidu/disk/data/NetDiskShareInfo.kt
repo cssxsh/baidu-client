@@ -10,7 +10,7 @@ import kotlinx.serialization.*
 public data class NetDiskShareInfo(
     @SerialName("randsk")
     val key: String = "",
-    @SerialName("err_msg")
+    @SerialName("show_msg")
     override val errorMessage: String = "",
     @SerialName("errno")
     override val errorNo: Int = 0,

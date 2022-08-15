@@ -23,7 +23,10 @@ public class BaiduNetDiskWeb internal constructor(public val client: NetDiskClie
         internal const val FILE_MANAGER = "https://pan.baidu.com/api/filemanager"
         internal const val TASK_QUERY = "https://pan.baidu.com/share/taskquery"
         internal const val SHORT_URL_INFO = "https://pan.baidu.com/api/shorturlinfo"
+        internal const val SHARE_SET = "https://pan.baidu.com/share/set"
         internal const val SHARE_RECORD = "https://pan.baidu.com/share/record"
+        internal const val SHARE_VERIFY = "https://pan.baidu.com/share/verify"
+        internal const val SHARE_LIST = "https://pan.baidu.com/share/list"
         internal const val RECYCLE_LIST = "https://pan.baidu.com/api/recycle/list"
         internal const val RECYCLE_RESTORE = "https://pan.baidu.com/api/recycle/restore"
         internal const val RECYCLE_CLEAR = "https://pan.baidu.com/api/recycle/clear"
@@ -364,6 +367,31 @@ public class BaiduNetDiskWeb internal constructor(public val client: NetDiskClie
     }
 
     /**
+     * 创建分享链接
+     * @param password 密码
+     * @param option 分享选项
+     * @param files 要分享文件的ID
+     */
+    public suspend fun share(password: String, option: ShareOption, vararg files: Long): NetDiskShare {
+        return client.useHttpClient { http ->
+            http.submitForm(Parameters.build {
+                appendParameter("fid_list", files.asList())
+                appendParameter("pwd", password)
+                appendParameter("period", option.period)
+                appendParameter("schannel", option.channel)
+                appendParameter("eflag_disable", option.easy)
+            }) {
+                url(SHARE_SET)
+                parameter("clienttype", "0")
+                parameter("app_id", appId)
+                parameter("web", "1")
+                parameter("access_token", client.accessToken())
+            }.body()
+        }
+    }
+
+    /**
+     * 查询当前账户分享记录，（此接口返回的 password 为空）
      * @param page 页码 从 1 开始，一页数目 1000
      */
     public suspend fun record(page: Int): NetDiskShareList {
@@ -378,6 +406,71 @@ public class BaiduNetDiskWeb internal constructor(public val client: NetDiskClie
                 parameter("desc", 1)
                 parameter("web", "1")
                 parameter("access_token", client.accessToken())
+            }.body()
+        }
+    }
+
+    /**
+     * 分享提取码验证
+     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串
+     * @param password 访问密码
+     */
+    public suspend fun verify(surl: String, password: String): NetDiskShareInfo {
+        return client.useHttpClient { http ->
+            http.submitForm(Parameters.build {
+                appendParameter("pwd", password)
+            }) {
+                url(SHARE_VERIFY)
+                header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
+                parameter("method", "verify")
+                parameter("access_token", client.accessToken())
+                parameter("surl", surl.removePrefix("1"))
+            }.body()
+        }
+    }
+
+    /**
+     * 获取分享文件信息-根目录
+     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串
+     * @param key 在 [verify] 中得到的 key
+     */
+    public suspend fun view(surl: String, key: String): NetDiskViewList {
+        return client.useHttpClient { http ->
+            http.get {
+                url(SHARE_LIST)
+                parameter("shorturl", surl.removePrefix("1"))
+                parameter("sekey", key)
+                parameter("web", "1")
+                parameter("root", "1")
+                parameter("access_token", client.accessToken())
+            }.body()
+        }
+    }
+
+    /**
+     * [获取分享文件信息-子文件夹](https://pan.baidu.com/union/doc/3ksmyma1y)
+     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串
+     * @param key 在 [verify] 中得到的 key
+     * @param page 页码 从 1 开始，一页数目 1000
+     * @param option 排序方式和起始路径
+     */
+    public suspend fun view(surl: String, key: String, page: Int, option: NetDiskOption): NetDiskFileList {
+        return client.useHttpClient { http ->
+            http.get {
+                url(BaiduNetDiskRESTful.SHARE)
+                header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
+                parameter("method", "list")
+                parameter("access_token", client.accessToken())
+                parameter("shorturl", surl.removePrefix("1"))
+                parameter("sekey", key)
+                parameter("page", page)
+                parameter("num", 1_000)
+                parameter("web", "1")
+                parameter("dir", option.path)
+                parameter("order", option.order)
+                parameter("desc", option.desc.toInt())
+                parameter("recursion", option.recursion.toInt())
+                parameter("showempty", "1")
             }.body()
         }
     }
@@ -405,7 +498,7 @@ public class BaiduNetDiskWeb internal constructor(public val client: NetDiskClie
      * 恢复文件-异步
      * @param files 要恢复文件的ID
      */
-    public suspend fun restore(vararg files: Long): NetDiskRecycleRestore {
+    public suspend fun restore(vararg files: Long): NetDiskRecycleOpera {
         return client.useHttpClient { http ->
             http.submitForm(Parameters.build {
                 appendParameter("fidlist", files.asList())
@@ -424,7 +517,7 @@ public class BaiduNetDiskWeb internal constructor(public val client: NetDiskClie
     /**
      * 彻底清理回收站文件-异步
      */
-    public suspend fun clear(): JsonObject {
+    public suspend fun clear(): NetDiskRecycleOpera {
         return client.useHttpClient { http ->
             http.submitForm {
                 url(RECYCLE_CLEAR)

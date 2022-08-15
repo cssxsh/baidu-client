@@ -56,24 +56,24 @@ internal class BaiduNetDiskRESTfulTest : BaiduNetDiskClientTest() {
         Assertions.assertTrue(application.list.all { it.category == CategoryType.APPLICATION })
 
         val video = client.rest.video(page = 1, option = option)
-        Assertions.assertTrue(video.info.isNotEmpty())
-        Assertions.assertTrue(video.info.all { it.category == CategoryType.VIDEO })
+        Assertions.assertTrue(video.list.isNotEmpty())
+        Assertions.assertTrue(video.list.all { it.category == CategoryType.VIDEO })
 
         val audio = client.rest.audio(page = 1, option = option)
-        Assertions.assertTrue(audio.info.isNotEmpty())
-        Assertions.assertTrue(audio.info.all { it.category == CategoryType.AUDIO })
+        Assertions.assertTrue(audio.list.isNotEmpty())
+        Assertions.assertTrue(audio.list.all { it.category == CategoryType.AUDIO })
 
         val image = client.rest.image(page = 1, option = option)
-        Assertions.assertTrue(image.info.isNotEmpty())
-        Assertions.assertTrue(image.info.all { it.category == CategoryType.IMAGE })
+        Assertions.assertTrue(image.list.isNotEmpty())
+        Assertions.assertTrue(image.list.all { it.category == CategoryType.IMAGE })
 
         val document = client.rest.document(page = 1, option = option)
-        Assertions.assertTrue(document.info.isNotEmpty())
-        Assertions.assertTrue(document.info.all { it.category == CategoryType.DOCUMENT })
+        Assertions.assertTrue(document.list.isNotEmpty())
+        Assertions.assertTrue(document.list.all { it.category == CategoryType.DOCUMENT })
 
         val bittorrent = client.rest.bittorrent(page = 1, option = option)
-        Assertions.assertTrue(bittorrent.info.isNotEmpty())
-        Assertions.assertTrue(bittorrent.info.all { it.category == CategoryType.BITTORRENT })
+        Assertions.assertTrue(bittorrent.list.isNotEmpty())
+        Assertions.assertTrue(bittorrent.list.all { it.category == CategoryType.BITTORRENT })
     }
 
     @Test
@@ -130,12 +130,18 @@ internal class BaiduNetDiskRESTfulTest : BaiduNetDiskClientTest() {
         // https://pan.baidu.com/share/init?surl={}
         // https://pan.baidu.com/s/1{}
 
+//        val option = ShareOption(period = 0, channel = 4, easy = false)
+//        val share = client.rest.share(password = "test", option = option, 925171613014809)
+//        println(share)
+
+        val record = client.rest.record(page = 1)
+        Assertions.assertTrue(record.list.isNotEmpty())
+
         val surl = "7Pu7r3WfRmYc-38jyajyWw"
         val verify = client.rest.verify(surl = surl, password = "ltel")
         println(verify)
         Assertions.assertEquals(0, verify.errorNo)
-
-        val view = client.rest.view(surl = surl, key = verify.key, fid = 0, page = 1)
+        val view = client.rest.view(surl = surl, key = verify.key)
         println(view)
         Assertions.assertEquals(0, view.errorNo)
 

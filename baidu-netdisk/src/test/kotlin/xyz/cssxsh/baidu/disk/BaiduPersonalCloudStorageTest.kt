@@ -71,6 +71,6 @@ internal class BaiduPersonalCloudStorageTest : BaiduNetDiskClientTest() {
 
         val list = client.pcs.list(path = "", order = OrderType.TIME, desc = true, limit = null)
         client.pcs.delete(list = list.list.map { it.path }.toTypedArray())
-        client.pcs.shred()
+        client.pcs.clear()
     }
 }
