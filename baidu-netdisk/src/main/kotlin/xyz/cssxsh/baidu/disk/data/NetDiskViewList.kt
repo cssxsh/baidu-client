@@ -22,7 +22,7 @@ public data class NetDiskViewList(
     @SerialName("uk")
     val uk: Long = 0,
     @SerialName("list")
-    val list: List<NetDiskFile> = emptyList(),
+    override val list: List<NetDiskFile> = emptyList(),
     @SerialName("server_time")
     @Serializable(TimestampSerializer::class)
     val time: OffsetDateTime = OffsetDateTime.MIN,
@@ -46,4 +46,4 @@ public data class NetDiskViewList(
     override val errorNo: Int = 0,
     @SerialName("request_id")
     override val requestId: String
-) : NetDiskErrorInfo
+) : NetDiskErrorInfo, NetDiskFileData

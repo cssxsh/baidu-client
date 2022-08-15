@@ -5,7 +5,7 @@ import kotlinx.serialization.*
 @Serializable
 public data class NetDiskQuery(
     @SerialName("list")
-    val list: List<NetDiskFileMeta>,
+    override val list: List<NetDiskFileMeta>,
     @SerialName("names")
     val names: Map<String, String>,
     @SerialName("errmsg")
@@ -14,4 +14,4 @@ public data class NetDiskQuery(
     override val errorNo: Int = 0,
     @SerialName("request_id")
     override val requestId: String
-) : NetDiskErrorInfo
+) : NetDiskErrorInfo, NetDiskFileData

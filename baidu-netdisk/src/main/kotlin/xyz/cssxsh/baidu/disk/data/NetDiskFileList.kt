@@ -16,11 +16,11 @@ public data class NetDiskFileList(
     @Serializable(NumberToBooleanSerializer::class)
     val hasMore: Boolean = false,
     @SerialName("list")
-    val list: List<NetDiskFile> = emptyList(),
+    override val list: List<NetDiskFile> = emptyList(),
     @SerialName("errmsg")
     override val errorMessage: String = "",
     @SerialName("errno")
     override val errorNo: Int = 0,
     @SerialName("request_id")
     override val requestId: String
-) : NetDiskErrorInfo
+) : NetDiskErrorInfo, NetDiskFileData
