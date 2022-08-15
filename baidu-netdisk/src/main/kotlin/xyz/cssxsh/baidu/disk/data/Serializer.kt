@@ -11,13 +11,6 @@ public enum class OrderType(public val value: String) {
     override fun toString(): String = value
 }
 
-public enum class RenameType {
-    NO,
-    PATH,
-    BLOCK,
-    COVER;
-}
-
 @Serializable(with = VipType.Serializer::class)
 public enum class VipType(public val updateLimit: Long, public val superLimit: Int, public val transferLimit: Int) {
     ORDINARY(4L shl 30, 4 shl 20, 500),

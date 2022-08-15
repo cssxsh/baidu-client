@@ -14,7 +14,7 @@ import java.time.*
 @Serializable
 public data class MergeFileInfo(
     @SerialName("blocks")
-    val blocks: MutableList<String>,
+    val blocks: List<String>,
     @SerialName("uploadId")
     val uploadId: String,
     @SerialName("size")
