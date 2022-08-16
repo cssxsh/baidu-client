@@ -34,6 +34,18 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
 
     public val web: BaiduNetDiskWeb by lazy { BaiduNetDiskWeb(client = this) }
 
+    protected var user: NetDiskUserInfo? = null
+
+    public suspend fun user(flush: Boolean = false): NetDiskUserInfo {
+        return if (flush || this.user == null) {
+            val user = rest.user()
+            this.user = user
+            user
+        } else {
+            this.user ?: user(flush = true)
+        }
+    }
+
     /**
      * 创建一个目录
      * @param path 路径
@@ -50,7 +62,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
         check(file.isFile) { "${file.absolutePath} 不是文件" }
         check(file.length() > 0) { "${file.absolutePath} 文件是空的" }
 
-        val user = rest.user()
+        val user = user()
         val length = file.length()
         check(length <= user.vip.updateLimit) { "超过当前用户${user}上传上限" }
 
