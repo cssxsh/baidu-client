@@ -331,14 +331,15 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
 
     /**
      * 获取分享文件信息-子文件夹
-     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串
+     * @param shareId 分享ID [NetDiskViewList.shareId]
+     * @param from 分享者ID [NetDiskViewList.uk]
      * @param key 在 [verify] 中得到的 key
      * @param page 页码 从 1 开始，一页数目 1000
      * @param option 排序方式和起始路径
      * @see rest
      */
-    public suspend fun view(surl: String, key: String, page: Int, option: NetDiskOption): NetDiskFileList {
-        return rest.view(surl = surl, key = key, page = page, option = option)
+    public suspend fun view(shareId: Long, from: Long, key: String, page: Int, option: NetDiskOption): NetDiskFileList {
+        return rest.view(shareId = shareId, from = from, key = key, page = page, option = option)
     }
 
     /**

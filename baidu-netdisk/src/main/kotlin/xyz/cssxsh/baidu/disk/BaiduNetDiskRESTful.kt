@@ -577,20 +577,23 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
 
     /**
      * [获取分享文件信息-子文件夹](https://pan.baidu.com/union/doc/3ksmyma1y)
-     * @param surl surl 参数，或者 short url 的 /s/ 之后的字符串
+     * @param shareId 分享ID [NetDiskViewList.shareId]
+     * @param from 分享者ID [NetDiskViewList.uk]
      * @param key 在 [verify] 中得到的 key
      * @param page 页码 从 1 开始，一页数目 1000
      * @param option 排序方式和起始路径
      */
-    public suspend fun view(surl: String, key: String, page: Int, option: NetDiskOption): NetDiskFileList {
+    public suspend fun view(shareId: Long, from: Long, key: String, page: Int, option: NetDiskOption): NetDiskFileList {
         return client.useHttpClient { http ->
             http.get {
                 url(SHARE)
                 header(HttpHeaders.Referrer, NetDiskClient.INDEX_PAGE)
                 parameter("method", "list")
                 parameter("access_token", client.accessToken())
-                parameter("shorturl", surl.removePrefix("1"))
+//                parameter("shorturl", surl.removePrefix("1"))
                 parameter("sekey", key)
+                parameter("shareid", shareId)
+                parameter("uk", from)
                 parameter("page", page)
                 parameter("num", 1_000)
                 parameter("web", "1")
