@@ -4,7 +4,7 @@ import kotlinx.serialization.*
 
 /**
  * 创建任务请求
- * @param text 待合成的文本，需要为UTF-8编码；输入多段文本时，文本间会插入1s长度的空白间隔
+ * @param text 待合成的文本；输入多段文本时，文本间会插入1s长度的空白间隔
  * @param format 音频格式 "mp3-16k"，"mp3-48k"，"wav"，"pcm-8k"，"pcm-16k"，默认为mp3-16k
  * @param voice 音库 [SpeechPerson]
  * @param lang 语言 固定值zh

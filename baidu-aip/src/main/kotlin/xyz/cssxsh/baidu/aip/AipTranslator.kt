@@ -113,9 +113,9 @@ public open class AipTranslator(override val client: AipClient) : AipApplication
                 append(key = "image".quote(), filename = "blob".quote(), bodyBuilder = image)
             }) {
                 parameter("access_token", client.accessToken())
-            }.body<ResponseBody2<TranslatePictureResult>>()
+            }.body<ResponseBody<TranslatePictureResult>>()
 
-            responseBody.data ?: throw BaiduAipException(info = responseBody)
+            responseBody.result ?: throw BaiduAipException(info = responseBody)
         }
     }
 
