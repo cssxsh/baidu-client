@@ -1,6 +1,7 @@
 package xyz.cssxsh.baidu.unit.data
 
 import kotlinx.serialization.*
+import kotlinx.serialization.json.*
 import java.time.LocalDateTime
 
 /**
@@ -25,19 +26,19 @@ import java.time.LocalDateTime
 public data class SkillInfo(
     @SerialName("skillId")
     val id: Long,
-    @SerialName("skillName")
+    @JsonNames("skillName", "botName")
     val name: String,
-    @SerialName("skillDesc")
+    @JsonNames("skillDesc", "botDesc")
     val description: String,
-    @SerialName("skillCategory")
+    @JsonNames("skillCategory", "botCategory")
     val category: SkillCategory,
-    @SerialName("skillType")
+    @JsonNames("skillType", "botType")
     val type: SkillType,
     @SerialName("skillObtainedBy")
     val obtainedBy: SkillObtainedBy,
     @SerialName("skillStatus")
     val status: SkillStatus,
-    @SerialName("skillVersion")
+    @JsonNames("skillVersion", "botVersion")
     val version: String,
     @SerialName("copyStatus")
     val copy: SkillCopyStatus = SkillCopyStatus.none,
