@@ -4,10 +4,10 @@
 
 [![Test](https://github.com/cssxsh/baidu-client/actions/workflows/Test.yml/badge.svg)](https://github.com/cssxsh/baidu-client/actions/workflows/Test.yml)
 
-* oauth ![baidu-oauth](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-oauth)
-* aip ![baidu-aip](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-aip)
-* netdisk ![baidu-netdisk](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-netdisk)
-* unit ![baidu-netdisk](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-unit)
+*   oauth ![baidu-oauth](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-oauth)
+*   aip ![baidu-aip](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-aip)
+*   netdisk ![baidu-netdisk](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-netdisk)
+*   unit ![baidu-netdisk](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-unit)
 
 ## Baidu User Oauth
 
@@ -33,11 +33,11 @@
 
 已完成的功能
 
-1. 验证登录
-2. 上传文件
-3. 列出文件
-4. 搜索文件
-5. [秒传链接](https://zhuanlan.zhihu.com/p/356900770) 获取和解析
+1.  验证登录
+2.  上传文件
+3.  列出文件
+4.  搜索文件
+5.  [秒传链接](https://zhuanlan.zhihu.com/p/356900770) 获取和解析
 
 ## Baidu AIP
 
@@ -45,10 +45,10 @@
 
 目前实现的功能有
 
-* [AipContentCensor](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipContentCensor.kt) 智能内容审核
-* [AipTextToSpeech](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipTextToSpeech.kt) 在线语音合成
-* [AipTranslator](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipTranslator.kt) 机器翻译
-* [AipNaturalLanguageProcessing](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipNaturalLanguageProcessing.kt) 自然语言分析
+*   [AipContentCensor](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipContentCensor.kt) 智能内容审核
+*   [AipTextToSpeech](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipTextToSpeech.kt) 在线语音合成
+*   [AipTranslator](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipTranslator.kt) 机器翻译
+*   [AipNaturalLanguageProcessing](baidu-aip/src/main/kotlin/xyz/cssxsh/baidu/aip/AipNaturalLanguageProcessing.kt) 自然语言分析
 
 ## Baidu Unit
 
@@ -57,7 +57,7 @@
 
 ## Gradle引用包
 
-```
+```kotlin
 repositories {
     mavenCentral()
 }
