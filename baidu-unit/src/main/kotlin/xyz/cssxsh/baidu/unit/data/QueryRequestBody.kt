@@ -58,8 +58,8 @@ public data class QueryRequestBody(
     )
 
     /**
-     * @param type 请求信息类型，取值范围："TEXT","EVENT"。
-     * @param source 请求信息来源，可选值："ASR","KEYBOARD"。ASR为语音输入，KEYBOARD为键盘文本输入。
+     * @param type 请求信息类型，取值范围：`TEXT`, `EVENT`。
+     * @param source 请求信息来源，可选值：`ASR`, `KEYBOARD`。ASR为语音输入，KEYBOARD为键盘文本输入。
      * @param candidates 请求信息来源若为ASR，该字段为ASR候选信息。
      */
     @Serializable

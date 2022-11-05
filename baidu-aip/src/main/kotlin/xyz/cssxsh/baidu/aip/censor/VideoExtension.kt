@@ -27,6 +27,10 @@ public data class VideoExtension(
         val subject: String
     )
 
+    /**
+     * @param title 字段名称
+     * @param value 字段值
+     */
     @Serializable
     public data class Field(
         @SerialName("title")

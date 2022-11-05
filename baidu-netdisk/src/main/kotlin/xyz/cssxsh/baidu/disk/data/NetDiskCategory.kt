@@ -18,6 +18,12 @@ public data class NetDiskCategory(
     override val requestId: String
 ) : NetDiskErrorInfo {
 
+    /**
+     * 分类详情
+     * @param count 数量
+     * @param size 大小
+     * @param total 总计
+     */
     @Serializable
     public data class Detail(
         @SerialName("count")
