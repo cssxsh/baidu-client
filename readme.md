@@ -3,6 +3,7 @@
 > 百度API的Kotlin Jvm SDK
 
 [![Test](https://github.com/cssxsh/baidu-client/actions/workflows/Test.yml/badge.svg)](https://github.com/cssxsh/baidu-client/actions/workflows/Test.yml)
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/9d86fd8a8c81490b94107f03df1dac5b)](https://www.codacy.com/gh/cssxsh/baidu-client/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=cssxsh/baidu-client&amp;utm_campaign=Badge_Grade)
 
 *   oauth ![baidu-oauth](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-oauth)
 *   aip ![baidu-aip](https://img.shields.io/maven-central/v/xyz.cssxsh.baidu/baidu-aip)
