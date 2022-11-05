@@ -16,7 +16,7 @@ public abstract class AbstractBaiduAuthClient<C : BaiduAuthConfig> : AbstractBai
         if (cause is ClientRequestException) {
             throw try {
                 AuthorizeException(cause)
-            } catch (cause: Throwable) {
+            } catch (cause: Exception) {
                 return
             }
         }

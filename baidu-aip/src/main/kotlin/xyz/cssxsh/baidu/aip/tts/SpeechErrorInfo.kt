@@ -3,6 +3,9 @@ package xyz.cssxsh.baidu.aip.tts
 import kotlinx.serialization.*
 import xyz.cssxsh.baidu.aip.*
 
+/**
+ * 语音错误信息
+ */
 @Serializable
 public data class SpeechErrorInfo(
     @SerialName("err_msg")

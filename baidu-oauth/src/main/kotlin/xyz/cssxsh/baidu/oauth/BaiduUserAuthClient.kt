@@ -5,6 +5,9 @@ import kotlinx.coroutines.*
 import xyz.cssxsh.baidu.oauth.data.*
 import xyz.cssxsh.baidu.oauth.exception.*
 
+/**
+ * 百度用户认证客户端
+ */
 public interface BaiduUserAuthClient<C : BaiduAuthConfig> : BaiduAuthClient<C> {
     public companion object {
         public const val TIMEOUT: Long = 10 * 60 * 1000L

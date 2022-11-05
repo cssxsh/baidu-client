@@ -2,13 +2,9 @@ package xyz.cssxsh.baidu.aip
 
 import kotlinx.coroutines.*
 import org.junit.jupiter.api.*
-import java.io.*
-import java.time.*
-import java.util.*
-import kotlin.properties.*
-import kotlin.reflect.*
 
-abstract class BaiduApiClientTest {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+internal abstract class BaiduApiClientTest {
 
     protected abstract val client: AipClient
 

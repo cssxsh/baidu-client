@@ -9,6 +9,9 @@ import kotlinx.serialization.json.*
 import xyz.cssxsh.baidu.api.*
 import xyz.cssxsh.baidu.disk.data.*
 
+/**
+ * 百度云 网页端 API
+ */
 public class BaiduNetDiskWeb internal constructor(public val client: NetDiskClient) {
     public companion object {
         internal const val QUOTA: String = "https://pan.baidu.com/api/quota"

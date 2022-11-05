@@ -3,7 +3,7 @@ package xyz.cssxsh.baidu.oauth.data
 import kotlinx.serialization.*
 
 /**
- *
+ * 认证错误信息数据
  * @see AuthorizeErrorType
  * @see xyz.cssxsh.baidu.oauth.exception.AuthorizeException
  */

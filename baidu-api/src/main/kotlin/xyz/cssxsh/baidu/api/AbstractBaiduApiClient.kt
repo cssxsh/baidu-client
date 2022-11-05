@@ -54,18 +54,22 @@ public abstract class AbstractBaiduApiClient<C> : BaiduApiClient<C> {
     public override suspend fun <R> useHttpClient(block: suspend C.(HttpClient) -> R): R {
         return supervisorScope {
             var ignores = 0
+            var cause: Throwable? = null
             while (isActive) {
                 try {
                     return@supervisorScope block.invoke(config, client)
+                } catch (cancellation: CancellationException) {
+                    break
                 } catch (throwable: Throwable) {
                     if (isActive && apiIgnore(throwable)) {
+                        cause = throwable
                         ignores++
                     } else {
                         throw throwable
                     }
                 }
             }
-            throw CancellationException("ignores: $ignores")
+            throw CancellationException("ignores: $ignores", cause)
         }
     }
 

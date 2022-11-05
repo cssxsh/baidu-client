@@ -2,6 +2,9 @@ package xyz.cssxsh.baidu.oauth.data
 
 import kotlinx.serialization.*
 
+/**
+ * 设备认证信息
+ */
 @Serializable
 public data class AuthorizeDeviceCode(
     @SerialName("device_code")

@@ -2,6 +2,11 @@ package xyz.cssxsh.baidu.disk
 
 import xyz.cssxsh.baidu.oauth.*
 
+/**
+ * 百度网盘 客户端接口
+ * @see AbstractNetDiskClient
+ * @see BaiduNetDiskConfig
+ */
 public interface NetDiskClient : BaiduUserAuthClient<BaiduNetDiskConfig> {
 
     public companion object {

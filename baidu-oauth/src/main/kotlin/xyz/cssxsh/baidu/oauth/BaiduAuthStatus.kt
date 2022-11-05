@@ -2,6 +2,9 @@ package xyz.cssxsh.baidu.oauth
 
 import java.time.*
 
+/**
+ * 百度认证状态信息接口
+ */
 public interface BaiduAuthStatus {
 
     public var expires: OffsetDateTime

@@ -7,6 +7,7 @@ import xyz.cssxsh.baidu.oauth.data.*
 
 
 /**
+ * 认证异常
  * @see AuthorizeErrorType
  * @see AuthorizeAccessToken
  */
@@ -17,6 +18,7 @@ public class AuthorizeException(public val data: AuthorizeError, cause: Throwabl
 }
 
 /**
+ * 认证异常
  * @see AuthorizeErrorType
  * @see AuthorizeAccessToken
  */

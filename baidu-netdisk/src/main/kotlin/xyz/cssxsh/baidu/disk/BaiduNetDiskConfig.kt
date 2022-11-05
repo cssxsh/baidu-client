@@ -4,6 +4,9 @@ import xyz.cssxsh.baidu.oauth.*
 import java.nio.file.Path
 import kotlin.io.path.*
 
+/**
+ * 百度网盘 配置接口
+ */
 public interface BaiduNetDiskConfig : BaiduAuthConfig {
     public val shareSecret: String get() = ""
     public val shareThirdId: Long get() = 0

@@ -108,6 +108,10 @@ public class OrdinalSerializer<E : Enum<E>>(kClass: KClass<E>, private val value
     }
 }
 
+/**
+ * 将 枚举 序列化为 ordinal 数字
+ * @see OrdinalSerializer
+ */
 @Suppress("FunctionName")
 public inline fun <reified E : Enum<E>> OrdinalSerializer(): OrdinalSerializer<E> {
     return OrdinalSerializer(kClass = E::class, values = enumValues())
@@ -130,6 +134,10 @@ public class LowerCaseSerializer<E : Enum<E>>(kClass: KClass<E>, private val val
     }
 }
 
+/**
+ * 将 枚举 序列化为 name 字符串
+ * @see LowerCaseSerializer
+ */
 @Suppress("FunctionName")
 public inline fun <reified E : Enum<E>> LowerCaseSerializer(): LowerCaseSerializer<E> {
     return LowerCaseSerializer(kClass = E::class, values = enumValues())

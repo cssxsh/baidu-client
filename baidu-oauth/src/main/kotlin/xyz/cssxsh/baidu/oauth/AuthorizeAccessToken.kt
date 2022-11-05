@@ -4,6 +4,9 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.oauth.data.*
 import java.time.*
 
+/**
+ * 认证 TOKEN 信息
+ */
 @Serializable
 public data class AuthorizeAccessToken(
     @SerialName("access_token")
