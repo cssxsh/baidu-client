@@ -2,6 +2,11 @@ package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
 
+/**
+ * 回收站文件列表
+ * @param list 文件列表
+ * @param timestamp 时间戳
+ */
 @Serializable
 public data class NetDiskRecycleList(
     @SerialName("list")

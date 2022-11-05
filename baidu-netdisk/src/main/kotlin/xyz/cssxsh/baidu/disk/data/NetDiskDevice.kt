@@ -4,6 +4,9 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 import java.time.*
 
+/**
+ * 网盘关联设备
+ */
 @Serializable
 public data class NetDiskDevice(
     @SerialName("device_brand")

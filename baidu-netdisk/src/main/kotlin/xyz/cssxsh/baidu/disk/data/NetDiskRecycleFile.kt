@@ -5,6 +5,7 @@ import xyz.cssxsh.baidu.api.*
 import java.time.*
 
 /**
+ * 回收站文件
  * @param deleted 删除时间
  */
 @Serializable

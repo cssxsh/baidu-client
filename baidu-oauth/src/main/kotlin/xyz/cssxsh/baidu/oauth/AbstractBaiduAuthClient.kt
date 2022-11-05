@@ -8,6 +8,9 @@ import xyz.cssxsh.baidu.oauth.data.*
 import xyz.cssxsh.baidu.oauth.exception.*
 import java.time.*
 
+/**
+ * 百度认证客户端 抽象实现
+ */
 public abstract class AbstractBaiduAuthClient<C : BaiduAuthConfig> : AbstractBaiduApiClient<C>(), BaiduAuthClient<C> {
 
     protected override val timeout: Long get() = BaiduUserAuthClient.TIMEOUT

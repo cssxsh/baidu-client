@@ -176,6 +176,9 @@ public object ScopeType : KSerializer<List<String>> {
 
     private val SPLIT_REGEX = """([,]|\s|[+])""".toRegex()
 
+    /**
+     * 解析权限
+     */
     public operator fun invoke(text: String): List<String> = text.split(SPLIT_REGEX)
 
     override fun deserialize(decoder: Decoder): List<String> {

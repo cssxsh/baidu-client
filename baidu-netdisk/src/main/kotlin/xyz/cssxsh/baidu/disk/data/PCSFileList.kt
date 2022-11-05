@@ -2,6 +2,9 @@ package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
 
+/**
+ * 文件列表
+ */
 @Serializable
 public data class PCSFileList<F : NetDiskFileInfo>(
     @SerialName("list")

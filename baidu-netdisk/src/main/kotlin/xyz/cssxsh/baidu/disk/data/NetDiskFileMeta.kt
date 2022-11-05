@@ -5,6 +5,7 @@ import xyz.cssxsh.baidu.api.*
 import java.time.*
 
 /**
+ * 文件元数据
  * @param dlink 下载链接
  */
 @Serializable

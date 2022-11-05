@@ -2,6 +2,11 @@ package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
 
+/**
+ * 查询文件信息 结果
+ * @param list 文件元数据
+ * @param names 文件和类型
+ */
 @Serializable
 public data class NetDiskQuery(
     @SerialName("list")

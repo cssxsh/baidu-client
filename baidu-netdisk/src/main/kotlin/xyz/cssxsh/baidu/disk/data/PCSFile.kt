@@ -4,6 +4,9 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 import java.time.*
 
+/**
+ * 文件元数据
+ */
 @Serializable
 public data class PCSFile(
     @SerialName("fs_id")

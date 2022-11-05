@@ -3,6 +3,11 @@ package xyz.cssxsh.baidu.disk.data
 import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 
+/**
+ * 分类文件列表
+ * @param list 文件列表
+ * @param hasMore 还有下一页
+ */
 @Serializable
 public data class NetDiskCategoryList(
     @SerialName("info")

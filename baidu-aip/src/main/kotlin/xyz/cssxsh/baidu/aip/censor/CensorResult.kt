@@ -3,10 +3,19 @@ package xyz.cssxsh.baidu.aip.censor
 import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 
+/**
+ * 审核结果数据
+ * @property records 审核结果集
+ */
 @Serializable
 public sealed class CensorResult : CensorStatus {
+    public abstract val records: List<CensorStatus>
     public abstract val isHitMd5: Boolean
 
+    /**
+     * 图片审核结果数据
+     * @param data 图片审核结果集
+     */
     @Serializable
     @SerialName("Image")
     public data class Image(
@@ -25,7 +34,14 @@ public sealed class CensorResult : CensorStatus {
         @SerialName("data")
         val `data`: List<Record> = emptyList(),
     ) : CensorResult() {
+        override val records: List<Record> get() = data
 
+        /**
+         * 图片审核审核记录
+         * @property message 信息
+         * @property stars 明星相关
+         * @property hits 词汇相关
+         */
         @Serializable
         public data class Record(
             @SerialName("error_code")
@@ -57,6 +73,10 @@ public sealed class CensorResult : CensorStatus {
         ) : CensorStatus, CensorItem
     }
 
+    /**
+     * 文本审核结果数据
+     * @param data 文本审核结果集
+     */
     @Serializable
     @SerialName("Text")
     public data class Text(
@@ -75,7 +95,13 @@ public sealed class CensorResult : CensorStatus {
         @SerialName("data")
         val `data`: List<Record> = emptyList()
     ) : CensorResult() {
+        override val records: List<Record> get() = data
 
+        /**
+         * 文本审核记录
+         * @property message 信息
+         * @property hits 词汇相关
+         */
         @Serializable
         public data class Record(
             @SerialName("error_code")
@@ -99,6 +125,11 @@ public sealed class CensorResult : CensorStatus {
         ) : CensorStatus
     }
 
+    /**
+     * 视频审核结果数据
+     * @param frames 视频审核结果集
+     * @param conclusionTypeGroupInfos 视频审核详细信息
+     */
     @Serializable
     @SerialName("Video")
     public data class Video(
@@ -119,7 +150,15 @@ public sealed class CensorResult : CensorStatus {
         @SerialName("conclusionTypeGroupInfos")
         val conclusionTypeGroupInfos: JsonArray? = null
     ) : CensorResult() {
+        override val records: List<Frame> get() = frames
 
+        /**
+         * 视频审核记录
+         * @param data 图片审核结果集
+         * @param frameThumbnailUrl 截图URL
+         * @param frameTimeStamp 时间戳
+         * @param frameUrl 截图URL
+         */
         @Serializable
         public data class Frame(
             @SerialName("error_code")
@@ -141,6 +180,11 @@ public sealed class CensorResult : CensorStatus {
         ) : CensorStatus
     }
 
+    /**
+     * 语音审核结果数据
+     * @param data 语音审核结果集
+     * @param rawText 语音转录热文本
+     */
     @Serializable
     @SerialName("Voice")
     public data class Voice(
@@ -163,7 +207,13 @@ public sealed class CensorResult : CensorStatus {
         @SerialName("sn")
         val sn: String = "",
     ) : CensorResult() {
+        override val records: List<Record> get() = data
 
+        /**
+         * 语音审核审核记录
+         * @property text 转录文本
+         * @property auditData 文本审核结果集
+         */
         @Serializable
         public data class Record(
             @SerialName("error_code")

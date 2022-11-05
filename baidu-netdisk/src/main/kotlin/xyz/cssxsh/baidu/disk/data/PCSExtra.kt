@@ -2,6 +2,10 @@ package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
 
+/**
+ * 文件操作结果数据
+ * @param extra 结果
+ */
 @Serializable
 public data class PCSExtra<T>(
     @SerialName("extra")
@@ -14,6 +18,10 @@ public data class PCSExtra<T>(
     override val requestId: Long
 ) : PCSErrorInfo {
 
+    /**
+     * 文件操作结果
+     * @param list 结果
+     */
     @Serializable
     public data class Extra<T>(
         @SerialName("list")

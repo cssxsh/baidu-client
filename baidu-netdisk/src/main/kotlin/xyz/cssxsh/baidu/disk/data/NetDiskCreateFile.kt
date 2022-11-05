@@ -4,6 +4,10 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 import java.time.*
 
+/**
+ * 文件创建结果
+ * @param name 文件名
+ */
 @Serializable
 public data class NetDiskCreateFile(
     @SerialName("category")

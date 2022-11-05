@@ -11,10 +11,16 @@ import java.time.*
 import java.time.format.*
 import kotlin.reflect.*
 
+/**
+ * boolean 转为 数字 1 和 0
+ */
 public fun Boolean.toInt(): Int = if (this) 1 else 0
 
 internal const val IGNORE_UNKNOWN_KEYS = "xyz.cssxsh.baidu.json.ignore"
 
+/**
+ * 根据百度API调整的序列化
+ */
 public val BaiduJson: Json = Json {
     isLenient = true
     ignoreUnknownKeys = System.getProperty(IGNORE_UNKNOWN_KEYS, "true").toBoolean()

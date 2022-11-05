@@ -3,6 +3,11 @@ package xyz.cssxsh.baidu.disk.data
 import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 
+/**
+ * 网盘关联设备列表
+ * @param list 列表
+ * @param hasMore 是否还有更多
+ */
 @Serializable
 public data class NetDiskDeviceList(
     @SerialName("list")

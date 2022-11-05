@@ -36,6 +36,10 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
 
     protected var user: NetDiskUserInfo? = null
 
+    /**
+     * 获取用户信息
+     * @param flush 是否刷新
+     */
     public suspend fun user(flush: Boolean = false): NetDiskUserInfo {
         return if (flush || this.user == null) {
             val user = rest.user()

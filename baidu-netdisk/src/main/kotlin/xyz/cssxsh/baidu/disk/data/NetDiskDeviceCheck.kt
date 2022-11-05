@@ -3,6 +3,9 @@ package xyz.cssxsh.baidu.disk.data
 import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 
+/**
+ * 网盘关联设备检查
+ */
 @Serializable
 public data class NetDiskDeviceCheck(
     @SerialName("status")

@@ -3,6 +3,11 @@ package xyz.cssxsh.baidu.disk.data
 import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 
+/**
+ * 网盘关联设备变动列表
+ * @param devices 变动列表
+ * @param hasMore 是否还有更多
+ */
 @Serializable
 public data class NetDiskDeviceDiffList(
     @SerialName("cursor")

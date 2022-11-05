@@ -2,6 +2,9 @@ package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
 
+/**
+ * 网盘错误信息
+ */
 @Serializable
 public data class NetDiskError(
     @SerialName("errmsg")

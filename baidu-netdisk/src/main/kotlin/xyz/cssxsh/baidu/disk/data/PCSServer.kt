@@ -2,6 +2,12 @@ package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
 
+/**
+ * PCS 服务器信息
+ * @param host 域名
+ * @param expire 过期时间
+ * @param server 服务器
+ */
 @Serializable
 public data class PCSServer(
     @SerialName("client_ip")

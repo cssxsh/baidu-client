@@ -2,6 +2,10 @@ package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
 
+/**
+ * 网盘登录状态
+ * @param login 登录信息
+ */
 @Serializable
 public data class NetDiskLoginStatus(
     @SerialName("login_info")
@@ -14,6 +18,15 @@ public data class NetDiskLoginStatus(
     override val requestId: String
 ) : NetDiskErrorInfo {
 
+    /**
+     * 网盘登录信息
+     * @param token 凭证
+     * @param photo
+     * @param id 用户ID
+     * @param uk 用户内部ID
+     * @param username 用户名
+     * @param vipType VIP类型
+     */
     @Serializable
     public data class LoginInfo(
         @SerialName("bdstoken")

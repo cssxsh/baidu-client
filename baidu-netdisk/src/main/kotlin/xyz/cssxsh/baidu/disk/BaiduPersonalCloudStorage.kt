@@ -29,6 +29,9 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         requestId = 0
     )
 
+    /**
+     * 查询容量
+     */
     public suspend fun quota(): PCSQuotaInfo {
         return client.useHttpClient { http ->
             http.get(QUOTA) {
@@ -38,6 +41,9 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 上传文件
+     */
     public suspend fun upload(path: String, ondup: OnDupType, size: Long, input: BodyBuilder): PCSUploadFile {
         return client.useHttpClient { http ->
             http.submitFormWithBinaryData(FILE, formData {
@@ -54,6 +60,9 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 秒传文件
+     */
     public suspend fun rapid(upload: RapidUploadInfo, ondup: OnDupType): PCSUploadFile {
         return client.useHttpClient { http ->
             http.post(FILE) {
@@ -69,6 +78,9 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 秒传文件
+     */
     public suspend fun temp(path: String, size: Int, input: BodyBuilder): PCSTempInfo {
         return client.useHttpClient { http ->
             http.submitFormWithBinaryData(FILE, formData {
@@ -85,6 +97,14 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 创建一个文件分片
+     * @param path 文件路径
+     * @param id 任务ID
+     * @param index 序号
+     * @param size 大小
+     * @param input 输入DSL
+     */
     public suspend fun temp(path: String, id: String, index: Int, size: Int, input: BodyBuilder): PCSTempInfo {
         return client.useHttpClient { http ->
             http.submitFormWithBinaryData(SUPER_FILE, formData {
@@ -104,6 +124,12 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 创建一个文件
+     * @param path 文件路径
+     * @param blocks 文件块MD5
+     * @param ondup 文件冲突策略
+     */
     public suspend fun create(path: String, blocks: List<String>, ondup: OnDupType): PCSUploadFile {
         return client.useHttpClient { http ->
             http.submitFormWithBinaryData(FILE, formData {
@@ -126,6 +152,11 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 创建一个下载任务
+     * @param path 文件路径
+     * @param block HttpRequest DSL
+     */
     public suspend fun download(path: String, block: HttpRequestBuilder.() -> Unit): HttpStatement {
         return client.useHttpClient { http ->
             http.prepareGet(FILE) {
@@ -141,6 +172,11 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 创建一个下载任务
+     * @param dlink 下载连接
+     * @param block HttpRequest DSL
+     */
     public suspend fun load(dlink: String, block: HttpRequestBuilder.() -> Unit): HttpStatement {
         return client.useHttpClient { http ->
             http.prepareGet(dlink) {
@@ -151,6 +187,10 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 创建文件夹
+     * @param path 文件路径
+     */
     public suspend fun mkdir(path: String): PCSUploadFile {
         return client.useHttpClient { http ->
             http.get(FILE) {
@@ -161,6 +201,10 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 获取文件元数据
+     * @param path 文件路径
+     */
     public suspend fun meta(path: String): PCSFileList<PCSFile> {
         return client.useHttpClient { http ->
             http.get(FILE) {
@@ -171,14 +215,18 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
-    public suspend fun meta(vararg list: String): PCSFileList<PCSFile> {
+    /**
+     * 获取文件元数据
+     * @param paths 文件路径列表
+     */
+    public suspend fun meta(vararg paths: String): PCSFileList<PCSFile> {
         return client.useHttpClient { http ->
             http.submitFormWithBinaryData(FILE, formData {
                 append(
                     key = "param".quote(),
                     value = buildJsonObject {
                         putJsonArray("list") {
-                            list.forEach { path ->
+                            paths.forEach { path ->
                                 addJsonObject {
                                     put("path", appDataFolder(path = path))
                                 }
@@ -193,6 +241,13 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 列出文件
+     * @param path 工作目录
+     * @param order 排序方式
+     * @param desc 逆序
+     * @param limit INDEX区间
+     */
     public suspend fun list(path: String, order: OrderType, desc: Boolean, limit: IntRange?): PCSFileList<PCSFile> {
         return client.useHttpClient { http ->
             http.get(FILE) {
@@ -206,6 +261,11 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 移动文件-单个
+     * @param from 起始目录
+     * @param to 目标目录
+     */
     public suspend fun move(from: String, to: String): PCSExtra<PCSFileChange> {
         return client.useHttpClient { http ->
             http.post(FILE) {
@@ -217,14 +277,18 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
-    public suspend fun move(vararg list: Pair<String, String>): PCSExtra<PCSFileChange> {
+    /**
+     * 移动文件-多个
+     * @param pairs 文件对列表
+     */
+    public suspend fun move(vararg pairs: Pair<String, String>): PCSExtra<PCSFileChange> {
         return client.useHttpClient { http ->
             http.submitFormWithBinaryData(FILE, formData {
                 append(
                     key = "param".quote(),
                     value = buildJsonObject {
                         putJsonArray("list") {
-                            list.forEach { (from, to) ->
+                            pairs.forEach { (from, to) ->
                                 addJsonObject {
                                     put("from", appDataFolder(path = from))
                                     put("to", appDataFolder(path = to))
@@ -240,6 +304,11 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 复制文件-单个
+     * @param from 起始目录
+     * @param to 目标目录
+     */
     public suspend fun copy(from: String, to: String): PCSExtra<PCSFileChange> {
         return client.useHttpClient { http ->
             http.post(FILE) {
@@ -251,14 +320,18 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
-    public suspend fun copy(vararg list: Pair<String, String>): PCSExtra<PCSFileChange> {
+    /**
+     * 复制文件-多个
+     * @param pairs 文件对列表
+     */
+    public suspend fun copy(vararg pairs: Pair<String, String>): PCSExtra<PCSFileChange> {
         return client.useHttpClient { http ->
             http.submitFormWithBinaryData(FILE, formData {
                 append(
                     key = "param".quote(),
                     value = buildJsonObject {
                         putJsonArray("list") {
-                            list.forEach { (from, to) ->
+                            pairs.forEach { (from, to) ->
                                 addJsonObject {
                                     put("from", appDataFolder(path = from))
                                     put("to", appDataFolder(path = to))
@@ -274,6 +347,10 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 删除文件-单个
+     * @param path 文件路径
+     */
     public suspend fun delete(path: String): PCSError {
         return client.useHttpClient { http ->
             http.post(FILE) {
@@ -284,14 +361,18 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
-    public suspend fun delete(vararg list: String): PCSError {
+    /**
+     * 删除文件-多个
+     * @param paths 文件路径列表
+     */
+    public suspend fun delete(vararg paths: String): PCSError {
         return client.useHttpClient { http ->
             http.submitFormWithBinaryData(FILE, formData {
                 append(
                     key = "param".quote(),
                     value = buildJsonObject {
                         putJsonArray("list") {
-                            list.forEach { path ->
+                            paths.forEach { path ->
                                 addJsonObject {
                                     put("path", appDataFolder(path = path))
                                 }
@@ -306,6 +387,12 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 搜索文件
+     * @param path 工作目录
+     * @param word 关键词
+     * @param recursion 迭代查找
+     */
     public suspend fun search(path: String, word: String, recursion: Boolean): PCSFileList<PCSSearchFile> {
         return client.useHttpClient { http ->
             http.get(FILE) {
@@ -318,6 +405,11 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 列出回收站文件
+     * @param start 页面起始INDEX
+     * @param limit 页面文件数上限
+     */
     public suspend fun recycle(start: Int, limit: Int): PCSFileList<PCSSearchFile> {
         return client.useHttpClient { http ->
             http.get(FILE) {
@@ -329,6 +421,10 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 恢复回收站文件
+     * @param id 文件ID
+     */
     public suspend fun restore(id: Long): PCSExtra<PCSFileRestore> {
         return client.useHttpClient { http ->
             http.post(FILE) {
@@ -339,14 +435,19 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
-    public suspend fun restore(vararg list: Long): PCSExtra<PCSFileRestore> {
+
+    /**
+     * 恢复回收站文件
+     * @param ids 文件ID列表
+     */
+    public suspend fun restore(vararg ids: Long): PCSExtra<PCSFileRestore> {
         return client.useHttpClient { http ->
             http.submitFormWithBinaryData(FILE, formData {
                 append(
                     key = "param".quote(),
                     value = buildJsonObject {
                         putJsonArray("list") {
-                            list.forEach { id ->
+                            ids.forEach { id ->
                                 addJsonObject {
                                     put("fs_id", id)
                                 }
@@ -361,6 +462,9 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 清空回收站
+     */
     public suspend fun clear(): PCSError {
         return client.useHttpClient { http ->
             http.post(FILE) {
@@ -371,6 +475,9 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         }
     }
 
+    /**
+     * 获取 PCS Host
+     */
     public suspend fun host(): PCSServer {
         return client.useHttpClient { http ->
             http.post(FILE) {

@@ -2,6 +2,10 @@ package xyz.cssxsh.baidu.disk.data
 
 import kotlinx.serialization.*
 
+/**
+ * 回收站操作结果
+ * @param failed 操作失败文件ID
+ */
 @Serializable
 public data class NetDiskRecycleOpera(
     @SerialName("faillist")

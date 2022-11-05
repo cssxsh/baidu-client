@@ -4,6 +4,9 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 import java.time.*
 
+/**
+ * 网盘关联设备变动
+ */
 @Serializable
 public data class NetDiskDeviceDiff(
     @SerialName("ability")
@@ -44,6 +47,9 @@ public data class NetDiskDeviceDiff(
     @Serializable(NumberToBooleanSerializer::class)
     val status: Boolean
 ) {
+    /**
+     * 活动
+     */
     @Serializable
     public data class Ability(
         @SerialName("category")

@@ -4,6 +4,7 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 
 /**
+ * 文件列表
  * @param list 文件列表
  * @param cursor 下一次查询的起点
  * @param hasMore 是否还有数据

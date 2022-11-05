@@ -4,6 +4,9 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 import java.time.*
 
+/**
+ * 文件上传记录
+ */
 @Serializable
 public data class NetDiskFileRecord(
     @SerialName("category")

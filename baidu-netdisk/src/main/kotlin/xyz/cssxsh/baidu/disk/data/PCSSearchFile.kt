@@ -4,6 +4,9 @@ import kotlinx.serialization.*
 import xyz.cssxsh.baidu.api.*
 import java.time.*
 
+/**
+ * 搜索文件结果
+ */
 @Serializable
 public data class PCSSearchFile(
     @SerialName("fs_id")
