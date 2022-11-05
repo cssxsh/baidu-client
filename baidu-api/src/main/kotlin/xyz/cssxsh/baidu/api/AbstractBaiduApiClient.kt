@@ -12,6 +12,14 @@ import io.ktor.serialization.kotlinx.json.*
 import io.ktor.utils.io.errors.*
 import kotlinx.coroutines.*
 
+/**
+ * 百度 API 客户端 抽象实现
+ * @property cookiesStorage 保存 cookies
+ * @property timeout 网络超时时间
+ * @property userAgent Http User Agent
+ * @property apiIgnore api exception ignore
+ * @property client Http Client
+ */
 public abstract class AbstractBaiduApiClient<C> : BaiduApiClient<C> {
     protected open val cookiesStorage: CookiesStorage = AcceptAllCookiesStorage()
 
