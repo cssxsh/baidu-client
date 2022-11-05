@@ -4,12 +4,13 @@ import kotlinx.serialization.*
 
 /**
  * 机器人技能类型
- * @property user 开发者⾃定义
- * @property built 预置
+ * @property USER 开发者⾃定义
+ * @property BUILT 预置
  */
 @Serializable
-@Suppress("EnumEntryName")
 public enum class SkillCategory {
-    user,
-    built
+    @SerialName("user")
+    USER,
+    @SerialName("built")
+    BUILT
 }

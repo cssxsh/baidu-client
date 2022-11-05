@@ -15,5 +15,5 @@ public data class SkillAddRequest(
     @SerialName("serviceDesc")
     val description: String,
     @SerialName("skillType")
-    val type: SkillType = SkillType.dialogue
+    val type: SkillType = SkillType.DIALOGUE
 )

@@ -4,16 +4,19 @@ import kotlinx.serialization.*
 
 /**
  * 机器人技能类型
- * @property dialogue 对话
- * @property faq 问答
- * @property ddqa ⽂档问答
- * @property kbqa 表格问答
+ * @property DIALOGUE 对话
+ * @property FAQ 问答
+ * @property DD_QA ⽂档问答
+ * @property KB_QA 表格问答
  */
 @Serializable
-@Suppress("EnumEntryName")
 public enum class SkillType {
-    dialogue,
-    faq,
-    ddqa,
-    kbqa
+    @SerialName("dialogue")
+    DIALOGUE,
+    @SerialName("faq")
+    FAQ,
+    @SerialName("ddqa")
+    DD_QA,
+    @SerialName("kbqa")
+    KB_QA
 }

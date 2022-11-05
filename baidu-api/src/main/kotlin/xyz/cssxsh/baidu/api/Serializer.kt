@@ -23,6 +23,9 @@ public val BaiduJson: Json = Json {
     }
 }
 
+/**
+ * 将 bytes 序列化为 base64 字符串
+ */
 public object ByteArrayToBase64Serializer : KSerializer<ByteArray> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor(this::class.qualifiedName!!, PrimitiveKind.STRING)
@@ -36,6 +39,9 @@ public object ByteArrayToBase64Serializer : KSerializer<ByteArray> {
     }
 }
 
+/**
+ * 将 0 和 1 解析为 Boolean 值 false 和 true
+ */
 public object NumberToBooleanSerializer : KSerializer<Boolean> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor(this::class.qualifiedName!!, PrimitiveKind.INT)
@@ -49,6 +55,9 @@ public object NumberToBooleanSerializer : KSerializer<Boolean> {
     }
 }
 
+/**
+ * 将 日期时间 序列化为字符串
+ */
 public object OffsetDateTimeSerializer : KSerializer<OffsetDateTime> {
 
     private val format: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
@@ -65,6 +74,9 @@ public object OffsetDateTimeSerializer : KSerializer<OffsetDateTime> {
     }
 }
 
+/**
+ * 将 日期时间 序列化为 Timestamp (Long)
+ */
 public object TimestampSerializer : KSerializer<OffsetDateTime> {
 
     override val descriptor: SerialDescriptor =
@@ -79,6 +91,9 @@ public object TimestampSerializer : KSerializer<OffsetDateTime> {
     }
 }
 
+/**
+ * 将 枚举 序列化为 ordinal 数字
+ */
 public class OrdinalSerializer<E : Enum<E>>(kClass: KClass<E>, private val values: Array<E>) : KSerializer<E> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor(kClass.qualifiedName!!, PrimitiveKind.INT)
@@ -98,6 +113,9 @@ public inline fun <reified E : Enum<E>> OrdinalSerializer(): OrdinalSerializer<E
     return OrdinalSerializer(kClass = E::class, values = enumValues())
 }
 
+/**
+ * 将 枚举 序列化为 name 字符串
+ */
 public class LowerCaseSerializer<E : Enum<E>>(kClass: KClass<E>, private val values: Array<E>) : KSerializer<E> {
     override val descriptor: SerialDescriptor =
         PrimitiveSerialDescriptor(kClass.qualifiedName!!, PrimitiveKind.STRING)

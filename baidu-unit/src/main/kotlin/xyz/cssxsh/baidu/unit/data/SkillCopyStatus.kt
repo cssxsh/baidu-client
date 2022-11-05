@@ -4,14 +4,16 @@ import kotlinx.serialization.*
 
 /**
  * 机器人技能复制状态
- * @property none 无
- * @property success 成功
- * @property failed 失败
+ * @property NONE 无
+ * @property SUCCESS 成功
+ * @property FAILED 失败
  */
 @Serializable
-@Suppress("EnumEntryName")
 public enum class SkillCopyStatus {
-    none,
-    success,
-    failed,
+    @SerialName("none")
+    NONE,
+    @SerialName("success")
+    SUCCESS,
+    @SerialName("failed")
+    FAILED,
 }

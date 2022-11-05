@@ -4,12 +4,13 @@ import kotlinx.serialization.*
 
 /**
  * 机器人服务类型
- * @property common 通⽤机器⼈
- * @property marketingClue 营销线索机器⼈
+ * @property COMMON 通⽤机器⼈
+ * @property MARKETING_CLUE 营销线索机器⼈
  */
 @Serializable
-@Suppress("EnumEntryName")
 public enum class ServiceCategory {
-    common,
-    marketingClue
+    @SerialName("common")
+    COMMON,
+    @SerialName("marketingClue")
+    MARKETING_CLUE
 }

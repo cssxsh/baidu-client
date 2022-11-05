@@ -2,46 +2,33 @@ package xyz.cssxsh.baidu.unit.data
 
 import kotlinx.serialization.*
 
+/**
+ * 行为类型
+ * @property CLARIFY 澄清
+ * @property SATISFY 满足
+ * @property GUIDE 引导到对话意图
+ * @property FAQ_GUIDE 引导到问答意图
+ * @property UNDERSTOOD 理解达成，注：内部使用
+ * @property FAILURE 理解失败
+ * @property CHAT 聊天话术
+ * @property EVENT 触发事件，在答复型对话回应,中选择了"执行函数"，将返回event类型的action
+ */
 @Serializable
-@Suppress("EnumEntryName")
 public enum class ActionType {
-    /**
-     * 澄清
-     */
-    clarify,
-
-    /**
-     * 满足
-     */
-    satisfy,
-
-    /**
-     * 引导到对话意图
-     */
-    guide,
-
-    /**
-     * 引导到问答意图
-     */
-    faqguide,
-
-    /**
-     * 理解达成，注：内部使用
-     */
-    understood,
-
-    /**
-     * 理解失败
-     */
-    failure,
-
-    /**
-     * 聊天话术
-     */
-    chat,
-
-    /**
-     * 触发事件，在答复型对话回应,中选择了"执行函数"，将返回event类型的action
-     */
-    event
+    @SerialName("clarify")
+    CLARIFY,
+    @SerialName("clarify")
+    SATISFY,
+    @SerialName("guide")
+    GUIDE,
+    @SerialName("faqguide")
+    FAQ_GUIDE,
+    @SerialName("understood")
+    UNDERSTOOD,
+    @SerialName("failure")
+    FAILURE,
+    @SerialName("chat")
+    CHAT,
+    @SerialName("event")
+    EVENT
 }

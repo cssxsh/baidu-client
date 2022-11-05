@@ -41,11 +41,11 @@ public data class SkillInfo(
     @JsonNames("skillVersion", "botVersion")
     val version: String,
     @SerialName("copyStatus")
-    val copy: SkillCopyStatus = SkillCopyStatus.none,
+    val copy: SkillCopyStatus = SkillCopyStatus.NONE,
     @SerialName("copyInfo")
     val copyInfo: SkillCopyInfo? = null,
     @SerialName("shareStatus")
-    val share: SkillShareStatus = SkillShareStatus.none,
+    val share: SkillShareStatus = SkillShareStatus.NONE,
     @SerialName("createTime")
     @Serializable(LocalDateTimeSerializer::class)
     val created: LocalDateTime,
@@ -55,7 +55,7 @@ public data class SkillInfo(
     @SerialName("instanceId")
     val instanceId: String = "",
     @SerialName("useStatus")
-    val use: SkillUseStatus = SkillUseStatus.unused,
+    val use: SkillUseStatus = SkillUseStatus.UNUSED,
     @SerialName("fileNum")
     val fileNum: Int = 0,
     @SerialName("fileSize")
