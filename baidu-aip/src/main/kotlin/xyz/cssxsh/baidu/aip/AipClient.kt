@@ -3,6 +3,7 @@ package xyz.cssxsh.baidu.aip
 import xyz.cssxsh.baidu.oauth.*
 
 /**
+ * AIP 客户端
  * * [AIP 文档](https://ai.baidu.com/ai-doc)
  * * [Token 认证](https://ai.baidu.com/ai-doc/REFERENCE/Ck3dwjhhu)
  */

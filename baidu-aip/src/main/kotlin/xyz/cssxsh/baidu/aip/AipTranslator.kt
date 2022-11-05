@@ -11,6 +11,7 @@ import xyz.cssxsh.baidu.aip.translate.*
 import kotlin.coroutines.*
 
 /**
+ * 翻译
  * [ai-doc](https://ai.baidu.com/ai-doc/MT/4kqryjku9)
  */
 public open class AipTranslator(override val client: AipClient) : AipApplication {

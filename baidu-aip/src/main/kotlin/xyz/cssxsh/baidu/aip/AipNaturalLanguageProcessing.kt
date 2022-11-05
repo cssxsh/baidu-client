@@ -6,6 +6,7 @@ import io.ktor.http.*
 import xyz.cssxsh.baidu.aip.nlp.*
 
 /**
+ * 自然语言分析
  * [ai-doc](https://ai.baidu.com/ai-doc/NLP/fk6z52f2u)
  */
 public class AipNaturalLanguageProcessing(override val client: AipClient) : AipApplication {

@@ -46,6 +46,9 @@ public data class TranslateDocumentData(
     val updatedAt: OffsetDateTime
 ) {
 
+    /**
+     * @param files 输出文件
+     */
     @Serializable
     public data class Output(
         @SerialName("files")

@@ -3,6 +3,9 @@ package xyz.cssxsh.baidu.aip
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.oauth.data.*
 
+/**
+ * AIP 客户端抽象实现
+ */
 public abstract class AbstractAipClient : AipClient, AbstractBaiduAuthClient<BaiduAuthConfig>() {
 
     override val timeout: Long get() = AipClient.TIMEOUT

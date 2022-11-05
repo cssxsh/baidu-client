@@ -8,6 +8,7 @@ import io.ktor.util.*
 import xyz.cssxsh.baidu.aip.censor.*
 
 /**
+ * 内容审核
  * [ai-doc](https://ai.baidu.com/ai-doc/ANTIPORN/Jk3h6x8t2)
  */
 public open class AipContentCensor(override val client: AipClient) : AipApplication {

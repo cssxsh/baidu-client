@@ -28,6 +28,7 @@ public data class TranslatePictureResult(
 ) {
 
     /**
+     * 内容
      * @param src 识别原文
      * @param dst 翻译译文
      * @param rect 原文擦除矩形位置 格式："rect":"0 0 321 199"矩形的位置信息，依次顺序left, top, wide, high (以图片左上角顶点为坐标原点)
@@ -51,6 +52,9 @@ public data class TranslatePictureResult(
         val src: String
     )
 
+    /**
+     * 坐标
+     */
     @Serializable
     public data class Point(
         @SerialName("x")

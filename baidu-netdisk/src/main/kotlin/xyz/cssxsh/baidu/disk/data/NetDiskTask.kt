@@ -32,6 +32,14 @@ public data class NetDiskTask(
     override val requestId: String = ""
 ) : NetDiskErrorInfo {
 
+    /**
+     * 任务内容
+     * @param revision 迭代
+     * @param isDir 是否文件夹
+     * @param path 文件路径
+     * @param modified 修改时间
+     * @param size 大小
+     */
     @Serializable
     public data class Item(
         @SerialName("base_revision")

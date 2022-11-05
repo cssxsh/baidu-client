@@ -51,7 +51,7 @@ internal class BaiduPersonalCloudStorageTest : BaiduNetDiskClientTest() {
 //        }
 
 //        client.pcs.meta(path = "/")
-        val meta = client.pcs.meta(list = arrayOf(path))
+        val meta = client.pcs.meta(paths = arrayOf(path))
 
 //        client.pcs.list(path = "/", order = OrderType.TIME, desc = true, limit = 0..10)
 //        client.pcs.list(path = "/", order = OrderType.TIME, desc = true, limit = 10..20)
@@ -70,7 +70,7 @@ internal class BaiduPersonalCloudStorageTest : BaiduNetDiskClientTest() {
         client.pcs.restore(id = meta.list.single().id)
 
         val list = client.pcs.list(path = "", order = OrderType.TIME, desc = true, limit = null)
-        client.pcs.delete(list = list.list.map { it.path }.toTypedArray())
+        client.pcs.delete(paths = list.list.map { it.path }.toTypedArray())
         client.pcs.clear()
     }
 }

@@ -10,6 +10,7 @@ import java.util.*
 import kotlin.coroutines.*
 
 /**
+ * 文字转语音
  * [ai-doc](https://ai.baidu.com/ai-doc/SPEECH/yk38y8h3j)
  */
 public open class AipTextToSpeech(override val client: AipClient) : AipApplication {
