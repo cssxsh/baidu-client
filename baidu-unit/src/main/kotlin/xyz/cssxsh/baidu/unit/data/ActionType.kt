@@ -17,7 +17,7 @@ import kotlinx.serialization.*
 public enum class ActionType {
     @SerialName("clarify")
     CLARIFY,
-    @SerialName("clarify")
+    @SerialName("satisfy")
     SATISFY,
     @SerialName("guide")
     GUIDE,
