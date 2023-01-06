@@ -28,19 +28,17 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
         save(token = token)
     }
 
-    public val pcs: BaiduPersonalCloudStorage by lazy { BaiduPersonalCloudStorage(client = this) }
+    public override val pcs: BaiduPersonalCloudStorage by lazy { BaiduPersonalCloudStorage(client = this) }
 
-    public val rest: BaiduNetDiskRESTful by lazy { BaiduNetDiskRESTful(client = this) }
+    public override val rest: BaiduNetDiskRESTful by lazy { BaiduNetDiskRESTful(client = this) }
 
-    public val web: BaiduNetDiskWeb by lazy { BaiduNetDiskWeb(client = this) }
-
-    protected var user: NetDiskUserInfo? = null
+    public override val web: BaiduNetDiskWeb by lazy { BaiduNetDiskWeb(client = this) }
 
     /**
      * 获取用户信息
      * @param flush 是否刷新
      */
-    public suspend fun user(flush: Boolean = false): NetDiskUserInfo {
+    public override suspend fun user(flush: Boolean): NetDiskUserInfo {
         return if (flush || this.user == null) {
             val user = rest.user()
             this.user = user
@@ -54,7 +52,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * 创建一个目录
      * @param path 路径
      */
-    public suspend fun mkdir(path: String): NetDiskFileInfo = rest.mkdir(path = path, ondup = OnDupType.SKIP)
+    public override suspend fun mkdir(path: String): NetDiskFileInfo = rest.mkdir(path = path, ondup = OnDupType.SKIP)
 
     /**
      * 分段上传一个文件
@@ -62,7 +60,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param path 云端文件路径
      * @param ondup 文件冲突策略
      */
-    public suspend fun upload(file: File, path: String, ondup: OnDupType = OnDupType.FAIL): NetDiskFileInfo {
+    public override suspend fun upload(file: File, path: String, ondup: OnDupType): NetDiskFileInfo {
         check(file.isFile) { "${file.absolutePath} 不是文件" }
         check(file.length() > 0) { "${file.absolutePath} 文件是空的" }
 
@@ -132,7 +130,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param ondup 文件冲突策略
      * @see pcs
      */
-    public suspend fun single(file: File, path: String, ondup: OnDupType = OnDupType.FAIL): NetDiskFileInfo {
+    public override suspend fun single(file: File, path: String, ondup: OnDupType): NetDiskFileInfo {
         return pcs.upload(path = path, ondup = ondup, size = file.length()) {
             writeFully(file.readBytes())
         }
@@ -146,7 +144,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @see RapidUploadInfo.calculate
      * @see pcs
      */
-    public suspend fun rapid(upload: RapidUploadInfo, ondup: OnDupType = OnDupType.FAIL): NetDiskFileInfo {
+    public override suspend fun rapid(upload: RapidUploadInfo, ondup: OnDupType): NetDiskFileInfo {
         return pcs.rapid(upload = upload, ondup = ondup)
     }
 
@@ -157,7 +155,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @see pcs
      * @see RapidUploadInfo.format
      */
-    public suspend fun flash(path: String): RapidUploadInfo {
+    public override suspend fun flash(path: String): RapidUploadInfo {
         return pcs.download(path = path) {
             header(HttpHeaders.Range, "bytes=0-${SLICE_SIZE - 1}")
         }.execute { response ->
@@ -184,7 +182,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param ondup 遇到重复文件的处理策略
      * @see rest
      */
-    public suspend fun copy(path: String, dest: String, newname: String, ondup: OnDupType): NetDiskOpera {
+    public override suspend fun copy(path: String, dest: String, newname: String, ondup: OnDupType): NetDiskOpera {
         return rest.move(OperaFileInfo(path, dest, newname), ondup = ondup)
     }
 
@@ -196,7 +194,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param ondup 文件冲突策略
      * @see rest
      */
-    public suspend fun move(path: String, dest: String, newname: String, ondup: OnDupType): NetDiskOpera {
+    public override suspend fun move(path: String, dest: String, newname: String, ondup: OnDupType): NetDiskOpera {
         return rest.move(OperaFileInfo(path, dest, newname), ondup = ondup)
     }
 
@@ -207,7 +205,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param ondup 文件冲突策略
      * @see rest
      */
-    public suspend fun rename(path: String, newname: String, ondup: OnDupType): NetDiskOpera {
+    public override suspend fun rename(path: String, newname: String, ondup: OnDupType): NetDiskOpera {
         return rest.move(OperaFileInfo(path, newname), ondup = ondup)
     }
 
@@ -216,7 +214,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param path 源路径
      * @see rest
      */
-    public suspend fun delete(path: String): NetDiskOpera {
+    public override suspend fun delete(path: String): NetDiskOpera {
         return rest.delete(OperaFileInfo(path))
     }
 
@@ -227,7 +225,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param page 页码 从 1 开始，一页数目 1000
      * @see rest
      */
-    public suspend fun search(key: String, dir: String, page: Int): NetDiskFileList {
+    public override suspend fun search(key: String, dir: String, page: Int): NetDiskFileList {
         return rest.search(key = key, dir = dir, recursion = true, page = page)
     }
 
@@ -237,7 +235,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param start 起始编号，从 0开始
      * @see rest
      */
-    public suspend fun list(path: String, start: Int): NetDiskFileList {
+    public override suspend fun list(path: String, start: Int): NetDiskFileList {
         return rest.list(
             start = start,
             option = NetDiskOption(path = path, order = OrderType.TIME, desc = true, recursion = true)
@@ -251,7 +249,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @see BaiduPersonalCloudStorage.load
      * @see BaiduPersonalCloudStorage.download
      */
-    public suspend fun link(file: NetDiskFileInfo, block: HttpRequestBuilder.() -> Unit): HttpStatement {
+    public override suspend fun link(file: NetDiskFileInfo, block: HttpRequestBuilder.() -> Unit): HttpStatement {
         return if (file is NetDiskFileMeta) {
             pcs.load(dlink = file.dlink, block = block)
         } else {
@@ -265,7 +263,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param range 要下载的序列，为 null 时，将下载全部数据
      * @see link
      */
-    public suspend fun download(file: NetDiskFileInfo, range: IntRange?): ByteArray {
+    public override suspend fun download(file: NetDiskFileInfo, range: IntRange?): ByteArray {
         return link(file = file) {
             header(HttpHeaders.Range, range?.run { "${first}-${last}" })
         }.body()
@@ -277,7 +275,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param listener 进度回调
      * @see link
      */
-    public suspend fun download(file: NetDiskFileInfo, listener: ProgressListener): ByteArray {
+    public override suspend fun download(file: NetDiskFileInfo, listener: ProgressListener): ByteArray {
         return link(file = file) {
             onDownload(listener)
         }.body()
@@ -289,7 +287,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      */
     public suspend fun host(): PCSServer {
         val upload = pcs.host()
-        pcs.host = upload
+        pcs.hosts = upload
         return upload
     }
 
@@ -300,7 +298,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param files 要分享文件的ID
      * @see web
      */
-    public suspend fun share(password: String, option: ShareOption, vararg files: Long): NetDiskShare {
+    public override suspend fun share(password: String, option: ShareOption, vararg files: Long): NetDiskShare {
         return web.share(password = password, option = option, files = files)
     }
 
@@ -309,7 +307,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param page 页码 从 1 开始，一页数目 1000
      * @see rest
      */
-    public suspend fun share(page: Int): NetDiskShareList {
+    public override suspend fun share(page: Int): NetDiskShareList {
         return rest.record(page = page)
     }
 
@@ -319,7 +317,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param password 访问密码
      * @see rest
      */
-    public suspend fun verify(surl: String, password: String): NetDiskShareInfo {
+    public override suspend fun verify(surl: String, password: String): NetDiskShareInfo {
         return rest.verify(surl = surl, password = password)
     }
 
@@ -329,7 +327,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @param key 在 [verify] 中得到的 key (无密码填入空文本即可)
      * @see rest
      */
-    public suspend fun view(surl: String, key: String): NetDiskViewList {
+    public override suspend fun view(surl: String, key: String): NetDiskViewList {
         return rest.view(surl = surl, key = key)
     }
 
@@ -354,7 +352,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @see rest
      * @see BaiduNetDiskWeb.task
      */
-    public suspend fun transfer(info: TransferFileInfo, path: String, ondup: OnDupType): NetDiskTransfer {
+    public override suspend fun transfer(info: TransferFileInfo, path: String, ondup: OnDupType): NetDiskTransfer {
         return rest.transfer(info = info, path = path, ondup = ondup)
     }
 
@@ -364,7 +362,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @see web
      * @see pcs
      */
-    public suspend fun recycle(page: Int): NetDiskRecycleList {
+    public override suspend fun recycle(page: Int): NetDiskRecycleList {
         return web.recycle(page = page)
     }
 
@@ -374,7 +372,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @see web
      * @see pcs
      */
-    public suspend fun restore(vararg files: Long): NetDiskRecycleOpera {
+    public override suspend fun restore(vararg files: Long): NetDiskRecycleOpera {
         return web.restore(files = files)
     }
 
@@ -383,7 +381,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @see web
      * @see pcs
      */
-    public suspend fun clear(): NetDiskRecycleOpera {
+    public override suspend fun clear(): NetDiskRecycleOpera {
         return web.clear()
     }
 }
