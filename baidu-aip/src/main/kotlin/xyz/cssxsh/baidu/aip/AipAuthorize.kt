@@ -5,11 +5,13 @@ import io.ktor.client.request.*
 import xyz.cssxsh.baidu.oauth.*
 import xyz.cssxsh.baidu.oauth.data.*
 
-internal const val TOKEN = "https://aip.baidubce.com/oauth/2.0/token"
+@PublishedApi
+internal const val TOKEN: String = "https://aip.baidubce.com/oauth/2.0/token"
 
 /**
  * [wiki](https://ai.baidu.com/ai-doc/REFERENCE/Ck3dwjhhu)
  */
+@PublishedApi
 internal suspend fun BaiduAuthClient<*>.getClientCredentialsToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.CLIENT_CREDENTIALS)
@@ -21,6 +23,7 @@ internal suspend fun BaiduAuthClient<*>.getClientCredentialsToken(): AuthorizeAc
 /**
  * [wiki](https://ai.baidu.com/ai-doc/REFERENCE/Ck3dwjhhu)
  */
+@PublishedApi
 internal suspend fun BaiduAuthClient<*>.getRefreshToken(): AuthorizeAccessToken = useHttpClient { client ->
     client.post(TOKEN) {
         parameter("grant_type", GrantType.REFRESH)

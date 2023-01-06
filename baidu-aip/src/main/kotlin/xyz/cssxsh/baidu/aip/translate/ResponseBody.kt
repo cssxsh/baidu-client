@@ -4,6 +4,7 @@ import kotlinx.serialization.*
 import kotlinx.serialization.json.*
 import xyz.cssxsh.baidu.aip.*
 
+@PublishedApi
 @Serializable
 internal data class ResponseBody<T>(
     @SerialName("log_id")

@@ -12,22 +12,26 @@ public const val SLICE_SIZE: Int = 256 shl 10
 
 public val LAZY_BLOCKS: List<String> = listOf("5910a591dd8fc18c32a8f3df4fdc1761", "a5fc157d78e6ad1c7e114b056c92821e")
 
+@PublishedApi
 internal fun ParametersBuilder.appendParameter(key: String, value: Any?) {
     value?.let { append(key, it.toString()) }
 }
 
 public typealias BodyBuilder = BytePacketBuilder.() -> Unit
 
+@PublishedApi
 internal fun ByteArray.toHexString(): String {
     return fold(Formatter()) { formatter, byte -> formatter.format("%02x", byte) }
         .toString()
 }
 
+@PublishedApi
 internal fun ByteArray.md5(): ByteArray {
     val digest = MessageDigest.getInstance("md5")
     return digest.digest(this)
 }
 
+@PublishedApi
 internal fun String.encryptMD5(): String {
     val md5 = this
     return buildString {

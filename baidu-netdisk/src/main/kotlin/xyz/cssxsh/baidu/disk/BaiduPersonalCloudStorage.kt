@@ -21,6 +21,7 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
         internal const val SUPER_FILE: String = "https://pcs.baidu.com/rest/2.0/pcs/superfile2"
     }
 
+    @PublishedApi
     internal var host: PCSServer = PCSServer(
         clientIp = "0.0.0.0",
         expire = 0,

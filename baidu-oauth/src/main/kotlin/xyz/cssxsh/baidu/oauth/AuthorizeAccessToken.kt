@@ -24,6 +24,7 @@ public data class AuthorizeAccessToken(
     val sessionSecret: String
 ) {
     @Transient
+    @PublishedApi
     internal var start: OffsetDateTime = OffsetDateTime.now()
 
     public val expires: OffsetDateTime get() = start.plusSeconds(expiresIn)

@@ -16,7 +16,8 @@ import kotlin.reflect.*
  */
 public fun Boolean.toInt(): Int = if (this) 1 else 0
 
-internal const val IGNORE_UNKNOWN_KEYS = "xyz.cssxsh.baidu.json.ignore"
+@PublishedApi
+internal const val IGNORE_UNKNOWN_KEYS: String = "xyz.cssxsh.baidu.json.ignore"
 
 /**
  * 根据百度API调整的序列化

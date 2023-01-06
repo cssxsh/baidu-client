@@ -6,20 +6,28 @@ import io.ktor.http.*
 import xyz.cssxsh.baidu.api.*
 import xyz.cssxsh.baidu.oauth.data.*
 
-internal const val AUTHORIZE = "https://openapi.baidu.com/oauth/2.0/authorize"
+@PublishedApi
+internal const val AUTHORIZE: String = "https://openapi.baidu.com/oauth/2.0/authorize"
 
-internal const val TOKEN = "https://openapi.baidu.com/oauth/2.0/token"
+@PublishedApi
+internal const val TOKEN: String = "https://openapi.baidu.com/oauth/2.0/token"
 
-internal const val DEVICE_CODE = "https://openapi.baidu.com/oauth/2.0/device/code"
+@PublishedApi
+internal const val DEVICE_CODE: String = "https://openapi.baidu.com/oauth/2.0/device/code"
 
-internal const val DEVICE = "https://openapi.baidu.com/device"
+@PublishedApi
+internal const val DEVICE: String = "https://openapi.baidu.com/device"
 
-internal const val DEFAULT_REDIRECT_URL = "https://openapi.baidu.com/oauth/2.0/login_success"
+@PublishedApi
+internal const val DEFAULT_REDIRECT_URL: String = "https://openapi.baidu.com/oauth/2.0/login_success"
 
-internal const val DEFAULT_REDIRECT = "oob"
+@PublishedApi
+internal const val DEFAULT_REDIRECT: String = "oob"
 
+@PublishedApi
 internal const val ACCESS_EXPIRES: Long = 86400L
 
+@PublishedApi
 internal fun ParametersBuilder.appendParameter(key: String, value: Any?) {
     value?.let { append(key, it.toString()) }
 }
@@ -27,6 +35,7 @@ internal fun ParametersBuilder.appendParameter(key: String, value: Any?) {
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
  */
+@PublishedApi
 internal fun BaiduUserAuthClient<*>.getWebAuthorizeUrl(
     type: AuthorizeType,
     state: String? = null,
@@ -59,6 +68,7 @@ internal fun BaiduUserAuthClient<*>.getWebAuthorizeUrl(
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/implicit)
  */
+@PublishedApi
 internal fun Url.getAuthorizeToken(): AuthorizeAccessToken {
     return if (parameters.isEmpty() && fragment.isNotBlank()) {
         Url(toString().replace('#', '?')).getAuthorizeToken()
@@ -77,11 +87,13 @@ internal fun Url.getAuthorizeToken(): AuthorizeAccessToken {
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
  */
+@PublishedApi
 internal fun Url.getAuthorizeCode(): String = parameters["code"].orEmpty()
 
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth)
  */
+@PublishedApi
 internal suspend fun BaiduUserAuthClient<*>.getAuthorizeToken(code: String): AuthorizeAccessToken {
     return useHttpClient { client ->
         client.post(TOKEN) {
@@ -97,6 +109,7 @@ internal suspend fun BaiduUserAuthClient<*>.getAuthorizeToken(code: String): Aut
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/client)
  */
+@PublishedApi
 internal suspend fun BaiduUserAuthClient<*>.getClientCredentialsToken(): AuthorizeAccessToken {
     return useHttpClient { client ->
         client.post(TOKEN) {
@@ -112,6 +125,7 @@ internal suspend fun BaiduUserAuthClient<*>.getClientCredentialsToken(): Authori
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/client)
  * @see [getClientCredentialsToken]
  */
+@PublishedApi
 internal suspend fun BaiduUserAuthClient<*>.getDeveloperCredentialsToken(): AuthorizeAccessToken {
     return useHttpClient { client ->
         client.post(TOKEN) {
@@ -126,6 +140,7 @@ internal suspend fun BaiduUserAuthClient<*>.getDeveloperCredentialsToken(): Auth
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
+@PublishedApi
 internal suspend fun BaiduUserAuthClient<*>.getDeviceCode(): AuthorizeDeviceCode {
     return useHttpClient { client ->
         client.post(DEVICE_CODE) {
@@ -139,6 +154,7 @@ internal suspend fun BaiduUserAuthClient<*>.getDeviceCode(): AuthorizeDeviceCode
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
+@PublishedApi
 internal fun getDeviceAuthorizeUrl(
     code: String,
     display: DisplayType = DisplayType.PAGE,
@@ -162,6 +178,7 @@ internal fun getDeviceAuthorizeUrl(
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
+@PublishedApi
 internal suspend fun BaiduUserAuthClient<*>.getDeviceToken(code: String): AuthorizeAccessToken {
     return useHttpClient { client ->
         client.post(TOKEN) {
@@ -176,6 +193,7 @@ internal suspend fun BaiduUserAuthClient<*>.getDeviceToken(code: String): Author
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
+@PublishedApi
 internal suspend fun BaiduUserAuthClient<*>.getDeviceQrcode(code: AuthorizeDeviceCode): ByteArray {
     return useHttpClient { client ->
         client.get(code.qrcodeUrl) {
@@ -189,6 +207,7 @@ internal suspend fun BaiduUserAuthClient<*>.getDeviceQrcode(code: AuthorizeDevic
 /**
  * [wiki](http://developer.baidu.com/wiki/index.php?title=docs/oauth/device)
  */
+@PublishedApi
 internal suspend fun BaiduUserAuthClient<*>.getRefreshToken(): AuthorizeAccessToken {
     return useHttpClient { client ->
         client.post(TOKEN) {

@@ -5,6 +5,7 @@ import kotlinx.serialization.*
 /**
  * 语音翻译请求数据
  */
+@PublishedApi
 @Serializable
 internal data class TranslateSpeechRequest(
     @SerialName("from")
