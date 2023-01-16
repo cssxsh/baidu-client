@@ -173,4 +173,18 @@ internal class BaiduNetDiskRESTfulTest : BaiduNetDiskClientTest() {
         println(client.rest.unbind(id = "166066882735070540"))
         println(client.rest.unbind(id = "190877501167031219"))
     }
+
+    @Test
+    fun rapid(): Unit = runBlocking {
+        val info = client.rest.rapid(
+            upload = RapidUploadInfo(
+                content = "76ff7056abae584a5a1bd8184399d9b3",
+                slice = "",
+                length = 54741222L,
+                path = "${LocalDate.now()}/教程.pdf"
+            ),
+            ondup = OnDupType.NEW_COPY
+        )
+        println(info)
+    }
 }

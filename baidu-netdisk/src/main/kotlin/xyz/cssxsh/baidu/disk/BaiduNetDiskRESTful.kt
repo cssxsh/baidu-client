@@ -470,6 +470,32 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
     }
 
     /**
+     * [秒传文件](https://pan.baidu.com/union/doc/rksg0sa17)
+     * @param upload Rapid信息
+     * @param ondup 文件冲突策略
+     * @see prepare
+     * @see BaiduPersonalCloudStorage.temp
+     */
+    public suspend fun rapid(upload: RapidUploadInfo, ondup: OnDupType): NetDiskCreateFile {
+        return client.useHttpClient { http ->
+            http.submitForm(Parameters.build {
+                appendParameter("path", appDataFolder(path = upload.path))
+                appendParameter("size", upload.length)
+                appendParameter("isdir", "0")
+                appendParameter("rtype", ondup.ordinal)
+                appendParameter("autoinit", "1")
+                appendParameter("block_list", BaiduJson.encodeToString(listOf(upload.content)))
+                appendParameter("local_ctime", upload.created?.toEpochSecond())
+                appendParameter("local_mtime", upload.modified?.toEpochSecond())
+            }) {
+                url(FILE)
+                parameter("method", "create")
+                parameter("access_token", client.accessToken())
+            }.body()
+        }
+    }
+
+    /**
      * [创建文件-文件夹](https://pan.baidu.com/union/doc/rksg0sa17)
      * @param path 文件路径
      * @param ondup 文件冲突策略
