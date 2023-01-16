@@ -38,8 +38,15 @@ public data class RapidUploadInfo(
          */
         @JvmStatic
         public fun parse(code: String): RapidUploadInfo {
-            return code.split('#').let { (content, slice, length, path) ->
-                RapidUploadInfo(content = content, slice = slice, length = length.toLong(), path = path)
+            val parts = code.split('#')
+            return when (parts.size) {
+                4 -> parts.let { (content, slice, length, path) ->
+                    RapidUploadInfo(content = content, slice = slice, length = length.toLong(), path = path)
+                }
+                3 -> parts.let { (content, length, path) ->
+                    RapidUploadInfo(content = content, slice = "", length = length.toLong(), path = path)
+                }
+                else -> throw IllegalArgumentException("秒传码格式错误")
             }
         }
 
