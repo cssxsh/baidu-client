@@ -32,7 +32,8 @@ internal fun ByteArray.md5(): ByteArray {
 }
 
 @PublishedApi
-internal fun String.encryptMD5(): String {
+internal fun String.encryptMD5(flag: Boolean = true): String {
+    check(length == 32)
     val md5 = this
     return buildString {
         append(md5.subSequence(8, 16))
@@ -41,9 +42,44 @@ internal fun String.encryptMD5(): String {
         append(md5.subSequence(16, 24))
 
         repeat(32) { index ->
-            setCharAt(index, (get(index).digitToInt(16) xor (15 and index)).digitToChar(16))
+            val char = get(index)
+                .digitToInt(16)
+                .xor(15 and index)
+                .digitToChar(16)
+                .lowercaseChar()
+            setCharAt(index, char)
         }
-        setCharAt(9, (get(9).digitToInt(16) + 'g'.code).toChar())
+        if (flag) {
+            val special = 'g'
+                .plus(get(9).digitToInt(16))
+            setCharAt(9, special)
+        }
     }
 }
 
+@PublishedApi
+internal fun String.decryptMD5(): String {
+    check(length == 32)
+    val cipher = this
+    return buildString {
+        append(cipher.subSequence(8, 16))
+        append(cipher.subSequence(0, 8))
+        append(cipher.subSequence(24, 32))
+        append(cipher.subSequence(16, 24))
+
+        if (get(1) >= 'g') {
+            val special = get(1)
+                .minus('g')
+                .digitToChar(16)
+            setCharAt(1, special)
+        }
+        repeat(32) { index ->
+            val char = get(index)
+                .digitToInt(16)
+                .xor(index xor 8 and 15)
+                .digitToChar(16)
+                .lowercaseChar()
+            setCharAt(index, char)
+        }
+    }
+}

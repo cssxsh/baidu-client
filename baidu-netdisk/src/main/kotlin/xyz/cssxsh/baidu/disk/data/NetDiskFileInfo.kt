@@ -1,6 +1,7 @@
 package xyz.cssxsh.baidu.disk.data
 
 import java.time.*
+import xyz.cssxsh.baidu.disk.*
 
 /**
  * 文件基本信息
@@ -14,6 +15,9 @@ import java.time.*
  * @property modified 修改时间
  * @property size 大小
  * @property share 是否为共享
+ *
+ * @see encryptMD5
+ * @see decryptMD5
  */
 public interface NetDiskFileInfo {
     public val category: CategoryType
