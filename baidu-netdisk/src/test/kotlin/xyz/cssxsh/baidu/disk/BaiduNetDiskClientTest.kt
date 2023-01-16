@@ -17,7 +17,7 @@ internal abstract class BaiduNetDiskClientTest {
         token = AuthorizeAccessToken(
             accessToken = System.getenv("BAIDU_NETDISK_ACCESS_TOKEN").orEmpty(),
             expiresIn = 100000,
-            refreshToken = System.getenv("BAIDU_NETDISK_REFRESH_TOKEN"),
+            refreshToken = System.getenv("BAIDU_NETDISK_REFRESH_TOKEN").orEmpty(),
             scope = emptyList(),
             sessionKey = "",
             sessionSecret = ""
