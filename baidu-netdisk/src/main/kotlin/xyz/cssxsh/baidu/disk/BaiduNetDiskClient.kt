@@ -145,7 +145,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
      * @see pcs
      */
     public override suspend fun rapid(upload: RapidUploadInfo, ondup: OnDupType): NetDiskFileInfo {
-        return if (upload.slice.isEmpty()) {
+        return if (upload.slice.isNotEmpty()) {
             pcs.rapid(upload = upload, ondup = ondup)
         } else {
             rest.rapid(upload = upload, ondup = ondup)

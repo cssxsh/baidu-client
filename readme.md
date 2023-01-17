@@ -30,7 +30,7 @@
 ## Baidu Netdisk
 
 构建客户端的参数需要到 [百度网盘开放中心](https://pan.baidu.com/union/apply) 申请  
-客户端工作目录为`/apps/${appName}`
+客户端工作目录为`/apps/${app_name}`
 
 已完成的功能
 
