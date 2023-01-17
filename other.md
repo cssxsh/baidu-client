@@ -116,7 +116,7 @@
 | 31219 | request exceed limit                                                    | 请求数超出限额                              |
 | 31220 | transfer exceed limit                                                   | 流量超出限额                               |
 | 31298 | the value of KEY\[VALUE] in pcs response headers is invalid             | 服务器返回值KEY非法                          |
-| 31299 | no KEY in pcs response headers                                          | 服务器返回值KEY不存在 /第一个分片的大小小于4MB          |
+| 31299 | no KEY in pcs response headers                                          | 服务器返回值KEY不存在/第一个分片的大小小于4MB           |
 | 31301 |                                                                         | 非音视频文件                               |
 | 31304 |                                                                         | 当前视频格式不支持播放                          |
 | 31324 |                                                                         | 无访问权限                                |

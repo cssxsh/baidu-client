@@ -71,3 +71,7 @@ dependencies {
 ```
 
 注意 本SDK 设置的 `JvmTarget` 为 `JavaVersion.VERSION_11`
+
+## [爱发电](https://afdian.net/@cssxsh)
+
+![afdian](.github/afdian.jpg)

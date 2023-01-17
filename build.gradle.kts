@@ -1,6 +1,6 @@
 allprojects {
     group = "xyz.cssxsh.baidu"
-    version = "3.3.0"
+    version = "3.3.1"
 }
 
 subprojects {
