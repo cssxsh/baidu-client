@@ -15,13 +15,13 @@ mavenCentralPublish {
 dependencies {
     testImplementation(kotlin("test"))
     //
-    implementation(platform("io.ktor:ktor-bom:2.1.3"))
+    api(platform("io.ktor:ktor-bom:2.1.3"))
     api("io.ktor:ktor-client-okhttp")
     api("io.ktor:ktor-client-encoding")
     api("io.ktor:ktor-client-content-negotiation")
     api("io.ktor:ktor-serialization-kotlinx-json")
     //
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
+    api(platform("com.squareup.okhttp3:okhttp-bom:4.10.0"))
     api("com.squareup.okhttp3:okhttp")
 }
 
