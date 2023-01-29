@@ -484,7 +484,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
                 appendParameter("isdir", "0")
                 appendParameter("rtype", ondup.ordinal)
                 appendParameter("autoinit", "1")
-                appendParameter("block_list", BaiduJson.encodeToString(listOf(upload.content)))
+                appendParameter("block_list", BaiduJson.encodeToString(listOf(upload.content.lowercase())))
                 appendParameter("local_ctime", upload.created?.toEpochSecond())
                 appendParameter("local_mtime", upload.modified?.toEpochSecond())
             }) {

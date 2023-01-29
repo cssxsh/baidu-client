@@ -71,9 +71,8 @@ public class BaiduPersonalCloudStorage internal constructor(public val client: N
                 parameter("access_token", client.accessToken())
                 parameter("path", appDataFolder(path = upload.path))
                 parameter("content-length", upload.length)
-                parameter("content-md5", upload.content)
-                parameter("slice-md5", upload.slice)
-                // parameter("content-crc32", "...")
+                parameter("content-md5", upload.content.lowercase())
+                parameter("slice-md5", upload.slice.lowercase())
                 parameter("ondup", ondup)
             }.body()
         }
