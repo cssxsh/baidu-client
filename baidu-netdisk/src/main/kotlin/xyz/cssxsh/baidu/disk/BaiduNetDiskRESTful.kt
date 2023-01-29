@@ -707,7 +707,7 @@ public class BaiduNetDiskRESTful internal constructor(public val client: NetDisk
      * @param type 设备类型
      * @param addr 设备地址
      */
-    public suspend fun register(type: Long, addr: String): JsonObject {
+    public suspend fun register(type: Long, addr: String): NetDiskDeviceInfo {
         return client.useHttpClient { http ->
             http.get {
                 url(DEVICE)
