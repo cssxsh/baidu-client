@@ -20,7 +20,7 @@ public class BaiduUnitSkillManager internal constructor(public val client: Baidu
 
     /**
      * 查询技能列表
-     * @param pageNo ⻚码, 从1开始
+     * @param pageNo ⻚码, 从 1 开始
      * @param pageSize 每⻚记录数
      * @param category 技能类别
      * @param type 技能类型

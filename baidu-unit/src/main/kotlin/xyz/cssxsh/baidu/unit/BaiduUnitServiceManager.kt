@@ -24,7 +24,7 @@ public class BaiduUnitServiceManager internal constructor(public val client: Bai
 
     /**
      * 查询机器⼈列表
-     * @param pageNo ⻚码, 从1开始
+     * @param pageNo ⻚码, 从 1 开始
      * @param pageSize 每⻚记录数
      */
     public suspend fun list(pageNo: Int, pageSize: Int = 200): ServiceList {
@@ -159,7 +159,7 @@ public class BaiduUnitServiceManager internal constructor(public val client: Bai
     /**
      * 查询机器⼈技能列表
      * @param id 机器⼈ID
-     * @param pageNo ⻚码, 从1开始
+     * @param pageNo ⻚码, 从 1 开始
      * @param pageSize 每⻚记录数
      */
     public suspend fun listSkill(id: String, pageNo: Int, pageSize: Int = 200): ServiceSkillList {

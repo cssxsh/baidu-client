@@ -2,6 +2,7 @@ package xyz.cssxsh.baidu.disk
 
 import kotlinx.coroutines.*
 import org.junit.jupiter.api.*
+import org.junit.jupiter.api.condition.*
 import xyz.cssxsh.baidu.disk.data.*
 import java.time.*
 
@@ -159,8 +160,8 @@ internal class BaiduNetDiskRESTfulTest : BaiduNetDiskClientTest() {
         Assertions.assertEquals(0, transfer.errorNo)
     }
 
-    @Disabled
     @Test
+    @DisabledIfEnvironmentVariable(named = "CI", matches = "true")
     fun device(): Unit = runBlocking {
 //        println(client.rest.unbind(id = "104771607rs1607808"))
         // Text: "{"errmsg":"exceed max bind count per device","errno":42103,"last_user":"贾**咖啡","request_id":"8668515804744130820"}"

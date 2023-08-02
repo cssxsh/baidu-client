@@ -14,7 +14,11 @@ public val LAZY_BLOCKS: List<String> = listOf("5910a591dd8fc18c32a8f3df4fdc1761"
 
 @PublishedApi
 internal fun ParametersBuilder.appendParameter(key: String, value: Any?) {
-    value?.let { append(key, it.toString()) }
+    when (value) {
+        null -> return
+        is String -> append(key, value)
+        else -> append(key, value.toString())
+    }
 }
 
 public typealias BodyBuilder = BytePacketBuilder.() -> Unit

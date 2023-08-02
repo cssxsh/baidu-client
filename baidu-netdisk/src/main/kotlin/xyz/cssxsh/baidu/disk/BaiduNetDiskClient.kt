@@ -236,7 +236,7 @@ public open class BaiduNetDiskClient(override val config: BaiduNetDiskConfig) : 
     /**
      * 列出文件，如需要递归或类别搜索 请直接使用 [rest] [web] [pcs] 的 api
      * @param path 起始目录, / 网盘根目录, 为空时是 APP 数据目录
-     * @param start 起始编号，从 0开始
+     * @param start 起始编号，从 0 开始
      * @see rest
      */
     public override suspend fun list(path: String, start: Int): NetDiskFileList {
