@@ -37,7 +37,7 @@ internal fun ByteArray.md5(): ByteArray {
 
 @PublishedApi
 internal fun String.encryptMD5(flag: Boolean = true): String {
-    check(length == 32)
+    check(length == 32) { "hash text length is not 32." }
     val md5 = this
     return buildString {
         append(md5.subSequence(8, 16))
@@ -63,7 +63,7 @@ internal fun String.encryptMD5(flag: Boolean = true): String {
 
 @PublishedApi
 internal fun String.decryptMD5(): String {
-    check(length == 32)
+    check(length == 32) { "hash text length is not 32." }
     val cipher = this
     return buildString {
         append(cipher.subSequence(8, 16))

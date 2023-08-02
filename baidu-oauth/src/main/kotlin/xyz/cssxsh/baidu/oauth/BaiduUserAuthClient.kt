@@ -53,7 +53,7 @@ public interface BaiduUserAuthClient<C : BaiduAuthConfig> : BaiduAuthClient<C> {
     public suspend fun device(block: suspend (Url, Url) -> Unit): AuthorizeAccessToken = save {
         val code = getDeviceCode()
         withTimeout(code.expiresIn * 1000L) {
-            launch { block(getDeviceAuthorizeUrl(code = code.userCode), Url(code.qrcodeUrl)) }
+            launch { block(Url(code.verificationUrl), Url(code.qrcodeUrl)) }
             while (isActive) {
                 try {
                     return@withTimeout getDeviceToken(code = code.deviceCode)
